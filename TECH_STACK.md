@@ -4,6 +4,8 @@ The first build targets a browser on the same PC as the RTX 4090. The browser ru
 
 ## Browser
 
+Use the [UI pack](design/trivia-ui/SKILL.md) for screen layouts, narration highlighting, pause behavior, and visual references.
+
 - **React, TypeScript, and Vite** for the home screen and round UI. The browser validates the imported JSON set, checks that its mode is `trivia`, and keeps the current question and session score in memory.
 - **Browser speech synthesis** for the host. Prefer a local English voice and unlock the buzzer when the utterance ends successfully. If narration fails, offer to replay the question before starting the timer.
 - **Microphone capture** with `getUserMedia` and `MediaRecorder`. Request permission before play. Start recording on a valid buzz, stop at the answer deadline, then upload the clip. If the buzz window expires first, the browser resolves the question locally. Use `localhost` for local play and HTTPS for a hosted build. [Browser microphone requirements](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#privacy_and_security)

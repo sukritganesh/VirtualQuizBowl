@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Virtual Quiz Bowl · UI pack</title>
+  <link rel="stylesheet" href="screen.css">
+  <script defer src="frames.js"></script>
+</head>
+<body>
+  <div id="screen"></div>
+  <nav class="viewer" aria-label="Design preview controls">
+    <label for="frame">Design preview</label>
+    <select id="frame" aria-label="Choose a mockup"></select>
+    <button type="button" id="previous" aria-label="Previous mockup">←</button>
+    <button type="button" id="next" aria-label="Next mockup">→</button>
+  </nav>
+  <dialog id="pauseDialog" aria-labelledby="pausedTitle">
+    <button class="icon close" aria-label="Close menu" autofocus>×</button>
+    <span class="pause-symbol" aria-hidden="true"></span>
+    <h2 id="pausedTitle">Game paused</h2>
+    <button class="quit">Quit game <span aria-hidden="true">→</span></button>
+  </dialog>
+</body>
+</html>
