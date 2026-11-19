@@ -1,6 +1,6 @@
 # Game development workflow
 
-Read the project's game overview before changing gameplay. Keep the premise, player actions, and rules in [GAME_OVERVIEW.md](GAME_OVERVIEW.md). Update it when a change affects how the game is played.
+Read the [game overview](GAME_OVERVIEW.md) before changing how the game plays. Read the [tech stack overview](TECH_STACK.md) before choosing tools or changing how components work together. Update the relevant overview when those decisions change.
 
 ## Designing and building
 

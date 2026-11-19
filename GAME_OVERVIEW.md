@@ -5,9 +5,9 @@ Virtual Quiz Bowl is an interactive buzzer trivia game with an AI host. The firs
 ## A trivia round
 
 1. The buzzer stays locked while the host reads. When the host finishes, the player has five seconds to buzz. If the window expires, the question ends with zero points.
-2. Buzzing opens the microphone and starts a fresh five-second recording window. Even a last-moment buzz gives the player the full five seconds to finish saying the answer. Recording stops at the deadline.
-3. Local, open-source speech recognition transcribes the clip. A local language model helps judge whether the reply identifies the answer in the key. For example, "Whitney" counts for Mount Whitney, while "Sierra Nevada" names the range.
-4. A correct answer earns five points. An incorrect answer or silence earns zero. Transcription and judging happen after recording, outside both timers.
+2. Buzzing gives the player a fresh five seconds to say their entire answer, even if they buzz at the last moment.
+3. The game shows what it heard and whether the reply identifies the answer. For example, "Whitney" counts for Mount Whitney, while "Sierra Nevada" names the range.
+4. A correct answer earns five points. An incorrect answer or silence earns zero. The time it takes to judge the answer is outside both timers.
 
 ## Planned quiz bowl mode
 
