@@ -2,7 +2,15 @@
 
 Twenty English replies test when a contestant should get credit. The [cases](cases.json) give the full questions, answer keys, aliases, replies, and expected verdicts. Ten should earn credit. Ten should score zero. Case 3 follows the player's rule that naming a wrong car before correcting to the right one scores zero. Case 4 counts a manufacturer followed by the right model as a single answer.
 
-## Results
+## Follow-up on the judging rule
+
+On November 20, the prompt explicitly distinguished changed guesses from hesitation and casual phrasing. With that edit, the default DeepSeek judge scored 18/20 on the written replies. It rejected the Camry correction and “Venus or Mercury” and accepted the hesitant Civic answer. Its two misses were rejecting the repeated name for China and awarding credit for a request to repeat the question. Qwen scored 12/20 and still rejected the hesitant Civic reply.
+
+The default game also replayed four recordings through Whisper and the updated judge. It rejected the correction and the two-planet guess and accepted the hesitant Civic and Mozart replies.
+
+## Baseline results
+
+These verdicts and timings use the judge prompt from game commit `f936fcb`, before the explicit rule for changes of answer.
 
 | Measured on this laptop | Current GPU setup | Smaller CPU setup |
 |---|---:|---:|
@@ -77,7 +85,7 @@ Bold verdicts disagree with the expected outcome. Text columns use the written r
 
 ## Method
 
-Recorded November 19, 2026 with the judge prompt from game commit `f936fcb`.
+The baseline run took place on November 19, 2026.
 
 The comparison used an Intel Core i9-13900H and an RTX 4090 Laptop GPU with 16 GiB of VRAM. The current profile used Whisper large-v3-turbo in CUDA FP16 and DeepSeek R1 7B in Ollama. The laptop profile used Whisper small.en in CPU INT8 and Qwen 2.5 1.5B on four CPU threads. The runner checked GPU placement through Ollama. Both profiles used the game's transcription settings, answer matcher, judge prompt, 4,096-token context, and temperature of zero.
 

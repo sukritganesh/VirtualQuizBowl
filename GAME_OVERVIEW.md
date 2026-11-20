@@ -13,6 +13,8 @@ The home screen and pause menu both offer audio settings. Players can preview a 
 3. In local AI play, the buzz starts a recording. The game stops it at the answer deadline or when the player presses R to submit early. It displays what it heard and compares the reply with the answer key. A missed buzz or an early pass skips recording.
 4. Correct earns five points. Wrong answers, silence, and missed buzzes earn zero. Judging happens outside both timers. Players can also choose manual scoring before a session or after an AI error.
 
+Hesitation, filler words, and casual phrasing are fine when the player gives one clear answer. Conflicting guesses or changing from one answer to another earn zero, even if the last guess is correct.
+
 The player can pause the round from the menu, resume it, or quit and discard the session. Each round action has a button and a shortcut. A buzzes in and N advances after a verdict. The final screen shows total points and counts of correct answers, wrong answers, and questions where the player never buzzed.
 
 ## Planned quiz bowl mode
