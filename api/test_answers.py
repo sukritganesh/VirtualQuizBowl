@@ -3,8 +3,11 @@ import json
 import unittest
 import wave
 from unittest.mock import patch
+from urllib.error import HTTPError, URLError
 
-from . import inference
+from fastapi import HTTPException, UploadFile
+
+from . import inference, server
 
 
 class AnswerTests(unittest.TestCase):
@@ -21,7 +24,10 @@ class AnswerTests(unittest.TestCase):
                 result = inference.judge(self.key, answer)
                 self.assertEqual(result.correct, correct)
                 self.assertEqual(result.transcript, answer)
-                prompt = json.loads(chat.call_args.args[1]["messages"][1]["content"])
+                payload = chat.call_args.args[1]
+                self.assertEqual(payload["options"]["num_predict"], 768)
+                self.assertNotEqual(payload.get("think"), False)
+                prompt = json.loads(payload["messages"][1]["content"])
                 self.assertEqual(prompt["aliases"], ["Whitney"])
                 self.assertEqual(prompt["player_reply"], answer)
 
@@ -29,6 +35,28 @@ class AnswerTests(unittest.TestCase):
         with patch.object(inference, "ollama", return_value={"message": {"content": '{"correct":"false"}'}}):
             with self.assertRaises(inference.NotReady):
                 inference.judge(self.key, "Perhaps another mountain")
+
+    def test_length_stop_never_scores_even_if_the_partial_json_looks_valid(self):
+        for content in ("", '{"correct":', '{"correct":true}'):
+            with self.subTest(content=content), patch.object(inference, "ollama", side_effect=[
+                {}, {"done_reason": "length", "message": {"content": content}},
+            ]):
+                with self.assertRaisesRegex(inference.NotReady, "judge couldn't finish within its token limit"):
+                    inference.judge(self.key, "I think it was Whitney")
+
+    def test_timeout_offers_manual_scoring_for_this_answer(self):
+        for timeout in (TimeoutError(), URLError(TimeoutError()), HTTPError("local", 504, "Timed out", None, None)):
+            with (
+                self.subTest(timeout=type(timeout)),
+                patch.object(inference, "transcribe", return_value="I think it was Whitney"),
+                patch.object(inference, "check_local_judge"),
+                patch.object(inference, "build_opener") as opener,
+            ):
+                opener.return_value.open.side_effect = timeout
+                with self.assertRaises(HTTPException) as raised:
+                    server.grade(UploadFile(io.BytesIO()), self.key.model_dump_json())
+                self.assertEqual(raised.exception.status_code, 504)
+                self.assertIn("judge couldn't finish in time", raised.exception.detail)
 
     def test_remote_judge_rejected_before_sending_transcript(self):
         with patch.object(inference, "ollama", return_value={"remote_host": "remote"}) as call:

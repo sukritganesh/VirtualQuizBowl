@@ -50,4 +50,7 @@ def grade(clip: Annotated[UploadFile, File()], key: Annotated[str, Form()]):
         transcript = inference.transcribe(data)
     except inference.BadClip as exc:
         raise HTTPException(422, str(exc)) from exc
-    return inference.judge(question, transcript)
+    try:
+        return inference.judge(question, transcript)
+    except inference.OllamaTimeout as exc:
+        raise HTTPException(504, "The judge couldn't finish in time. You can mark this answer manually.") from exc

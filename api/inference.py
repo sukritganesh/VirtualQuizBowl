@@ -18,6 +18,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, ValidationError
 LOCAL_TURBO = Path(__file__).resolve().parents[1] / ".models" / "large-v3-turbo"
 WHISPER_MODEL = os.getenv("VQB_WHISPER_MODEL", str(LOCAL_TURBO) if LOCAL_TURBO.is_dir() else "large-v3-turbo")
 OLLAMA_MODEL = os.getenv("VQB_OLLAMA_MODEL", "deepseek-r1:7b")
+JUDGE_MAX_TOKENS = 768
 SAMPLE_RATE = 16000
 MAX_SAMPLES = 5 * SAMPLE_RATE
 
@@ -34,6 +35,10 @@ from faster_whisper import WhisperModel
 
 class NotReady(Exception):
     """A local inference dependency is unavailable."""
+
+
+class OllamaTimeout(NotReady):
+    """Ollama did not respond before the request deadline."""
 
 
 class BadClip(Exception):
@@ -114,6 +119,9 @@ def ollama(path: str, payload: dict, timeout: int = 90) -> dict:
         with build_opener(ProxyHandler({})).open(request, timeout=timeout) as response:
             return json.load(response)
     except (HTTPError, URLError, OSError, ValueError) as exc:
+        if (isinstance(exc, TimeoutError) or isinstance(getattr(exc, "reason", None), TimeoutError)
+                or isinstance(exc, HTTPError) and exc.code in (408, 504)):
+            raise OllamaTimeout("Ollama took too long to respond.") from exc
         raise NotReady(f"Check that Ollama is running locally and {OLLAMA_MODEL} is installed.") from exc
 
 
@@ -156,8 +164,10 @@ def judge(key: Key, transcript: str) -> Verdict:
                 )},
                 {"role": "user", "content": json.dumps({**key.model_dump(), "player_reply": transcript})},
             ],
-            "options": {"temperature": 0, "num_ctx": 4096},
+            "options": {"temperature": 0, "num_ctx": 4096, "num_predict": JUDGE_MAX_TOKENS},
         })
+        if result.get("done_reason") == "length":
+            raise NotReady("The judge couldn't finish within its token limit. You can mark this answer manually.")
         try:
             correct = Decision.model_validate_json(result["message"]["content"]).correct
         except (KeyError, TypeError, ValidationError) as exc:

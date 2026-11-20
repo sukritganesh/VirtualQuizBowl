@@ -3,6 +3,7 @@ import type { Game } from './game'
 import type { Question } from './sets'
 
 export type Verdict = { transcript: string; correct: boolean }
+const judgeTimedOut = "The judge couldn't finish in time. You can mark this answer manually."
 
 async function apiError(response: Response, fallback: string) {
   const body = await response.json().catch(() => null)
@@ -78,20 +79,26 @@ export function useSpokenAnswer(stream: MediaStream | null, question: Question, 
   useEffect(() => {
     if (!clip || game.phase !== 'grade' || manual) return
     const controller = new AbortController()
+    const deadline = AbortSignal.timeout(120000)
     const data = new FormData()
     data.set('clip', clip, 'answer')
     data.set('key', JSON.stringify({ question: question.question, answer: question.answer, aliases: question.aliases ?? [] }))
     async function grade() {
       try {
         const response = await fetch('/api/answers', {
-          method: 'POST', body: data, signal: AbortSignal.any([controller.signal, AbortSignal.timeout(120000)]),
+          method: 'POST', body: data, signal: AbortSignal.any([controller.signal, deadline]),
         })
-        if (!response.ok) throw await apiError(response, 'The local AI service could not check this recording.')
+        if (!response.ok) {
+          const fallback = response.status === 504 ? judgeTimedOut : 'The local AI service could not check this recording.'
+          throw await apiError(response, fallback)
+        }
         const result = await response.json()
         if (typeof result.transcript !== 'string' || typeof result.correct !== 'boolean') throw new Error('Invalid verdict from the local AI service.')
         if (!controller.signal.aborted) setVerdict(result)
       } catch (err) {
-        if (!controller.signal.aborted) setError(err instanceof Error ? err.message : 'Unable to check this recording.')
+        if (controller.signal.aborted) return
+        if (deadline.aborted) setError(judgeTimedOut)
+        else setError(err instanceof Error ? err.message : 'Unable to check this recording.')
       }
     }
     void grade()
