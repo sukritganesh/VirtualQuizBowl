@@ -1,0 +1,59 @@
+{
+  "mode": "trivia",
+  "title": "Crosscurrent",
+  "category": "Mixed trivia",
+  "questions": [
+    {
+      "id": "phase-change",
+      "question": "What process turns a solid directly into a gas?",
+      "answer": "Sublimation"
+    },
+    {
+      "id": "capacitor",
+      "question": "Which unit of electrical capacitance is named after the scientist who discovered electromagnetic induction in 1831?",
+      "answer": "Farad",
+      "aliases": [
+        "the farad"
+      ]
+    },
+    {
+      "id": "scratch-test",
+      "question": "Which mineral defines ten on the Mohs scale of hardness?",
+      "answer": "Diamond"
+    },
+    {
+      "id": "cheese-origin",
+      "question": "Which Greek cheese is traditionally made from sheep's milk or a blend of sheep's and goat's milk and matured in brine?",
+      "answer": "Feta",
+      "aliases": [
+        "feta cheese"
+      ]
+    },
+    {
+      "id": "orbit-point",
+      "question": "What do astronomers call the point in a planet's orbit where it is closest to the Sun?",
+      "answer": "Perihelion"
+    },
+    {
+      "id": "belgian-sleuth",
+      "question": "Which novelist created the Belgian detective Hercule Poirot?",
+      "answer": "Agatha Christie",
+      "aliases": [
+        "Christie"
+      ]
+    },
+    {
+      "id": "string-technique",
+      "question": "Which Italian musical term directs a string player to pluck the strings?",
+      "answer": "Pizzicato"
+    },
+    {
+      "id": "letter-dot",
+      "question": "What word beginning with T names the dot above a lowercase i or j?",
+      "answer": "Tittle",
+      "aliases": [
+        "a tittle"
+      ]
+    }
+  ]
+}

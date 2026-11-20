@@ -6,12 +6,14 @@ Try [The Night Sky](sets/trivia/astronomy/the-night-sky.json) for an eight-quest
 
 ## A trivia round
 
+The home screen and pause menu both offer audio settings. Players can preview a host voice, adjust volume, or mute directly from the home screen or round. While muted, the question highlights silently before the buzzer opens.
+
 1. The buzzer stays locked while the host reads. When the host finishes, the player has five seconds to buzz. If the window expires, the question ends with zero points.
 2. Buzzing gives the player a fresh five seconds to say their entire answer, even if they buzz at the last moment.
-3. The game shows what it heard and whether the reply identifies the answer. For example, "Whitney" counts for Mount Whitney, while "Sierra Nevada" names the range.
-4. A correct answer earns five points. An incorrect answer or silence earns zero. The time it takes to judge the answer is outside both timers.
+3. When the answer window ends, the game reveals the key. Press R to reveal it earlier. Revealing before buzzing counts as a pass. A missed buzz also reveals the answer.
+4. After buzzing, compare your reply with the key and mark it correct (C) or incorrect (I). Correct earns five points. Wrong answers, silence, and missed buzzes earn zero. Manual judging takes place outside both timers.
 
-The player can pause the round from the menu, resume it, or quit and discard the session. After a verdict, the player advances by click or keyboard. The final screen shows total points and counts of correct answers, wrong answers, and questions where the player never buzzed.
+The player can pause the round from the menu, resume it, or quit and discard the session. Each round action has a button and a shortcut. A buzzes in and N advances after a verdict. The final screen shows total points and counts of correct answers, wrong answers, and questions where the player never buzzed.
 
 ## Planned quiz bowl mode
 

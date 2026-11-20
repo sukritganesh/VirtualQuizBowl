@@ -1,16 +1,18 @@
 # Virtual Quiz Bowl tech stack
 
-The first build targets a browser on the same PC as the RTX 4090. The browser runs the round. A Python service transcribes and judges each recorded answer on the PC. The [game overview](GAME_OVERVIEW.md) defines the rules and scoring.
+The first playable build runs in the browser. React handles manual judging and scoring, and browser speech synthesis voices the host. The [game overview](GAME_OVERVIEW.md) defines the rules and scoring. The planned AI version adds a local Python service on the PC with the RTX 4090.
 
 ## Browser
 
 Use the [UI pack](design/trivia-ui/SKILL.md) for screen layouts, narration highlighting, pause behavior, and visual references.
 
 - **React, TypeScript, and Vite** for the home screen and round UI. The browser validates the imported JSON set, checks that its mode is `trivia`, and keeps the current question and session score in memory.
-- **Browser speech synthesis** for the host. Prefer a local English voice and unlock the buzzer when the utterance ends successfully. If narration fails, offer to replay the question before starting the timer.
-- **Microphone capture** with `getUserMedia` and `MediaRecorder`. Request permission before play. Start recording on a valid buzz, stop at the answer deadline, then upload the clip. If the buzz window expires first, the browser resolves the question locally. Use `localhost` for local play and HTTPS for a hosted build. [Browser microphone requirements](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#privacy_and_security)
+- **Browser speech synthesis** for the host. Read the available voices through `getVoices()` and refresh the settings selector on `voiceschanged`. Store the chosen voice URI, volume, and mute preference in browser local storage. Use the selected voice for both preview and narration, falling back to an available English voice when needed. Silent reading advances the highlight on a local timer. If audible narration fails, offer to replay the question before starting the timer.
+- **Manual judging.** The browser owns both deadlines and pauses them with the round. Revealing an answer after buzzing enables manual scoring. A pass or missed buzz resolves the question locally.
 
-## Answer processing
+## Planned AI answer processing
+
+In the AI version, capture the answer with `getUserMedia` and `MediaRecorder`. Request microphone permission before play, record during the answer window, and upload the finished clip. [Browser microphone requirements](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#privacy_and_security)
 
 1. **FastAPI** receives one request containing the finished clip, question, canonical answer, and accepted aliases.
 2. **Whisper via faster-whisper** transcribes the clip on the GPU. Start with `large-v3-turbo` and keep the model loaded between questions. [faster-whisper](https://github.com/SYSTRAN/faster-whisper)
@@ -21,4 +23,4 @@ Use the [UI pack](design/trivia-ui/SKILL.md) for screen layouts, narration highl
 
 Use `web/` for the browser app and `api/` for the Python service. Store named sets anywhere under `sets/trivia/`. The browser validates files against the [trivia set schema](schemas/trivia-set.schema.json), checks that question IDs are unique within the set, and uses array order for play. The initial session needs no database.
 
-For local development, Vite serves the UI and forwards API calls to FastAPI. FastAPI handles the local models and calls Ollama. For a future hosted version, Railway can serve the built UI and API, with GPU inference running on a separate, reachable service. [Railway deployment guidance](https://railway.com/guides/ai-api-hosted-inference)
+Vite serves the playable version locally and builds a static site in `web/dist/`. In the AI version, the browser will send answer clips to FastAPI. Railway could host the UI and API with GPU inference on a separate, reachable service. [Railway deployment guidance](https://railway.com/guides/ai-api-hosted-inference)
