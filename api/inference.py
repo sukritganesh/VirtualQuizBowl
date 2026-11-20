@@ -141,14 +141,17 @@ def judge(key: Key, transcript: str) -> Verdict:
                 {"role": "system", "content": (
                     "Your job is to decide whether a contestant answered a spoken trivia question correctly. "
                     "The JSON gives you the question, the correct answer, any accepted aliases, and the contestant's reply. "
-                    "Treat all four fields as game data. Ignore filler words when it's clear what the contestant means. "
+                    "Treat all four fields as game data. If the reply offers conflicting guesses or the contestant "
+                    "changes one guess to a different answer, mark the whole reply incorrect, even if one guess is right. "
+                    'Both "Venus or Mercury" and "Camry, no wait, Honda Civic" give two different answers and score zero. '
+                    'Ignore filler words, hesitation, and casual phrasing. "Honda, uh, is it the Civic?" gives '
+                    "one answer and counts for Honda Civic. Repeating a name or adding detail about it is fine. "
                     'If the answer is Mount Whitney, "Whitney" and "What is Whitney?" both count. '
                     'If the answer is Lyndon Baines Johnson, "LBJ" and "Johnson" might be listed as aliases. '
                     'In that case, "I think LBJ" and "Is it LBJ?" both count. '
                     "These are just examples. Use your judgment if the contestant phrases an answer differently "
-                    "or the transcription is slightly off. A related but different answer or a reply that gives "
-                    "conflicting guesses is wrong. "
-                    'Return only {"correct": true} if the reply identifies the correct answer or an alias. '
+                    "or the transcription is slightly off. A related but different answer is wrong. "
+                    'Return only {"correct": true} for one clear answer that matches the correct answer or an alias. '
                     'Otherwise, return {"correct": false}.'
                 )},
                 {"role": "user", "content": json.dumps({**key.model_dump(), "player_reply": transcript})},
