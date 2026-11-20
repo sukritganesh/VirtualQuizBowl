@@ -1,0 +1,127 @@
+{
+  "mode": "trivia",
+  "title": "Engine Room",
+  "category": "Automotive",
+  "questions": [
+    {
+      "id": "camber-lean",
+      "question": "Looking at a car head-on, what kind of camber makes the tops of its wheels lean toward each other?",
+      "answer": "Negative camber",
+      "aliases": ["Negative"]
+    },
+    {
+      "id": "turbo-exhaust-shortcut",
+      "question": "Which valve keeps a turbo from making too much boost by letting some exhaust skip the turbine?",
+      "answer": "Wastegate",
+      "aliases": ["Waste gate", "Turbine bypass valve"]
+    },
+    {
+      "id": "porsche-clutch-partner",
+      "question": "In a Porsche dual-clutch gearbox, which other gear among the first four shares a clutch with first?",
+      "answer": "Third gear",
+      "aliases": ["Third", "3rd gear", "Gear three", "Three", "3"]
+    },
+    {
+      "id": "corner-push",
+      "question": "What do drivers call it when the front tires lose grip first and the car runs wide in a bend?",
+      "answer": "Understeer",
+      "aliases": ["Understeering", "Push", "Front-end push", "Plowing", "Ploughing"]
+    },
+    {
+      "id": "hybrid-downhill",
+      "question": "Which braking method lets a hybrid charge its battery from the motion of its wheels on a descent?",
+      "answer": "Regenerative braking",
+      "aliases": ["Regen", "Regen braking", "Brake energy regeneration", "Brake energy recovery"]
+    },
+    {
+      "id": "rotor-tip",
+      "question": "On a Mazda rotary engine, which long seal runs across each tip of the triangular rotor?",
+      "answer": "Apex seal",
+      "aliases": ["Apex seals", "Rotor apex seal"]
+    },
+    {
+      "id": "left-right-link",
+      "question": "Which suspension bar connects the left and right sides so the car leans less through a bend?",
+      "answer": "Anti-roll bar",
+      "aliases": ["Sway bar", "Stabilizer bar", "Stabiliser bar", "Anti-sway bar", "Anti roll bar"]
+    },
+    {
+      "id": "brakes-boiling",
+      "question": "After a long descent, what kind of lock can soften the brake pedal when the fluid boils?",
+      "answer": "Vapor lock",
+      "aliases": ["Vapour lock", "Brake fluid vapor lock", "Brake fluid vapour lock"]
+    },
+    {
+      "id": "highway-gearing",
+      "question": "What do you call a gear ratio that lets the gearbox output shaft spin faster than its input shaft?",
+      "answer": "Overdrive",
+      "aliases": ["Overdrive gear", "Overdrive ratio"]
+    },
+    {
+      "id": "oil-on-track",
+      "question": "Which lubrication system lets a Corvette carry its engine oil in a separate tank for hard cornering?",
+      "answer": "Dry sump",
+      "aliases": ["Dry-sump lubrication", "Dry sump oiling", "Dry sump system"]
+    },
+    {
+      "id": "sidewall-arrow",
+      "question": "What does the arrow on a directional tire's sidewall tell you about how to mount it?",
+      "answer": "Direction of rotation",
+      "aliases": ["Rotation direction", "Rolling direction", "Which way it should roll", "Which way it should rotate", "Which way it should spin"]
+    },
+    {
+      "id": "floor-exit",
+      "question": "Which aerodynamic device opens upward at the back of a race car's floor to guide air out from underneath?",
+      "answer": "Rear diffuser",
+      "aliases": ["Diffuser", "Underbody diffuser", "Underfloor diffuser"]
+    },
+    {
+      "id": "camshaft-speed",
+      "question": "When a four-stroke engine's crankshaft is turning at six thousand revolutions per minute, how fast is its camshaft turning?",
+      "answer": "3,000 rpm",
+      "aliases": ["3000 rpm", "Three thousand rpm", "Three thousand revolutions per minute", "Three thousand", "3000", "3,000", "Half crankshaft speed", "Half the crankshaft speed", "Half as fast"]
+    },
+    {
+      "id": "suspension-spheres",
+      "question": "What gas acts as a spring inside the suspension spheres of a classic Citroën DS?",
+      "answer": "Nitrogen",
+      "aliases": ["Nitrogen gas", "N2", "N two"]
+    },
+    {
+      "id": "mixture-feedback",
+      "question": "Which gas does a lambda sensor measure in a gasoline engine's exhaust to help control the fuel mixture?",
+      "answer": "Oxygen",
+      "aliases": ["O2", "O two", "Residual oxygen"]
+    },
+    {
+      "id": "left-hand-bend",
+      "question": "As a car rounds a left-hand bend without slipping, which of its rear wheels turns faster?",
+      "answer": "Right rear",
+      "aliases": ["Right", "Right rear wheel", "Right-hand wheel", "Rear right", "Outside", "Outside wheel", "Outside rear wheel", "Outer wheel"]
+    },
+    {
+      "id": "charging-at-home",
+      "question": "When an electric car plugs into an AC outlet, which component inside the car converts that power to DC for the traction battery?",
+      "answer": "Onboard charger",
+      "aliases": ["On-board charger", "On board charger", "OBC", "O B C"]
+    },
+    {
+      "id": "tire-aspect-ratio",
+      "question": "What is the nominal sidewall height in millimeters of a forty-series tire with a section width of 225 millimeters?",
+      "answer": "90 millimeters",
+      "aliases": ["Ninety millimeters", "90 mm", "Ninety", "90", "Nine centimeters", "9 cm"]
+    },
+    {
+      "id": "automatic-fluid-drive",
+      "question": "Which component between an engine and a conventional automatic gearbox uses an impeller, a turbine, and a stator?",
+      "answer": "Torque converter",
+      "aliases": ["Hydraulic torque converter", "Automatic transmission torque converter"]
+    },
+    {
+      "id": "compressed-air-cooling",
+      "question": "Which heat exchanger cools air after it leaves the turbocharger and before it enters the engine?",
+      "answer": "Intercooler",
+      "aliases": ["Charge air cooler", "Charge-air cooler", "Aftercooler", "Charge cooler"]
+    }
+  ]
+}

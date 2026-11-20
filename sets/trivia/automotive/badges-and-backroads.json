@@ -1,0 +1,126 @@
+{
+  "mode": "trivia",
+  "title": "Badges and Backroads",
+  "category": "Automotive",
+  "questions": [
+    {
+      "id": "alfa-emblem-city",
+      "question": "Which Italian city lent its red cross and the serpent of its ruling Visconti family to Alfa Romeo's badge?",
+      "answer": "Milan",
+      "aliases": ["Milano", "Milan, Italy"]
+    },
+    {
+      "id": "steinbeck-highway",
+      "question": "Which American highway did John Steinbeck call the Mother Road in The Grapes of Wrath?",
+      "answer": "Route 66",
+      "aliases": ["Route sixty-six", "US Route 66", "US 66", "Highway 66", "Sixty-six", "66"]
+    },
+    {
+      "id": "mulliner-bacalar",
+      "question": "For which luxury carmaker did the coachbuilder Mulliner build the open-top Bacalar?",
+      "answer": "Bentley",
+      "aliases": ["Bentley Motors"]
+    },
+    {
+      "id": "bowling-green-sinkhole",
+      "question": "In which state did a sinkhole swallow eight cars at the National Corvette Museum in 2014?",
+      "answer": "Kentucky",
+      "aliases": ["Commonwealth of Kentucky", "KY"]
+    },
+    {
+      "id": "subaru-stars",
+      "question": "Which star cluster gives Subaru its Japanese name and appears on the company's blue oval badge?",
+      "answer": "The Pleiades",
+      "aliases": ["Pleiades", "Seven Sisters", "The Seven Sisters", "Messier 45", "M45"]
+    },
+    {
+      "id": "lingotto-laps",
+      "question": "Where on Fiat's old Lingotto factory could newly assembled cars take a test lap?",
+      "answer": "The roof",
+      "aliases": ["Roof", "Rooftop", "On the roof", "Rooftop test track", "On the rooftop track"]
+    },
+    {
+      "id": "aston-initials",
+      "question": "Which former Aston Martin owner gave his initials to the DB series?",
+      "answer": "David Brown",
+      "aliases": ["Sir David Brown", "Brown"]
+    },
+    {
+      "id": "victorian-coast",
+      "question": "Which Australian coastal drive takes motorists past the limestone stacks called the Twelve Apostles in Victoria?",
+      "answer": "Great Ocean Road",
+      "aliases": ["The Great Ocean Road"]
+    },
+    {
+      "id": "tire-mascot",
+      "question": "What name did the Michelin Man take from the Latin toast on an early tire poster?",
+      "answer": "Bibendum"
+    },
+    {
+      "id": "highland-park-line",
+      "question": "Which Ford model was built on the moving assembly line at Highland Park in 1913?",
+      "answer": "Ford Model T",
+      "aliases": ["Model T", "Model Tee", "Tin Lizzie"]
+    },
+    {
+      "id": "utah-jeep-gathering",
+      "question": "An off-roader heading to Utah for the Easter Jeep Safari is bound for which city?",
+      "answer": "Moab",
+      "aliases": ["Moab, Utah"]
+    },
+    {
+      "id": "audi-four-rings",
+      "question": "What company did Audi, DKW, Horch, and Wanderer form in 1932, inspiring the four-ring emblem?",
+      "answer": "Auto Union",
+      "aliases": ["Auto Union AG", "Auto Union Aktiengesellschaft"]
+    },
+    {
+      "id": "movie-minis",
+      "question": "In which Italian city do three Minis carry off the stolen gold in the original 1969 film The Italian Job?",
+      "answer": "Turin",
+      "aliases": ["Torino", "Turin, Italy"]
+    },
+    {
+      "id": "bohlin-belt",
+      "question": "Which seat belt design did Volvo engineer Nils Bohlin develop to restrain both the hips and the upper body?",
+      "answer": "Three-point seat belt",
+      "aliases": ["Three-point belt", "Three point", "3-point seat belt", "3 point", "Lap and shoulder belt", "Three point safety belt"]
+    },
+    {
+      "id": "monterey-fairway",
+      "question": "Which California concours lines up collector cars on the eighteenth fairway of its namesake golf course?",
+      "answer": "Pebble Beach Concours d'Elegance",
+      "aliases": ["Pebble Beach", "Pebble Beach Concours", "Pebble Beach Concours d'Élégance"]
+    },
+    {
+      "id": "mazda-design",
+      "question": "What Japanese name does Mazda give its design philosophy called Soul of Motion?",
+      "answer": "Kodo",
+      "aliases": ["Kodo design", "Kodō"]
+    },
+    {
+      "id": "woodward-cruise",
+      "question": "Classic cars cruising Woodward Avenue in the annual Dream Cruise are in the suburbs of which Michigan city?",
+      "answer": "Detroit",
+      "aliases": ["Detroit, Michigan", "Motor City", "The Motor City"]
+    },
+    {
+      "id": "bonnet-mascot",
+      "question": "What is the name of the leaning figure with flowing robes on the nose of a Rolls-Royce?",
+      "answer": "Spirit of Ecstasy",
+      "aliases": ["The Spirit of Ecstasy", "Flying Lady", "The Flying Lady"]
+    },
+    {
+      "id": "japanese-roadsters",
+      "question": "What Japanese vehicle class do the tiny Honda Beat and Suzuki Cappuccino roadsters belong to?",
+      "answer": "Kei cars",
+      "aliases": ["Kei", "Kei car", "Keijidosha", "Kei jidōsha", "Japanese light cars"]
+    },
+    {
+      "id": "bertha-fuel-stop",
+      "question": "What kind of shop supplied Bertha Benz with fuel in Wiesloch during her long-distance drive in 1888?",
+      "answer": "A pharmacy",
+      "aliases": ["Pharmacy", "Chemist", "Chemist's shop", "Drugstore", "Drug store", "Apothecary"]
+    }
+  ]
+}
