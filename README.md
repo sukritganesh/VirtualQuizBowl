@@ -11,7 +11,9 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. For a production build, run `npm run build` and serve `web/dist/`, or run `npm run preview` to try the build locally. Run the game-rule tests with `npm test`.
+Open [Virtual Quiz Bowl](http://127.0.0.1:52741/). The game uses a dedicated local port so its browser storage and service-worker scope stay separate from other games.
+
+For a production build, run `npm run build` and serve `web/dist/`, or run `npm run preview` and open the [local build preview](http://127.0.0.1:52742/). Run the game-rule tests with `npm test`.
 
 ## Play a round
 
