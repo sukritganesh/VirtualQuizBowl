@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added audio settings on the home and pause screens, including voice preview, saved volume and voice choices, and quick mute during play.
 - Assigned dedicated local ports to Virtual Quiz Bowl so the development game and build preview have predictable browser addresses.
 - Added playable single-player trivia with browser narration, independent buzz and answer clocks, manual grading, keyboard and button controls, pause, and final stats.
 - Added four medium-difficulty mixed trivia packs with eight distinct questions each, available from the home screen alongside JSON import.

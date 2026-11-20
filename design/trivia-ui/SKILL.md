@@ -25,7 +25,8 @@ Use Inter or a clean system sans for the title, question, and controls. Use a sy
 
 - **Home.** Pair the game title with one stylized buzzer. Keep the set picker and Play together. Play becomes available after a valid trivia JSON set is selected. Show the selected title, question count, and optional category before play. On a narrow display the controls come first and the illustration yields space.
 - **Round.** At the top left, place Menu first and the timer immediately beside it. Reserve the timer's width during narration. Keep points at the upper right. Put the question number and optional pack category above the prompt. Anchor feedback and the primary action in a strip below it. Long questions or small screens can scroll vertically.
-- **Pause.** The menu opens a modal over the current frame. Its only controls are Close (×) and Quit game. Close or Escape resumes in place. Freeze narration, highlight, both clocks, and recording while paused. Preserve already captured audio and remaining answer time. Hold any verdict that arrives until resume. Quit discards the session and returns home.
+- **Sound controls.** Put quick mute beside Settings on the home screen and beside Menu during a round. Settings has a volume slider, a voice selector, and a spoken preview. Back or Escape returns to the screen that opened it.
+- **Pause.** The menu opens a modal over the current frame with Close (×), Settings, and Quit game. Keep the round paused throughout a visit to Settings. Closing the pause menu resumes in place. Freeze narration, highlight, and both clocks while paused. Quit discards the session and returns home.
 - **Summary.** Give total points the largest type, with separate counts for Correct, Wrong, and Never buzzed. Count each completed question once. Silence after a buzz counts as wrong. Back to home returns to set selection.
 
 ## Round states

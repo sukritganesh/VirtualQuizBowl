@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Home } from './Home'
+import { AudioProvider } from './AudioSettings'
 import { Session } from './Session'
 import type { TriviaSet } from './sets'
 import '../../design/trivia-ui/mockups/screen.css'
@@ -11,4 +12,4 @@ function App() {
   return <div className="stage">{set ? <Session set={set} onQuit={() => play(null)}/> : <Home onPlay={play}/>}</div>
 }
 
-createRoot(document.getElementById('root')!).render(<App/>)
+createRoot(document.getElementById('root')!).render(<AudioProvider><App/></AudioProvider>)

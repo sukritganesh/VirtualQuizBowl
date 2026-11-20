@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react'
 import { library, parseSet, type TriviaSet } from './sets'
 import buzzer from './assets/buzzer.png'
+import { MuteButton, SettingsButton } from './AudioSettings'
 
-export function BrandRail() {
+export function BrandRail({ home = false }: { home?: boolean }) {
   return <header className="rail">
     <span className="brand" aria-label="Virtual Quiz Bowl"><span className="mark" aria-hidden="true"><i/><i/><i/></span>VQB</span>
-    <span className="tag micro">Single-player trivia</span>
+    <div className="rail-tools"><span className="tag micro">Single-player trivia</span>
+      {home && <><MuteButton/><SettingsButton/></>}
+    </div>
   </header>
 }
 
@@ -34,7 +37,7 @@ export function Home({ onPlay }: { onPlay: (set: TriviaSet) => void }) {
     }
   }
 
-  return <><BrandRail/><main className="home-main">
+  return <><BrandRail home/><main className="home-main">
     <div className="home-copy"><h1 className="home-title">Virtual<span>Quiz Bowl</span></h1>
       <div className="form">
         <label className="eyebrow" htmlFor="pack">Question set</label>

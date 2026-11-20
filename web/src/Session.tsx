@@ -1,5 +1,6 @@
 import { Fragment, useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { BrandRail } from './Home'
+import { MuteButton, SettingsButton, useAudio } from './AudioSettings'
 import { startGame, transition, type Command, type Game } from './game'
 import type { TriviaSet } from './sets'
 import { useNarration } from './useNarration'
@@ -21,6 +22,7 @@ function PauseMenu({ resume, quit }: { resume: () => void; quit: () => void }) {
     <button className="icon close" aria-label="Close menu" autoFocus onClick={resume}>×</button>
     <span className="pause-symbol" aria-hidden="true"/>
     <h2 id="pause-title">Game paused</h2>
+    <SettingsButton inMenu/>
     <button className="quit" onClick={quit}>Quit game <span aria-hidden="true">→</span></button>
   </dialog>
 }
@@ -44,16 +46,17 @@ function useCountdown(deadline: number | null, send: RoundProps['send']) {
 }
 
 function Round({ game, set, send, onQuit }: RoundProps) {
+  const { preferences } = useAudio()
   const question = set.questions[game.index]
   const { phase, outcome } = game
   const finishReading = useCallback(() => send('read'), [send])
-  const narration = useNarration(question.question, phase === 'reading' && !game.paused, finishReading)
+  const narration = useNarration(question.question, phase === 'reading' && !game.paused, preferences, finishReading)
   const seconds = useCountdown(game.deadline, send)
   const menu = useRef<HTMLButtonElement>(null)
   const showingAnswer = phase === 'grade' || phase === 'result'
   const timed = phase === 'buzz' || phase === 'answer'
   const label = {
-    reading: narration.failed ? 'Voice unavailable' : 'Host is reading',
+    reading: preferences.muted ? 'Reading silently' : narration.failed ? 'Voice unavailable' : 'Host is reading',
     buzz: 'Buzz window open',
     answer: 'Buzzed in',
     grade: 'Mark your answer',
@@ -70,6 +73,7 @@ function Round({ game, set, send, onQuit }: RoundProps) {
   return <>
     <header className="rail"><div className="rail-group">
       <button ref={menu} className="icon" aria-label="Open pause menu" onClick={() => send('pause')}><span className="hamburger"/></button>
+      <MuteButton/>
       <div className="clock"><span className="micro">{timed ? (phase === 'buzz' ? 'Buzz' : 'Answer') : 'Timer'}</span>
         <b>{timed ? `${String(game.paused ? Math.ceil(game.remaining/1000) : seconds).padStart(2,'0')} s` : '—'}</b></div>
     </div><div className="metric"><span className="micro">Score</span><b>{game.counts.correct * 5}</b></div></header>

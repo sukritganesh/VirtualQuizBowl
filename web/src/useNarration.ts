@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { hostUtterance, type AudioPreferences } from './audio'
 
 // Each short phrase supplies a real completion boundary on voices without word events.
 function nextPhrase(words: string[], start: number) {
@@ -7,7 +8,7 @@ function nextPhrase(words: string[], start: number) {
   return words.slice(start, end)
 }
 
-export function useNarration(text: string, enabled: boolean, onFinished: () => void) {
+export function useNarration(text: string, enabled: boolean, preferences: AudioPreferences, onFinished: () => void) {
   const [word, setWord] = useState(-1)
   const [failed, setFailed] = useState(false)
   const [attempt, setAttempt] = useState(0)
@@ -19,11 +20,26 @@ export function useNarration(text: string, enabled: boolean, onFinished: () => v
     const synth = window.speechSynthesis
     let watchdog: number
     setFailed(false)
+    const words = text.split(' ')
+    if (cursor.current >= words.length) { onFinished(); return }
+    if (preferences.muted) {
+      // Keep the read-along and both game windows playable even without a speech engine.
+      let timer: number
+      const advance = () => {
+        setWord(cursor.current)
+        timer = window.setTimeout(() => {
+          cursor.current++
+          if (cursor.current === words.length) onFinished()
+          else advance()
+        }, 320)
+      }
+      advance()
+      return () => window.clearTimeout(timer)
+    }
     if (!synth || typeof SpeechSynthesisUtterance === 'undefined') {
       setFailed(true)
       return
     }
-    const words = text.split(' ')
     const fail = () => {
       if (!active) return
       active = false
@@ -35,10 +51,7 @@ export function useNarration(text: string, enabled: boolean, onFinished: () => v
     const speak = () => {
       const start = cursor.current
       const phrase = nextPhrase(words, start)
-      utterance = new SpeechSynthesisUtterance(phrase.join(' '))
-      const english = synth.getVoices().filter(voice => /^en\b/i.test(voice.lang))
-      utterance.voice = english.find(voice => voice.localService) ?? english[0] ?? null
-      utterance.lang = utterance.voice?.lang ?? 'en-US'
+      utterance = hostUtterance(phrase.join(' '), preferences)
       utterance.onboundary = event => {
         if (!active || event.name === 'sentence') return
         const preceding = phrase.join(' ').slice(0, event.charIndex)
@@ -63,7 +76,7 @@ export function useNarration(text: string, enabled: boolean, onFinished: () => v
       window.clearTimeout(watchdog)
       synth.cancel()
     }
-  }, [text, enabled, attempt, onFinished])
+  }, [text, enabled, attempt, preferences, onFinished])
 
   function retry() {
     cursor.current = 0

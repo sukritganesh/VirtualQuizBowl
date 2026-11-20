@@ -6,6 +6,8 @@ Try [The Night Sky](sets/trivia/astronomy/the-night-sky.json) for an eight-quest
 
 ## A trivia round
 
+The home screen and pause menu both offer audio settings. Players can preview a host voice, adjust volume, or mute directly from the home screen or round. While muted, the question highlights silently before the buzzer opens.
+
 1. The buzzer stays locked while the host reads. When the host finishes, the player has five seconds to buzz. If the window expires, the question ends with zero points.
 2. Buzzing gives the player a fresh five seconds to say their entire answer, even if they buzz at the last moment.
 3. When the answer window ends, the game reveals the key. Press R to reveal it earlier. Revealing before buzzing counts as a pass. A missed buzz also reveals the answer.

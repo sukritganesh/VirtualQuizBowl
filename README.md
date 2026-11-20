@@ -17,6 +17,8 @@ For a production build, run `npm run build` and serve `web/dist/`, or run `npm r
 
 ## Play a round
 
+Open **Settings** from the home screen or pause menu to set narration volume and preview the voices your browser offers. Your choices are saved in this browser. The speaker button toggles mute immediately and restores your previous volume when unmuted. While muted, words highlight silently before the buzz window opens.
+
 | Key | Button | When to use it |
 | --- | --- | --- |
 | A | Buzz in | Within five seconds after the host finishes. Buzzing starts a fresh five-second answer window. |
