@@ -1,0 +1,209 @@
+{
+  "mode": "trivia",
+  "title": "Showroom Legends",
+  "category": "Automotive",
+  "questions": [
+    {
+      "id": "chicago-roadster",
+      "question": "What was the Eunos Roadster called when Mazda introduced it in Chicago in 1989?",
+      "answer": "Mazda MX-5 Miata",
+      "aliases": [
+        "Miata",
+        "Mazda Miata",
+        "MX-5",
+        "MX5",
+        "MX-5 Miata",
+        "Mazda MX-5",
+        "MX five",
+        "M X five"
+      ]
+    },
+    {
+      "id": "gti-upholstery",
+      "question": "What fabric pattern covered the sport seats in the original Volkswagen Golf GTI?",
+      "answer": "Tartan",
+      "aliases": [
+        "Plaid",
+        "Tartan plaid"
+      ]
+    },
+    {
+      "id": "divided-rear-glass",
+      "question": "Which model year of the second-generation Corvette Sting Ray coupe had a split rear window?",
+      "answer": "1963",
+      "aliases": [
+        "Nineteen sixty-three",
+        "Sixty-three",
+        "63"
+      ]
+    },
+    {
+      "id": "roll-bar-roof",
+      "question": "What name did Porsche give the 911 body style that debuted with a removable roof panel and a fixed roll bar?",
+      "answer": "Targa",
+      "aliases": [
+        "911 Targa",
+        "Porsche Targa",
+        "Porsche 911 Targa"
+      ]
+    },
+    {
+      "id": "toyota-development-partner",
+      "question": "Which Japanese motorcycle manufacturer helped Toyota develop the 2000GT sports car?",
+      "answer": "Yamaha Motor Company",
+      "aliases": [
+        "Yamaha",
+        "Yamaha Motor"
+      ]
+    },
+    {
+      "id": "regal-special",
+      "question": "Buick built just 547 examples of which more powerful version of the Regal Grand National in 1987?",
+      "answer": "Buick GNX",
+      "aliases": [
+        "GNX",
+        "G N X",
+        "Grand National Experimental",
+        "Buick Grand National Experimental"
+      ]
+    },
+    {
+      "id": "three-abreast",
+      "question": "Which Fiat went on sale in Italy in 1998 with room for six people in just two rows?",
+      "answer": "Fiat Multipla",
+      "aliases": [
+        "Multipla"
+      ]
+    },
+    {
+      "id": "highland-green-fastback",
+      "question": "In which film does Steve McQueen drive a Highland Green Mustang fastback through San Francisco?",
+      "answer": "Bullitt",
+      "aliases": [
+        "Bullet"
+      ]
+    },
+    {
+      "id": "nsx-body",
+      "question": "What metal did Honda use for the original NSX's lightweight monocoque body?",
+      "answer": "Aluminum",
+      "aliases": [
+        "Aluminium",
+        "Aluminum alloy",
+        "Aluminium alloy"
+      ]
+    },
+    {
+      "id": "bubble-car-door",
+      "question": "Which BMW bubble car had a single door that opened at the front?",
+      "answer": "BMW Isetta",
+      "aliases": [
+        "Isetta",
+        "Isetta 250",
+        "Isetta 300"
+      ]
+    },
+    {
+      "id": "lfa-cylinder-count",
+      "question": "How many cylinders powered the original Lexus LFA's high-revving engine?",
+      "answer": "Ten",
+      "aliases": [
+        "10",
+        "Ten cylinders",
+        "V10",
+        "V ten"
+      ]
+    },
+    {
+      "id": "alfa-performance-emblem",
+      "question": "What Alfa Romeo performance designation does a green four-leaf clover identify?",
+      "answer": "Quadrifoglio",
+      "aliases": [
+        "Quadrifoglio Verde",
+        "QV",
+        "Q V"
+      ]
+    },
+    {
+      "id": "night-panel",
+      "question": "Which gauge normally stays lit when a Saab 9-5 driver presses the Night Panel button?",
+      "answer": "Speedometer",
+      "aliases": [
+        "Speedo",
+        "Speed gauge"
+      ]
+    },
+    {
+      "id": "australian-coupe",
+      "question": "Which Australian coupe was the basis for the Pontiac GTO that returned to American showrooms in 2004?",
+      "answer": "Holden Monaro",
+      "aliases": [
+        "Monaro",
+        "Holden Monaro CV8",
+        "Monaro CV8"
+      ]
+    },
+    {
+      "id": "red-cam-covers",
+      "question": "Which Ferrari introduced in 1984 revived a name inspired by red engine cam covers?",
+      "answer": "Ferrari Testarossa",
+      "aliases": [
+        "Testarossa",
+        "Testa Rossa"
+      ]
+    },
+    {
+      "id": "mini-designer",
+      "question": "Who designed the original Mini, turning its engine sideways to make more room for passengers?",
+      "answer": "Alec Issigonis",
+      "aliases": [
+        "Issigonis",
+        "Sir Alec Issigonis"
+      ]
+    },
+    {
+      "id": "saints-volvo",
+      "question": "Which Volvo coupe did Roger Moore drive as Simon Templar in The Saint?",
+      "answer": "Volvo P1800",
+      "aliases": [
+        "P1800",
+        "P eighteen hundred",
+        "1800",
+        "Eighteen hundred",
+        "Volvo eighteen hundred",
+        "Volvo 1800",
+        "1800S",
+        "Volvo 1800S"
+      ]
+    },
+    {
+      "id": "f1-heat-shield",
+      "question": "Which precious metal lines parts of the McLaren F1's engine bay to reflect heat?",
+      "answer": "Gold",
+      "aliases": [
+        "Gold foil",
+        "Gold leaf"
+      ]
+    },
+    {
+      "id": "paris-sedan",
+      "question": "Which Citroën sedan unveiled in Paris in 1955 later offered headlights that turned with the steering?",
+      "answer": "Citroën DS",
+      "aliases": [
+        "DS",
+        "D S",
+        "Citroen DS",
+        "DS 19"
+      ]
+    },
+    {
+      "id": "corolla-nickname",
+      "question": "What Japanese nickname for Toyota's AE86 comes from saying the digits eight and six?",
+      "answer": "Hachi-Roku",
+      "aliases": [
+        "Hachi Roku",
+        "Hachiroku"
+      ]
+    }
+  ]
+}

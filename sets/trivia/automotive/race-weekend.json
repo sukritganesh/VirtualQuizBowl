@@ -1,0 +1,126 @@
+{
+  "mode": "trivia",
+  "title": "Race Weekend",
+  "category": "Automotive",
+  "questions": [
+    {
+      "id": "rally-corner-calls",
+      "question": "What does a rally co-driver read aloud to warn the driver about the next bend, crest or jump?",
+      "answer": "Pace notes",
+      "aliases": ["Pacenotes", "Rally pace notes"]
+    },
+    {
+      "id": "monterey-plunge",
+      "question": "What nickname do drivers use for the plunging left-right combination at Laguna Seca?",
+      "answer": "The Corkscrew",
+      "aliases": ["Corkscrew"]
+    },
+    {
+      "id": "four-rotor-winner",
+      "question": "Which Japanese manufacturer won Le Mans in 1991 with the rotary-powered 787B?",
+      "answer": "Mazda"
+    },
+    {
+      "id": "early-pit-stop",
+      "question": "What pit strategy uses fresh tires to gain time on a rival before that rival makes a pit stop?",
+      "answer": "Undercut",
+      "aliases": ["The undercut", "Undercutting"]
+    },
+    {
+      "id": "martinsville-trophy",
+      "question": "Which piece of furniture has Martinsville Speedway awarded to NASCAR Cup winners since 1964?",
+      "answer": "Grandfather clock",
+      "aliases": ["A grandfather clock", "Longcase clock"]
+    },
+    {
+      "id": "rally-supercars",
+      "question": "The Peugeot 205 T16 and Ford RS200 competed under which rally rules that were dropped from the world championship after 1986?",
+      "answer": "Group B",
+      "aliases": ["FIA Group B", "Group Bee"]
+    },
+    {
+      "id": "bathurst-descent",
+      "question": "Which Australian circuit sends touring cars down from Skyline and onto Conrod Straight?",
+      "answer": "Mount Panorama",
+      "aliases": ["Mount Panorama Circuit", "Bathurst", "Bathurst circuit"]
+    },
+    {
+      "id": "unexpected-touring-car",
+      "question": "Which family-car body style did Volvo race with its 850 in the 1994 British Touring Car Championship?",
+      "answer": "Station wagon",
+      "aliases": ["Wagon", "Estate", "Estate car", "Estate wagon"]
+    },
+    {
+      "id": "colorado-summit",
+      "question": "Which Colorado mountain hosts the 156-turn hill climb nicknamed the Race to the Clouds?",
+      "answer": "Pikes Peak",
+      "aliases": ["Pike's Peak"]
+    },
+    {
+      "id": "restricted-paddock",
+      "question": "What French term names the restricted enclosure where officials hold race cars for checks?",
+      "answer": "Parc fermé",
+      "aliases": ["Parc ferme", "Park ferme"]
+    },
+    {
+      "id": "last-lap-signal",
+      "question": "What color flag tells a NASCAR leader that one lap remains?",
+      "answer": "White",
+      "aliases": ["White flag", "The white flag"]
+    },
+    {
+      "id": "champagne-spray",
+      "question": "Which driver celebrated his 1967 Le Mans win alongside teammate AJ Foyt by spraying champagne over the crowd?",
+      "answer": "Dan Gurney",
+      "aliases": ["Gurney", "Daniel Gurney"]
+    },
+    {
+      "id": "rallycross-detour",
+      "question": "In rallycross, what is the lap called when a driver takes the designated longer route through part of the circuit?",
+      "answer": "Joker lap",
+      "aliases": ["Joker", "The joker lap"]
+    },
+    {
+      "id": "rubber-off-line",
+      "question": "What nickname do racing drivers give the loose bits of tire rubber that gather off the racing line?",
+      "answer": "Marbles",
+      "aliases": ["Tire marbles", "Tyre marbles", "Rubber marbles"]
+    },
+    {
+      "id": "senna-esses",
+      "question": "Which São Paulo circuit opens with the Senna S?",
+      "answer": "Interlagos",
+      "aliases": ["Autódromo José Carlos Pace", "Autodromo Jose Carlos Pace", "Interlagos Circuit"]
+    },
+    {
+      "id": "victory-lane-milk",
+      "question": "At which American open-wheel race does the winner traditionally drink milk and pose with the Borg-Warner Trophy?",
+      "answer": "Indianapolis 500",
+      "aliases": ["Indy 500", "Indianapolis five hundred", "Indy five hundred"]
+    },
+    {
+      "id": "outside-wall-scar",
+      "question": "What do NASCAR fans call the scrape on a car that has brushed Darlington's outside wall?",
+      "answer": "Darlington stripe",
+      "aliases": ["A Darlington stripe", "The Darlington stripe"]
+    },
+    {
+      "id": "concrete-runways",
+      "question": "Which Florida circuit runs a twelve-hour endurance race on a course that includes old concrete airfield runways?",
+      "answer": "Sebring International Raceway",
+      "aliases": ["Sebring", "Sebring Raceway"]
+    },
+    {
+      "id": "african-finish",
+      "question": "The original Paris-Dakar Rally finished on the Atlantic coast of which African country?",
+      "answer": "Senegal",
+      "aliases": ["Republic of Senegal"]
+    },
+    {
+      "id": "triple-crown-driver",
+      "question": "Which British driver completed racing's Triple Crown by winning the 24 Hours of Le Mans in 1972?",
+      "answer": "Graham Hill",
+      "aliases": ["Hill"]
+    }
+  ]
+}
