@@ -10,8 +10,8 @@ The home screen and pause menu both offer audio settings. Players can preview a 
 
 1. The buzzer stays locked while the host reads. When the host finishes, the player has five seconds to buzz. If the window expires, the question ends with zero points.
 2. Buzzing gives the player a fresh five seconds to say their entire answer, even if they buzz at the last moment.
-3. When the answer window ends, the game reveals the key. Press R to reveal it earlier. Revealing before buzzing counts as a pass. A missed buzz also reveals the answer.
-4. After buzzing, compare your reply with the key and mark it correct (C) or incorrect (I). Correct earns five points. Wrong answers, silence, and missed buzzes earn zero. Manual judging takes place outside both timers.
+3. In local AI play, the buzz starts a recording. The game stops it at the answer deadline or when the player presses R to submit early. It displays what it heard and compares the reply with the answer key. A missed buzz or an early pass skips recording.
+4. Correct earns five points. Wrong answers, silence, and missed buzzes earn zero. Judging happens outside both timers. Players can also choose manual scoring before a session or after an AI error.
 
 The player can pause the round from the menu, resume it, or quit and discard the session. Each round action has a button and a shortcut. A buzzes in and N advances after a verdict. The final screen shows total points and counts of correct answers, wrong answers, and questions where the player never buzzed.
 

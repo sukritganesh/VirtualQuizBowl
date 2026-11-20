@@ -6,6 +6,8 @@
 }
 .pack-detail, .file-error { color: var(--silver); margin: 8px 0 18px; font-size: 14px; }
 .file-error { color: var(--gold); }
+.scoring-mode { display: flex; align-items: center; gap: 8px; color: var(--silver); font-size: 15px; margin: 0 0 16px; }
+.scoring-mode input { accent-color: var(--blue); width: 17px; height: 17px; }
 .actions { gap: 10px; flex-wrap: wrap; }
 .home-actions button { min-width: 110px; }
 .meter { display: flex; align-items: center; gap: 3px; }

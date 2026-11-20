@@ -4,12 +4,13 @@ import { MuteButton, SettingsButton, useAudio } from './AudioSettings'
 import { startGame, transition, type Command, type Game } from './game'
 import type { TriviaSet } from './sets'
 import { useNarration } from './useNarration'
+import { useSpokenAnswer } from './spokenAnswers'
 
 const shortcuts: Record<string, Command | undefined> = {
   a: 'buzz', r: 'reveal', c: 'correct', i: 'incorrect', n: 'next',
 }
 
-type RoundProps = { game: Game; set: TriviaSet; send: (command: Command) => void; onQuit: () => void }
+type RoundProps = { game: Game; set: TriviaSet; stream: MediaStream | null; send: (command: Command) => void; onQuit: () => void }
 
 function PauseMenu({ resume, quit }: { resume: () => void; quit: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null)
@@ -45,21 +46,40 @@ function useCountdown(deadline: number | null, send: RoundProps['send']) {
   return seconds
 }
 
-function Round({ game, set, send, onQuit }: RoundProps) {
+function Round({ game, set, stream, send, onQuit }: RoundProps) {
   const { preferences } = useAudio()
   const question = set.questions[game.index]
   const { phase, outcome } = game
+  const spoken = useSpokenAnswer(stream, question, game)
+  const automatic = !!stream && !spoken.manual
+  useEffect(() => {
+    if (automatic && !game.paused && phase === 'grade' && spoken.verdict) {
+      send(spoken.verdict.correct ? 'correct' : 'incorrect')
+    }
+  }, [automatic, phase, game.paused, spoken.verdict, send])
+  useEffect(() => {
+    if (game.paused) return
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.repeat || event.ctrlKey || event.altKey || event.metaKey || event.isComposing) return
+      const command = shortcuts[event.key.toLowerCase()]
+      if (!command || (automatic && (command === 'correct' || command === 'incorrect'))) return
+      event.preventDefault()
+      send(command)
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [game.paused, automatic, send])
   const finishReading = useCallback(() => send('read'), [send])
   const narration = useNarration(question.question, phase === 'reading' && !game.paused, preferences, finishReading)
   const seconds = useCountdown(game.deadline, send)
   const menu = useRef<HTMLButtonElement>(null)
-  const showingAnswer = phase === 'grade' || phase === 'result'
+  const showingAnswer = (phase === 'grade' && !automatic) || phase === 'result'
   const timed = phase === 'buzz' || phase === 'answer'
   const label = {
     reading: preferences.muted ? 'Reading silently' : narration.failed ? 'Voice unavailable' : 'Host is reading',
     buzz: 'Buzz window open',
-    answer: 'Buzzed in',
-    grade: 'Mark your answer',
+    answer: automatic ? 'Recording answer' : 'Buzzed in',
+    grade: automatic ? (spoken.error ? 'Could not check answer' : 'Checking answer') : 'Mark your answer',
     result: outcome === 'correct' ? 'Correct' : outcome === 'incorrect' ? 'Incorrect' : 'Never buzzed',
     summary: '',
   }[phase]
@@ -91,7 +111,9 @@ function Round({ game, set, send, onQuit }: RoundProps) {
         </span>
         <div aria-live="polite" aria-atomic="true"><h2>{label}</h2>
           {showingAnswer && <p className="answer-key">Answer · <strong>{question.answer}</strong></p>}
-          {phase === 'grade' && !!question.aliases?.length && <p className="aliases">Also accepted · {question.aliases.join(', ')}</p>}
+          {phase === 'result' && spoken.verdict && <p>{spoken.verdict.transcript ? `Heard “${spoken.verdict.transcript}”` : 'No speech detected.'}</p>}
+          {phase === 'grade' && automatic && spoken.error && <p role="alert">{spoken.error}</p>}
+          {phase === 'grade' && !automatic && !!question.aliases?.length && <p className="aliases">Also accepted · {question.aliases.join(', ')}</p>}
           {phase === 'answer' && <p>Say your answer.</p>}
           {phase === 'reading' && narration.failed && <p>Retry the host or read the question yourself.</p>}
         </div>
@@ -102,8 +124,12 @@ function Round({ game, set, send, onQuit }: RoundProps) {
           <button className="primary" onClick={finishReading}>I've read it</button></>}
         {(phase === 'buzz' || (phase === 'reading' && !narration.failed)) && action('buzz', 'Buzz in', 'A', true, phase === 'reading')}
         {(phase === 'reading' || phase === 'buzz') && action('reveal', 'Reveal & pass', 'R')}
-        {phase === 'answer' && action('reveal', 'Reveal answer', 'R', true)}
-        {phase === 'grade' && <>{action('correct','Correct','C',true)}{action('incorrect','Incorrect','I')}</>}
+        {phase === 'answer' && action('reveal', automatic ? 'Submit answer' : 'Reveal answer', 'R', true)}
+        {phase === 'grade' && !automatic && <>{action('correct','Correct','C',true)}{action('incorrect','Incorrect','I')}</>}
+        {phase === 'grade' && automatic && spoken.error && <>
+          {spoken.canRetry && <button className="primary" onClick={spoken.retry}>Retry scoring</button>}
+          <button className="quiet" onClick={spoken.markManually}>Mark manually</button>
+        </>}
         {phase === 'result' && action('next', game.index + 1 === game.total ? 'View results' : 'Next question', 'N', true)}
       </div>
     </footer>
@@ -111,22 +137,12 @@ function Round({ game, set, send, onQuit }: RoundProps) {
   </>
 }
 
-export function Session({ set, onQuit }: { set: TriviaSet; onQuit: () => void }) {
+export function Session({ set, stream, onQuit }: { set: TriviaSet; stream: MediaStream | null; onQuit: () => void }) {
   const [game, dispatch] = useReducer(transition, set.questions.length, startGame)
   const send = useCallback((command: Command) => dispatch({ command, now: performance.now() }), [])
-  useEffect(() => {
-    if (game.paused || game.phase === 'summary') return
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.repeat || event.ctrlKey || event.altKey || event.metaKey || event.isComposing) return
-      const command = shortcuts[event.key.toLowerCase()]
-      if (!command) return
-      event.preventDefault()
-      send(command)
-    }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [game.paused, game.phase, send])
-  if (game.phase !== 'summary') return <Round key={game.index} game={game} set={set} send={send} onQuit={onQuit}/>
+  const activeStream = game.phase === 'summary' ? null : stream
+  useEffect(() => () => activeStream?.getTracks().forEach(track => track.stop()), [activeStream])
+  if (game.phase !== 'summary') return <Round key={game.index} game={game} set={set} stream={stream} send={send} onQuit={onQuit}/>
   return <><BrandRail/><main className="summary">
     <span className="eyebrow">Set complete</span><h1>{set.title}</h1>
     <div className="total"><strong>{game.counts.correct * 5}</strong><span>points</span></div>
