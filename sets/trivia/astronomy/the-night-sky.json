@@ -1,0 +1,51 @@
+{
+  "mode": "trivia",
+  "title": "The Night Sky",
+  "category": "Astronomy",
+  "questions": [
+    {
+      "id": "earth-companion",
+      "question": "What is Earth's only natural satellite called?",
+      "answer": "The Moon",
+      "aliases": ["Moon", "Luna"]
+    },
+    {
+      "id": "rusty-neighbor",
+      "question": "Which planet gets its nickname, the Red Planet, from rust on its surface?",
+      "answer": "Mars"
+    },
+    {
+      "id": "icy-rings",
+      "question": "Which planet is famous for its bright rings of ice and rock?",
+      "answer": "Saturn"
+    },
+    {
+      "id": "home-galaxy",
+      "question": "Which galaxy contains our solar system?",
+      "answer": "The Milky Way",
+      "aliases": ["Milky Way", "Milky Way Galaxy", "the Milky Way Galaxy"]
+    },
+    {
+      "id": "northern-guide",
+      "question": "Which star at the tip of the Little Dipper's handle helps travelers find north?",
+      "answer": "Polaris",
+      "aliases": ["North Star", "the North Star"]
+    },
+    {
+      "id": "streak-of-light",
+      "question": "What do we call the streak of light a meteoroid makes when it enters Earth's atmosphere?",
+      "answer": "Meteor",
+      "aliases": ["shooting star", "falling star"]
+    },
+    {
+      "id": "largest-moon",
+      "question": "Which moon of Jupiter is the largest moon in our solar system?",
+      "answer": "Ganymede"
+    },
+    {
+      "id": "slow-spin",
+      "question": "Which planet in our solar system takes longer to spin once than to orbit the Sun?",
+      "answer": "Venus"
+    }
+  ]
+}

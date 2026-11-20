@@ -19,6 +19,6 @@ Use the [UI pack](design/trivia-ui/SKILL.md) for screen layouts, narration highl
 
 ## Workspace and deployment
 
-Use `web/` for the browser app, `api/` for the Python service, and `sets/trivia/` for example sets. The initial session needs no database.
+Use `web/` for the browser app and `api/` for the Python service. Store named sets anywhere under `sets/trivia/`. The browser validates files against the [trivia set schema](schemas/trivia-set.schema.json), checks that question IDs are unique within the set, and uses array order for play. The initial session needs no database.
 
 For local development, Vite serves the UI and forwards API calls to FastAPI. FastAPI handles the local models and calls Ollama. For a future hosted version, Railway can serve the built UI and API, with GPU inference running on a separate, reachable service. [Railway deployment guidance](https://railway.com/guides/ai-api-hosted-inference)
