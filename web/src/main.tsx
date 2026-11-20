@@ -8,8 +8,9 @@ import '../../design/trivia-ui/mockups/screen.css'
 import './game.css'
 
 function App() {
-  const [set, play] = useState<TriviaSet | null>(null)
-  return <div className="stage">{set ? <Session set={set} onQuit={() => play(null)}/> : <Home onPlay={play}/>}</div>
+  const [session, play] = useState<{ set: TriviaSet; stream: MediaStream | null } | null>(null)
+  return <div className="stage">{session ? <Session {...session} onQuit={() => play(null)}/>
+    : <Home onPlay={(set, stream) => play({ set, stream })}/>}</div>
 }
 
 createRoot(document.getElementById('root')!).render(<AudioProvider><App/></AudioProvider>)
