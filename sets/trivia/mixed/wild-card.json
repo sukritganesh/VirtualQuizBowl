@@ -1,0 +1,72 @@
+{
+  "mode": "trivia",
+  "title": "Wild Card",
+  "category": "Mixed trivia",
+  "questions": [
+    {
+      "id": "knotted-records",
+      "question": "Which South American empire used knotted cords called quipus to keep records?",
+      "answer": "Inca Empire",
+      "aliases": [
+        "Inca",
+        "Incan Empire",
+        "the Incas"
+      ]
+    },
+    {
+      "id": "babylonian-laws",
+      "question": "Which Babylonian king lends his name to a collection of laws carved on a stone monument now in the Louvre?",
+      "answer": "Hammurabi"
+    },
+    {
+      "id": "inner-ear",
+      "question": "Which spiral structure of the inner ear contains the organ of Corti?",
+      "answer": "Cochlea",
+      "aliases": [
+        "the cochlea"
+      ]
+    },
+    {
+      "id": "game-terms",
+      "question": "Which board game uses the terms atari for a threatened capture and komi for a point allowance?",
+      "answer": "Go",
+      "aliases": [
+        "baduk",
+        "weiqi"
+      ]
+    },
+    {
+      "id": "metal-symbol",
+      "question": "Which metal has the chemical symbol W?",
+      "answer": "Tungsten",
+      "aliases": [
+        "wolfram"
+      ]
+    },
+    {
+      "id": "fencing-target",
+      "question": "Which fencing weapon permits hits on the entire body?",
+      "answer": "Épée",
+      "aliases": [
+        "epee"
+      ]
+    },
+    {
+      "id": "pink-jersey",
+      "question": "Which men's cycling race awards its overall leader a pink jersey called the maglia rosa?",
+      "answer": "Giro d'Italia",
+      "aliases": [
+        "the Giro",
+        "Tour of Italy"
+      ]
+    },
+    {
+      "id": "return-to-heart",
+      "question": "Which blood vessels carry oxygenated blood from the lungs back to the heart?",
+      "answer": "Pulmonary veins",
+      "aliases": [
+        "pulmonary vein"
+      ]
+    }
+  ]
+}

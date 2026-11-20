@@ -1,0 +1,61 @@
+{
+  "mode": "trivia",
+  "title": "Lucky Dip",
+  "category": "Mixed trivia",
+  "questions": [
+    {
+      "id": "soft-clocks",
+      "question": "Which artist painted the melting clocks in The Persistence of Memory?",
+      "answer": "Salvador Dalí",
+      "aliases": [
+        "Dalí",
+        "Salvador Dali",
+        "Dali"
+      ]
+    },
+    {
+      "id": "imperial-capital",
+      "question": "Which Japanese city was the imperial capital immediately before Tokyo?",
+      "answer": "Kyoto"
+    },
+    {
+      "id": "wedge-script",
+      "question": "Which ancient writing system takes its name from the wedge-shaped marks pressed into clay?",
+      "answer": "Cuneiform"
+    },
+    {
+      "id": "planet-suite",
+      "question": "Which English composer wrote the orchestral suite The Planets?",
+      "answer": "Gustav Holst",
+      "aliases": [
+        "Holst"
+      ]
+    },
+    {
+      "id": "island-crossing",
+      "question": "Which strait separates Tasmania from mainland Australia?",
+      "answer": "Bass Strait"
+    },
+    {
+      "id": "animated-films",
+      "question": "Which Japanese filmmaker directed both Spirited Away and Princess Mononoke?",
+      "answer": "Hayao Miyazaki",
+      "aliases": [
+        "Miyazaki"
+      ]
+    },
+    {
+      "id": "comedy-language",
+      "question": "Which programming language did Guido van Rossum name after a British comedy troupe?",
+      "answer": "Python"
+    },
+    {
+      "id": "two-piece-move",
+      "question": "Which chess move lets a player reposition a king and a rook in a single turn?",
+      "answer": "Castling",
+      "aliases": [
+        "castle"
+      ]
+    }
+  ]
+}

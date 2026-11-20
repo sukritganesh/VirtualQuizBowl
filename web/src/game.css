@@ -1,0 +1,21 @@
+.stage { min-height: 100vh; min-height: 100svh; }
+.art img { display: block; width: 100%; height: auto; }
+.pack-select {
+  width: 100%; padding: 14px; background: var(--surface); border: 1px solid #455875;
+  border-radius: 7px; color: var(--white); font: inherit; font-size: 18px;
+}
+.pack-detail, .file-error { color: var(--silver); margin: 8px 0 18px; font-size: 14px; }
+.file-error { color: var(--gold); }
+.actions { gap: 10px; flex-wrap: wrap; }
+.home-actions button { min-width: 110px; }
+.meter { display: flex; align-items: center; gap: 3px; }
+.meter i { height: 8px; }
+.meter i:nth-child(2), .meter i:nth-child(4) { height: 14px; }
+.meter i:nth-child(3) { height: 21px; }
+.state .answer-key strong { color: var(--white); }
+.state .aliases { font-size: 13px; }
+.question, .summary h1, .state p, .category { overflow-wrap: anywhere; }
+@media (max-width: 680px) {
+  .actions button { width: auto; flex: 1 1 auto; }
+  .art { pointer-events: none; }
+}

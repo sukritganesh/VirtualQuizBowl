@@ -1,0 +1,69 @@
+{
+  "mode": "trivia",
+  "title": "Scattershot",
+  "category": "Mixed trivia",
+  "questions": [
+    {
+      "id": "opening-solo",
+      "question": "Which woodwind instrument plays the famous opening slide in Gershwin's Rhapsody in Blue?",
+      "answer": "Clarinet",
+      "aliases": [
+        "a clarinet"
+      ]
+    },
+    {
+      "id": "uganda-outlet",
+      "question": "Which lake empties into the Nile at Jinja in Uganda?",
+      "answer": "Lake Victoria",
+      "aliases": [
+        "Victoria"
+      ]
+    },
+    {
+      "id": "enclave",
+      "question": "Which independent country is entirely surrounded by South Africa?",
+      "answer": "Lesotho"
+    },
+    {
+      "id": "shipwrecked-twins",
+      "question": "Which Shakespeare comedy features the shipwrecked twins Viola and Sebastian?",
+      "answer": "Twelfth Night",
+      "aliases": [
+        "12th Night"
+      ]
+    },
+    {
+      "id": "waterfall-house",
+      "question": "Which architect designed Fallingwater over a stream in Pennsylvania?",
+      "answer": "Frank Lloyd Wright",
+      "aliases": [
+        "Wright"
+      ]
+    },
+    {
+      "id": "four-capitals",
+      "question": "Which river flows through Vienna, Bratislava, Budapest, and Belgrade?",
+      "answer": "Danube",
+      "aliases": [
+        "the Danube",
+        "Danube River"
+      ]
+    },
+    {
+      "id": "gregor-samsa",
+      "question": "Which author wrote The Metamorphosis about a traveling salesman named Gregor Samsa?",
+      "answer": "Franz Kafka",
+      "aliases": [
+        "Kafka"
+      ]
+    },
+    {
+      "id": "woodblock-wave",
+      "question": "Which Japanese artist designed the woodblock print commonly called The Great Wave?",
+      "answer": "Katsushika Hokusai",
+      "aliases": [
+        "Hokusai"
+      ]
+    }
+  ]
+}

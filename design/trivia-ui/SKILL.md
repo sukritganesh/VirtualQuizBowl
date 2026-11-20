@@ -30,13 +30,15 @@ Use Inter or a clean system sans for the title, question, and controls. Use a sy
 
 ## Round states
 
+The first playable version uses manual grading. Show **Buzz in (A)**, **Reveal answer (R)**, **Correct (C)**, **Incorrect (I)**, and **Next question (N)** in the bottom strip as each becomes available. Before buzzing, label the reveal action **Reveal & pass**. At the answer deadline, show the canonical answer and accepted aliases for self-grading. The mockups below also illustrate the planned AI judging state.
+
 | State | What the player sees and can do |
 | --- | --- |
 | Reading | Full question in white, progressively turning red. The strip says “Host is reading” and the buzzer is disabled. |
-| Buzz open | On successful narration end, the upper-left clock starts at 5 seconds and the strip offers Buzz in. Click, tap, or press Space. A missed buzz ends the question for zero points. |
+| Buzz open | On successful narration end, the upper-left clock starts at 5 seconds and the strip offers Buzz in. Click, tap, or press A. A missed buzz ends the question for zero points. |
 | Answering | A valid buzz starts a fresh 5 seconds. The clock label changes from Buzz to Answer. The bottom strip says “Buzzed in” and “Say your answer.” |
 | Judging | At the recording deadline the mic closes. Show “Checking answer” in the same strip until the verdict arrives. |
-| Verdict | Show Correct, Incorrect, or Never buzzed, with the point change. Show what was heard and the keyed answer when relevant. Click Next question or press Enter to advance. The final action reads View results. |
+| Verdict | Show Correct, Incorrect, or Never buzzed, with the point change. Show the keyed answer. Click Next question or press N to advance. The final action reads View results. |
 
 When extending the game, reuse these anchors, text roles, and state changes before adding another panel. Give each state an explicit label and keep keyboard focus visible. Move focus inside the pause dialog, contain it there, and restore it to Menu on close. Announce phase changes once for assistive technology. Let the complete question remain a single readable sentence regardless of individual word highlights.
 
