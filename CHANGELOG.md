@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a 20-case [spoken-answer benchmark](benchmarks/spoken-answers/README.md) comparing the current GPU setup with a smaller CPU-only setup.
 - Clarified how the trivia judge handles shortened names, aliases, and filler words in spoken answers.
 - Added local AI scoring with five-second microphone capture, CUDA Whisper transcription, accepted aliases, and Ollama judging. The result shows what the game heard. Manual scoring remains available.
 - Added audio settings on the home and pause screens, including voice preview, saved volume and voice choices, and quick mute during play.
