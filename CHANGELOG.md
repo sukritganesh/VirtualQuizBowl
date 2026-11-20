@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Limited the trivia judge to 768 generated tokens per answer. If it reaches the limit or times out, the game explains what happened and offers manual scoring.
 - Added four 20-question automotive trivia sets covering production cars, workshop know-how, motorsport, and car culture. All four are available in the home screen's question-set picker.
 - Updated the trivia judge to reject conflicting guesses and changes of answer while accepting correct replies with hesitation or casual phrasing.
 - Added a 20-case [spoken-answer benchmark](benchmarks/spoken-answers/README.md) comparing the current GPU setup with a smaller CPU-only setup.

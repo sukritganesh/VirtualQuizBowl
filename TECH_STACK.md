@@ -17,7 +17,7 @@ The browser checks local model availability and requests microphone permission b
 1. **FastAPI** receives one request containing the finished clip, question, canonical answer, and accepted aliases.
 2. **Whisper via faster-whisper** transcribes in English on CUDA using local `large-v3-turbo` weights and voice activity detection. PyAV decodes up to five seconds of mono audio in memory. [faster-whisper](https://github.com/SYSTRAN/faster-whisper)
 3. **Answer matching** first checks the transcript against the answer and aliases, ignoring case and surrounding punctuation. For other phrasing, ask a local Ollama model whether the transcript identifies the keyed answer in context. Start with `deepseek-r1:7b` and request a structured verdict. [Ollama model](https://ollama.com/library/deepseek-r1:7b) · [Structured outputs](https://docs.ollama.com/capabilities/structured-outputs)
-4. FastAPI returns the transcript and verdict. The browser applies the scoring rule once. If processing fails, the browser can retry the same clip before scoring.
+4. The judge uses the model's default reasoning behavior and a 768-token output limit shared by reasoning and the verdict. A length stop or a 90-second Ollama chat timeout leaves the question unscored. The browser offers manual grading or a retry with the same clip. On success, FastAPI returns the transcript and verdict and the browser applies the score once.
 
 ## Workspace and deployment
 

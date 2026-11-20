@@ -127,8 +127,8 @@ function Round({ game, set, stream, send, onQuit }: RoundProps) {
         {phase === 'answer' && action('reveal', automatic ? 'Submit answer' : 'Reveal answer', 'R', true)}
         {phase === 'grade' && !automatic && <>{action('correct','Correct','C',true)}{action('incorrect','Incorrect','I')}</>}
         {phase === 'grade' && automatic && spoken.error && <>
-          {spoken.canRetry && <button className="primary" onClick={spoken.retry}>Retry scoring</button>}
-          <button className="quiet" onClick={spoken.markManually}>Mark manually</button>
+          <button className="primary" onClick={spoken.markManually}>Mark manually</button>
+          {spoken.canRetry && <button className="quiet" onClick={spoken.retry}>Retry scoring</button>}
         </>}
         {phase === 'result' && action('next', game.index + 1 === game.total ? 'View results' : 'Next question', 'N', true)}
       </div>
