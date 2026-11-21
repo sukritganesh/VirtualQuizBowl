@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Added four selectable sounds each for buzzing in, correct and incorrect answers, and time running out. Preview and choose them in home Settings.
+- Home Settings now offers 22 round sounds. Play any sound inside its dropdown, then click its name to select it. New players start with Arcade select, Menu confirmation, Falling synth, and Last-life alert.
 
 - Switched the default Ollama judge to Phi-4 Mini for faster spoken-answer verdicts.
 - Browse built-in trivia sets by category from the home screen. Science includes Astronomy and Geology, with a new 10-question geology pack, *Written in Stone*.

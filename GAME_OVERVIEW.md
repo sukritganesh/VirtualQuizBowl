@@ -6,7 +6,7 @@ On the home screen, open **Browse** to explore question sets by category, or cho
 
 ## A trivia round
 
-Each visit to the home screen picks one of two music tracks at random and loops it until the round begins. Settings is available from home and the pause menu, with separate music and narration volumes and a host voice preview. Home Settings also has a **Sound effects** section where players can preview and choose a cue for a valid buzz, either verdict, and either clock expiring. Quick mute silences all game audio. With narration muted or set to zero, the question highlights silently before the buzzer opens.
+Each visit to the home screen picks one of two music tracks at random and loops it until the round begins. Settings is available from home and the pause menu, with separate music and narration volumes and a host voice preview. In home Settings, expand **Sound effects** and open a cue’s dropdown. Play any clip to hear it, then select its name to use it for a valid buzz, a verdict, or either clock expiring. Quick mute silences all game audio. With narration muted or set to zero, the question highlights silently before the buzzer opens.
 
 1. The host reads the whole question as one sentence. The buzzer stays locked until the host finishes, then the player has five seconds to buzz. If the window expires, the question ends with zero points.
 2. Buzzing gives the player a fresh five seconds to say their entire answer, even if they buzz at the last moment.

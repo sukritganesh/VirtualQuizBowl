@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { chooseVoice, defaultAudio, readAudioPreferences, speakQuestion } from '../src/audio.ts'
+import { existsSync } from 'node:fs'
+import { chooseVoice, defaultAudio, readAudioPreferences, serializeAudioPreferences, soundLibrary, speakQuestion } from '../src/audio.ts'
 
 test('saved audio keeps the last audible volume even while muted and tolerates old or damaged data', () => {
   const saved = { volume: 36, muted: true, voiceURI: 'host-2' }
@@ -14,11 +15,22 @@ test('saved audio keeps the last audible volume even while muted and tolerates o
   }
 })
 
-test('old audio settings get the four selected defaults and invalid picks fall back per cue', () => {
-  const defaults = { buzzer: 'twoTone1.ogg', correct: 'confirmation_001.ogg', incorrect: 'lowDown.ogg', timeout: 'sfx_alarm_loop3.wav' }
+test('missing and retired sounds use the new defaults while supported player choices survive', () => {
+  const defaults = { buzzer: 'sfx_menu_select1.wav', correct: 'positive.wav', incorrect: 'lowDown.ogg', timeout: 'sfx_lowhealth_alarmloop2.wav' }
   assert.deepEqual(readAudioPreferences('{}').sounds, defaults)
-  const saved = { sounds: { buzzer: 'switch_002.ogg', correct: 'switch_002.ogg', incorrect: 'unknown.wav' } }
-  assert.deepEqual(readAudioPreferences(JSON.stringify(saved)).sounds, { ...defaults, buzzer: 'switch_002.ogg' })
+  const saved = { sounds: { buzzer: 'switch_002.ogg', correct: 'confirmation_001.ogg', incorrect: 'positive.wav', timeout: 'threeTone2.ogg' } }
+  assert.deepEqual(readAudioPreferences(JSON.stringify(saved)).sounds, { ...defaults, timeout: 'threeTone2.ogg' })
+  const oldDefaults = { buzzer: 'twoTone1.ogg', correct: 'confirmation_001.ogg', incorrect: 'lowDown.ogg', timeout: 'sfx_alarm_loop3.wav' }
+  assert.deepEqual(readAudioPreferences(JSON.stringify({ sounds: oldDefaults })).sounds, defaults)
+  assert.deepEqual(readAudioPreferences(serializeAudioPreferences({ ...defaultAudio, sounds: oldDefaults })).sounds, oldDefaults)
+})
+
+test('each curated sound has a bundled audio file', () => {
+  for (const group of Object.values(soundLibrary)) {
+    for (const clip of group.options) {
+      assert.ok(existsSync(new URL('../public/sounds/' + clip.file, import.meta.url)), clip.file)
+    }
+  }
 })
 
 test('explicit selection wins and a missing voice falls back to local English narration', () => {
