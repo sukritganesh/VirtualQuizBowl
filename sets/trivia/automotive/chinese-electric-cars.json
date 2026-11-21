@@ -1,0 +1,123 @@
+{
+  "mode": "trivia",
+  "title": "China Goes Electric",
+  "category": "Chinese Electric Cars",
+  "questions": [
+    {
+      "id": "byd-three-word-slogan",
+      "question": "Which three-word slogan spells out the initials on a BYD electric car?",
+      "answer": "Build Your Dreams"
+    },
+    {
+      "id": "nio-drive-in-station",
+      "question": "At a Nio station, what service lets you drive in with a depleted pack and leave minutes later with a charged one?",
+      "answer": "Battery swapping",
+      "aliases": ["Battery swap", "Battery exchange", "Swapping the battery", "Replacing the battery"]
+    },
+    {
+      "id": "su7-smartphone-maker",
+      "question": "Which Chinese company, already known for its Redmi smartphones, launched the SU7 electric sedan in 2024?",
+      "answer": "Xiaomi",
+      "aliases": ["Xiaomi Auto"]
+    },
+    {
+      "id": "wuling-american-partner",
+      "question": "Which American automaker is a partner in the Chinese joint venture that builds the tiny Wuling Hong Guang Mini EV?",
+      "answer": "General Motors",
+      "aliases": ["GM", "G M"]
+    },
+    {
+      "id": "atto-door-strings",
+      "question": "Which musical instrument inspired the strings you can strum across the door pockets of a BYD Atto 3?",
+      "answer": "Guitar"
+    },
+    {
+      "id": "zeekr-wagon-body",
+      "question": "Which two-word body style with roots in hunting does Zeekr use to describe its sporty, wagon-shaped 001?",
+      "answer": "Shooting brake",
+      "aliases": ["Shooting break"]
+    },
+    {
+      "id": "li-auto-generator",
+      "question": "In Li Auto's L9 SUV, what does the gasoline engine produce while electric motors drive the wheels?",
+      "answer": "Electricity",
+      "aliases": ["Electrical power", "Electric power", "Electric current", "Electricity to charge the battery"]
+    },
+    {
+      "id": "cyberster-roadster-badge",
+      "question": "Which British sports car badge did China's SAIC put on the Cyberster, a two-seat electric roadster with scissor doors?",
+      "answer": "MG",
+      "aliases": ["M G", "MG Motor", "Morris Garages"]
+    },
+    {
+      "id": "nio-first-overseas-market",
+      "question": "Which Nordic country became Nio's first overseas market in 2021, when the company brought its ES8 electric SUV to Oslo?",
+      "answer": "Norway"
+    },
+    {
+      "id": "blade-cell-shape",
+      "question": "What sharp-sounding name did BYD give the battery pack with long, flat cells that use lithium iron phosphate?",
+      "answer": "Blade Battery",
+      "aliases": ["Blade", "BYD Blade Battery"]
+    },
+    {
+      "id": "ora-uk-launch-name",
+      "question": "What two-word feline name did Great Wall Motor use in Britain for the retro electric hatchback later called the Ora 03?",
+      "answer": "Funky Cat",
+      "aliases": ["Ora Funky Cat", "GWM Ora Funky Cat"]
+    },
+    {
+      "id": "dolphin-camping-power",
+      "question": "What EV feature lets you plug a kettle into a parked BYD Dolphin and boil water using the car's battery?",
+      "answer": "Vehicle-to-load",
+      "aliases": ["V2L", "V two L", "Vehicle to load power"]
+    },
+    {
+      "id": "xpeng-german-partner",
+      "question": "Which German automaker behind the ID family of electric cars partnered with XPeng to develop electric models for China?",
+      "answer": "Volkswagen",
+      "aliases": ["VW", "Volkswagen Group"]
+    },
+    {
+      "id": "hongqi-name-translation",
+      "question": "What two English words translate the name Hongqi, the Chinese marque behind the electric E-HS9 luxury SUV?",
+      "answer": "Red Flag",
+      "aliases": ["Red Banner"]
+    },
+    {
+      "id": "nextev-electric-racing",
+      "question": "Driving for China's NextEV team, Nelson Piquet Junior won the first drivers' title in which electric single-seater racing series?",
+      "answer": "Formula E",
+      "aliases": ["FIA Formula E", "Formula E Championship"]
+    },
+    {
+      "id": "xpeng-minivan-u-turn",
+      "question": "Which steering feature helps XPeng's X9 minivan make tight U-turns by angling the back wheels as well as the front ones?",
+      "answer": "Rear-wheel steering",
+      "aliases": ["Rear steering", "Rear-axle steering", "Four-wheel steering", "All-wheel steering", "Active rear steering"]
+    },
+    {
+      "id": "catl-battery-block-shape",
+      "question": "What sweet treat inspired CATL to nickname its rectangular EV battery block the Choco-SEB?",
+      "answer": "A chocolate bar",
+      "aliases": ["Chocolate", "A bar of chocolate", "Chocolate bars"]
+    },
+    {
+      "id": "et7-laser-sensor",
+      "question": "Which type of sensor on the Nio ET7 measures distance by timing reflections from pulses of laser light?",
+      "answer": "Lidar",
+      "aliases": ["Light detection and ranging", "Laser radar", "Laser rangefinder"]
+    },
+    {
+      "id": "zeekr-robotaxi-partner",
+      "question": "Zeekr designed an electric vehicle for which American robotaxi company that began as Google's self-driving car project?",
+      "answer": "Waymo"
+    },
+    {
+      "id": "yangwang-jumping-hypercar",
+      "question": "Which chassis system did BYD demonstrate by making all four wheels of its Yangwang U9 hypercar jump clear of the ground?",
+      "answer": "Active suspension",
+      "aliases": ["Suspension", "Active suspension system", "DiSus-X", "DiSus", "Intelligent body control system"]
+    }
+  ]
+}

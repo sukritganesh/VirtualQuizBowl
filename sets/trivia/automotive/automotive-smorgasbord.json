@@ -1,0 +1,126 @@
+{
+  "mode": "trivia",
+  "title": "Automotive Smorgasbord",
+  "category": "Automotive",
+  "questions": [
+    {
+      "id": "audi-quattro",
+      "question": "What Italian word for four did Audi use to name its all-wheel-drive coupe in 1980?",
+      "answer": "Quattro",
+      "aliases": ["Audi quattro"]
+    },
+    {
+      "id": "delorean-body",
+      "question": "What metal gives the DeLorean DMC-12 its distinctive unpainted body panels?",
+      "answer": "Stainless steel",
+      "aliases": ["Brushed stainless steel", "Stainless"]
+    },
+    {
+      "id": "tire-footprint",
+      "question": "As a tire rolls, what do engineers call the small area of tread touching the road at any instant?",
+      "answer": "Contact patch",
+      "aliases": ["Tire contact patch", "Footprint", "Tire footprint"]
+    },
+    {
+      "id": "smokey-trans-am",
+      "question": "Which trim of Pontiac Firebird does Burt Reynolds drive in Smokey and the Bandit?",
+      "answer": "Trans Am",
+      "aliases": ["Pontiac Trans Am", "Firebird Trans Am", "Pontiac Firebird Trans Am"]
+    },
+    {
+      "id": "mini-monte-carlo",
+      "question": "Paddy Hopkirk drove a Mini Cooper S to victory in 1964 at which winter rally named for a district of Monaco?",
+      "answer": "Monte Carlo Rally",
+      "aliases": ["Monte Carlo", "Rallye Monte-Carlo"]
+    },
+    {
+      "id": "australian-ute",
+      "question": "What do Australians call the coupe with a cargo bed that Ford Australia introduced in 1934?",
+      "answer": "Ute",
+      "aliases": ["Coupe utility", "Utility", "Utility coupe"]
+    },
+    {
+      "id": "anti-lock-pedal",
+      "question": "Which braking system makes the pedal pulse as it rapidly releases and reapplies pressure to keep a wheel turning?",
+      "answer": "Anti-lock braking system",
+      "aliases": ["ABS", "A B S", "Anti-lock brakes", "Antilock braking system", "Anti-lock brake system"]
+    },
+    {
+      "id": "mercedes-gullwing",
+      "question": "What bird-inspired nickname did the Mercedes-Benz 300 SL coupe earn for its roof-hinged doors?",
+      "answer": "Gullwing",
+      "aliases": ["Gull wing", "Gull wings", "Gullwing doors"]
+    },
+    {
+      "id": "nissan-r32-monster",
+      "question": "What movie-monster nickname did the Nissan Skyline GT-R earn in Australia during the R32 era?",
+      "answer": "Godzilla",
+      "aliases": ["Gojira"]
+    },
+    {
+      "id": "wheelbase-measurement",
+      "question": "What do you measure between the centers of the front and rear wheels on the same side of a car?",
+      "answer": "Wheelbase",
+      "aliases": ["Wheel base"]
+    },
+    {
+      "id": "manx-donor",
+      "question": "Which Volkswagen donated its chassis to the classic Meyers Manx dune buggy kits?",
+      "answer": "Volkswagen Beetle",
+      "aliases": ["Beetle", "Volkswagen Bug", "VW Bug", "VW Beetle", "Bug", "Type 1", "Volkswagen Type 1"]
+    },
+    {
+      "id": "abarth-badge",
+      "question": "What creature on an Abarth badge represents founder Carlo Abarth’s zodiac sign?",
+      "answer": "Scorpion"
+    },
+    {
+      "id": "heel-toe-shift",
+      "question": "What downshifting technique lets a driver brake and blip the throttle with the same foot?",
+      "answer": "Heel-and-toe downshifting",
+      "aliases": ["Heel and toe", "Heel toe", "Heel-toe shifting", "Heel and toe downshift"]
+    },
+    {
+      "id": "first-prius",
+      "question": "Which Toyota went on sale in Japan in 1997 as the world’s first mass-produced hybrid passenger car?",
+      "answer": "Toyota Prius",
+      "aliases": ["Prius"]
+    },
+    {
+      "id": "green-hell-loop",
+      "question": "Which loop of the Nürburgring did Jackie Stewart nickname the Green Hell?",
+      "answer": "Nordschleife",
+      "aliases": ["North Loop", "Northern Loop", "Nürburgring Nordschleife"]
+    },
+    {
+      "id": "shelby-cobra-designer",
+      "question": "Which American racing driver paired a British AC Ace chassis with a Ford V8 to create the Cobra?",
+      "answer": "Carroll Shelby",
+      "aliases": ["Shelby", "Carroll Hall Shelby"]
+    },
+    {
+      "id": "transfer-case-low",
+      "question": "In a four-wheel-drive truck, which unit sends power to both axles and lets the driver select low range?",
+      "answer": "Transfer case",
+      "aliases": ["Transfer box", "Two-speed transfer case"]
+    },
+    {
+      "id": "mustang-fair-city",
+      "question": "In which city did Ford unveil the original Mustang at the 1964 World's Fair?",
+      "answer": "New York City",
+      "aliases": ["New York", "NYC", "N Y C"]
+    },
+    {
+      "id": "honda-vtec",
+      "question": "What four-letter name did Honda give the system that switches cam profiles as engine speed rises?",
+      "answer": "VTEC",
+      "aliases": ["V tech", "V tec", "Variable Valve Timing and Lift Electronic Control"]
+    },
+    {
+      "id": "monza-lesmo",
+      "question": "Which Italian circuit, nicknamed the Temple of Speed, sends drivers through the two Lesmo corners?",
+      "answer": "Monza",
+      "aliases": ["Autodromo Nazionale Monza", "Monza Circuit", "Autodromo Nazionale di Monza"]
+    }
+  ]
+}
