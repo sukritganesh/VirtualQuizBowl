@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Players can spell a trivia answer aloud. The judge accepts minor spelling slips when the intended answer is clear.
+- Players can spell a trivia answer aloud. When the transcript shows space-separated letters, the judge is asked to allow up to two letter errors if the intended answer is clear.
 
 - Kokoro voices highlight the word being spoken, including years and model names. Each question’s word timings are prepared with its audio.
 

@@ -10,15 +10,15 @@ On November 21, 2026, the local Phi-4 Mini judge (`phi4-mini:3.8b`) produced the
 
 | On the spelling benchmark | Previous prompt (`988ed3f`) | Revised prompt |
 | --- | ---: | ---: |
-| Correct verdicts | 12/20 | 14/20 |
+| Correct verdicts | 12/20 | 16/20 |
 | Valid replies awarded credit | 9/10 | 9/10 |
-| Wrong replies rejected | 3/10 | 5/10 |
-| False positives | 7 | 5 |
+| Wrong replies rejected | 3/10 | 7/10 |
+| False positives | 7 | 3 |
 | False negatives | 1 | 1 |
 
-The revised prompt rejected “V E N U S or Mercury” and “I'll spell it: X P E N G,” which previously earned credit. Both prompts accepted “I think it’s X I A O M I” and “F R A N K E N S T I E N.” Both rejected “Show me.”
+The revised prompt rejected “V E N U S or Mercury,” spelled XPeng for Xiaomi, spelled Kyoto for Tokyo, and Paris → Lyon → Paris. These previously earned credit. Both prompts accepted “I think it’s X I A O M I” and “F R A N K E N S T I E N.” Both rejected “Show me.”
 
-The five false positives were Manet for Monet (8), Kyoto for Tokyo (10), ROM for RAM (16), the unfinished “A U S T R” (17), and Paris → Lyon → Paris (18). Both prompts rejected the valid “Samuel, last name C L E M E N S” for Mark Twain (9). Both scored 20/20 on the original written replies and 20/20 on the saved Whisper transcripts from the earlier model comparison.
+The three false positives were Manet for Monet (8), ROM for RAM (16), and the unfinished “A U S T R” (17). Both prompts rejected the valid “Samuel, last name C L E M E N S” for Mark Twain (9). Both scored 20/20 on the original written replies and 20/20 on the saved Whisper transcripts from the earlier model comparison.
 
 To replay the spelling cases using the installed game judge, start Ollama and run this from the repository root. The optional argument accepts another case file, including `benchmarks/spoken-answers/cases.json`. Each row reports its verdict against the label. Service failures are reported as unscored.
 
