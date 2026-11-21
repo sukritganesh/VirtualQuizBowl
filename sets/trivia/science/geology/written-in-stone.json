@@ -1,0 +1,64 @@
+{
+  "mode": "trivia",
+  "title": "Written in Stone",
+  "category": "Geology",
+  "questions": [
+    {
+      "id": "floating-rock",
+      "question": "Which volcanic rock can float on water thanks to all the bubbles trapped inside it?",
+      "answer": "Pumice",
+      "aliases": ["Pumice stone"]
+    },
+    {
+      "id": "quake-at-the-surface",
+      "question": "What do geologists call the point on the surface directly above the spot where an earthquake starts?",
+      "answer": "Epicenter",
+      "aliases": ["The epicenter", "Epicentre"]
+    },
+    {
+      "id": "hanging-from-the-roof",
+      "question": "What is the name for an icicle-shaped mineral deposit hanging from a cave ceiling?",
+      "answer": "Stalactite",
+      "aliases": ["A stalactite"]
+    },
+    {
+      "id": "scratch-test",
+      "question": "Which mineral sits at number one on the Mohs hardness scale?",
+      "answer": "Talc"
+    },
+    {
+      "id": "limestone-transformed",
+      "question": "When heat and pressure recrystallize pure limestone, what metamorphic rock forms?",
+      "answer": "Marble"
+    },
+    {
+      "id": "rounded-pebbles",
+      "question": "What sedimentary rock is made of rounded pebbles cemented together?",
+      "answer": "Conglomerate",
+      "aliases": ["Conglomerate rock"]
+    },
+    {
+      "id": "sideways-slip",
+      "question": "What type of fault allows the two sides to slide mainly horizontally past each other?",
+      "answer": "Strike-slip fault",
+      "aliases": ["Strike slip", "Strike slip fault"]
+    },
+    {
+      "id": "volcanic-glass",
+      "question": "Which usually black volcanic glass was prized for making sharp blades and arrowheads?",
+      "answer": "Obsidian"
+    },
+    {
+      "id": "ice-transport",
+      "question": "What do geologists call a boulder carried by a glacier and left on bedrock of a different kind?",
+      "answer": "Glacial erratic",
+      "aliases": ["Erratic", "An erratic boulder"]
+    },
+    {
+      "id": "wandering-continents",
+      "question": "Which German scientist proposed continental drift in 1912?",
+      "answer": "Alfred Wegener",
+      "aliases": ["Wegener", "Alfred Lothar Wegener"]
+    }
+  ]
+}

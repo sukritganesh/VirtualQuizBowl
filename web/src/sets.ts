@@ -20,5 +20,7 @@ export function parseSet(data: unknown): TriviaSet {
   return data
 }
 
-const files = import.meta.glob('../../sets/trivia/**/*.json', { eager: true, import: 'default' })
-export const library = Object.values(files).map(parseSet).sort((a, b) => a.title.localeCompare(b.title))
+const files = import.meta.glob('./**/*.json', { base: '../../sets/trivia', eager: true, import: 'default' })
+export const library = Object.entries(files)
+  .map(([path, data]) => ({ path: path.replace(/^\.\//, ''), set: parseSet(data) }))
+  .sort((a, b) => a.set.title.localeCompare(b.set.title))

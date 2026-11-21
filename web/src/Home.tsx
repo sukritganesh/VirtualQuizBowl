@@ -4,6 +4,7 @@ import { library, parseSet, type TriviaSet } from './sets'
 import buzzer from './assets/buzzer.png'
 import { MuteButton, SettingsButton } from './AudioSettings'
 import { HomeMusic } from './HomeMusic'
+import { SetBrowser } from './SetBrowser'
 
 export function BrandRail({ home = false }: { home?: boolean }) {
   return <header className="rail">
@@ -19,13 +20,13 @@ export function Home({ onPlay }: { onPlay: (set: TriviaSet, stream: MediaStream 
   const [starting, setStarting] = useState(false)
   const connection = useRef<AbortController | null>(null)
   useEffect(() => () => connection.current?.abort(), [])
-  const [choice, setChoice] = useState('0')
+  const [selected, setSelected] = useState<TriviaSet | null>(library[0]?.set ?? null)
+  const [browsing, setBrowsing] = useState(false)
   const [imported, setImported] = useState<TriviaSet | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const fileInput = useRef<HTMLInputElement>(null)
   const request = useRef(0)
-  const selected = choice === 'import' ? imported : library[Number(choice)]
 
   async function play() {
     if (!selected || connection.current) return
@@ -51,11 +52,14 @@ export function Home({ onPlay }: { onPlay: (set: TriviaSet, stream: MediaStream 
     const ticket = ++request.current
     setError('')
     setLoading(true)
-    setChoice('import')
+    setSelected(null)
     setImported(null)
     try {
       const pack = parseSet(JSON.parse(await file.text()))
-      if (ticket === request.current) setImported(pack)
+      if (ticket === request.current) {
+        setImported(pack)
+        setSelected(pack)
+      }
     } catch (err) {
       if (ticket === request.current) setError(err instanceof SyntaxError ? 'This file contains invalid JSON.' : String(err instanceof Error ? err.message : err))
     } finally {
@@ -67,16 +71,19 @@ export function Home({ onPlay }: { onPlay: (set: TriviaSet, stream: MediaStream 
     <div className="home-copy"><h1 className="home-title">Virtual<span>Quiz Bowl</span></h1>
       <div className="form">
         <label className="eyebrow" htmlFor="pack">Question set</label>
-        <select id="pack" className="pack-select" disabled={starting} value={choice} onChange={event => {
+        <button id="pack" className="picker browse-trigger" aria-haspopup="dialog" disabled={starting}
+          aria-label={`Browse question sets${selected ? ', selected ' + selected.title : ''}`} onClick={() => setBrowsing(true)}>
+          <span className="details"><strong>{selected?.title ?? 'Choose a question set'}</strong>
+            <small>{loading ? 'Loading set…' : selected && [selected.category, `${selected.questions.length} questions`].filter(Boolean).join(' · ')}</small>
+          </span><span className="browse-link">Browse <span aria-hidden="true">›</span></span>
+        </button>
+        {browsing && <SetBrowser selected={selected} imported={imported} onClose={() => setBrowsing(false)} onSelect={set => {
           request.current++
           setLoading(false)
-          setChoice(event.target.value)
+          setSelected(set)
           setError('')
-        }}>
-          {library.map((set, index) => <option key={index} value={index}>{set.title}</option>)}
-          {(imported || choice === 'import') && <option value="import">{imported?.title ?? 'Choose a valid file'}</option>}
-        </select>
-        <p className="pack-detail" role="status">{loading ? 'Loading set…' : selected && [selected.category, `${selected.questions.length} questions`].filter(Boolean).join(' · ')}</p>
+          setBrowsing(false)
+        }}/>}
         <label className="scoring-mode"><input type="checkbox" checked={ai} disabled={starting} onChange={event => { setAI(event.target.checked); setError('') }}/> Use local AI to score my spoken answers</label>
         {error && <p className="file-error" role="alert">{error}</p>}
         <div className="actions home-actions">

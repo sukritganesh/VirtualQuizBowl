@@ -1,6 +1,6 @@
 # Virtual Quiz Bowl
 
-Play a single-player trivia set in your browser. Pick a built-in pack or import a [trivia JSON file](sets/trivia/astronomy/the-night-sky.json). The browser reads each question. Buzz, say your answer, and see the local transcript and score. Uncheck **Use local AI** on the home screen to play with manual scoring.
+Play a single-player trivia set in your browser. Choose **Browse** to explore built-in packs by category, or use **Import JSON** to open your own [trivia set](sets/trivia/science/astronomy/the-night-sky.json). The browser reads each question. Buzz, say your answer, and see the local transcript and score. Uncheck **Use local AI** on the home screen to play with manual scoring.
 
 ## Run locally
 

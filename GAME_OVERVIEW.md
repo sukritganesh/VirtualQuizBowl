@@ -2,7 +2,7 @@
 
 Virtual Quiz Bowl is an interactive buzzer trivia game with an AI host. The first version is single-player trivia. From the home screen, the player loads a JSON trivia set and hears one short question at a time.
 
-Try [The Night Sky](sets/trivia/astronomy/the-night-sky.json) for an eight-question round. To make another set, follow the [trivia question authoring skill](.agents/skills/trivia-questions/SKILL.md).
+On the home screen, open **Browse** to explore question sets by category, or choose **Import JSON** to play a local file. Under **Science → Astronomy**, try [The Night Sky](sets/trivia/science/astronomy/the-night-sky.json) for an eight-question round. To make another set, follow the [trivia question authoring skill](.agents/skills/trivia-questions/SKILL.md).
 
 ## A trivia round
 

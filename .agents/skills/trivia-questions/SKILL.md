@@ -20,7 +20,7 @@ For “10 simple geography questions,” write ten approachable geography questi
 
 ## JSON format and storage
 
-Save one UTF-8 JSON object per file anywhere under the tracked `sets/trivia/` directory. A flat directory or any depth of subfolders works. The display name comes from `title`, the category from `category`, and play order from the `questions` array. Moving a file between folders leaves those values intact.
+Save one UTF-8 JSON object per file under the tracked `sets/trivia/` directory. Put it in the directory where players should find it. Each directory is a category in the set browser, so `science/geology/` appears as Science → Geology. Use descriptive directory names with hyphens between words. The JSON `title` names the set, `category` labels it during play, and the `questions` array sets the play order.
 
 ```json
 {
@@ -40,4 +40,4 @@ Save one UTF-8 JSON object per file anywhere under the tracked `sets/trivia/` di
 
 Every set needs `mode` equal to `"trivia"`, a nonblank `title`, and at least one question. Include `category` whenever the brief names one. Each question needs a stable, nonblank string `id` unique within its set, the `question`, and a nonblank `answer`. The optional `aliases` array contains distinct, nonblank strings and defaults to empty. Keep existing IDs when editing or reordering a set.
 
-Before handing it over, validate the JSON against the [trivia set schema](../../../schemas/trivia-set.schema.json). Check IDs for uniqueness, read each question as one sentence, and reconcile the final count, order, and any requested quotas with the brief. Review repeated clues and answers for unintended giveaways. The [eight-question astronomy set](../../../sets/trivia/astronomy/the-night-sky.json) shows how a finished file reads.
+Before handing it over, validate the JSON against the [trivia set schema](../../../schemas/trivia-set.schema.json). Check IDs for uniqueness, read each question as one sentence, and reconcile the final count, order, and any requested quotas with the brief. Review repeated clues and answers for unintended giveaways. The [eight-question astronomy set](../../../sets/trivia/science/astronomy/the-night-sky.json) shows how a finished file reads.
