@@ -1,0 +1,127 @@
+{
+  "mode": "trivia",
+  "title": "Corvette Generations",
+  "category": "Corvette",
+  "questions": [
+    {
+      "id": "fiberglass-body",
+      "question": "What lightweight material did Chevrolet mold into body panels for the original Corvette?",
+      "answer": "Fiberglass",
+      "aliases": ["Fibreglass", "Glass-reinforced plastic", "Fiberglass-reinforced plastic"]
+    },
+    {
+      "id": "engine-layout",
+      "question": "What engine layout did the 2020 Corvette adopt by putting its V8 between the seats and the rear axle?",
+      "answer": "Mid-engine",
+      "aliases": ["Mid-engined", "Rear mid-engine", "Mid-mounted engine"]
+    },
+    {
+      "id": "kentucky-home",
+      "question": "Which Kentucky city is home to both the Corvette assembly plant and the National Corvette Museum?",
+      "answer": "Bowling Green",
+      "aliases": ["Bowling Green, Kentucky"]
+    },
+    {
+      "id": "stingray-return",
+      "question": "Which Corvette name, borrowed from a sea creature, returned for the seventh generation in 2014?",
+      "answer": "Stingray",
+      "aliases": ["Sting Ray", "Corvette Stingray"]
+    },
+    {
+      "id": "first-year-paint",
+      "question": "What color were all 300 Corvettes that Chevrolet built for the first model year?",
+      "answer": "Polo White",
+      "aliases": ["White"]
+    },
+    {
+      "id": "daytona-family",
+      "question": "Which NASCAR family supplied two drivers for the number three Corvette at the 2001 Daytona 24 Hours?",
+      "answer": "The Earnhardts",
+      "aliases": ["Earnhardt", "Dale Earnhardt and Dale Earnhardt Junior", "Dale Senior and Dale Junior"]
+    },
+    {
+      "id": "hidden-headlights",
+      "question": "What type of headlights did Chevrolet retire when it gave the 2005 Corvette fixed, exposed lamps?",
+      "answer": "Pop-up headlights",
+      "aliases": ["Retractable headlights", "Hidden headlights", "Flip-up headlights", "Hideaway headlights", "Pop-ups"]
+    },
+    {
+      "id": "crossed-flags",
+      "question": "What racing flag makes up the black-and-white half of the Corvette's crossed-flags emblem?",
+      "answer": "Checkered flag",
+      "aliases": ["Chequered flag", "Checkered", "Chequered", "Finish flag"]
+    },
+    {
+      "id": "blue-flame",
+      "question": "How many cylinders did the original Corvette's Blue Flame engine have?",
+      "answer": "Six",
+      "aliases": ["6", "Six cylinders", "Inline six", "Straight six"]
+    },
+    {
+      "id": "grand-sport-stripes",
+      "question": "Which 1996 Corvette edition wore Admiral Blue paint, a white stripe, and two red hash marks on the left front fender?",
+      "answer": "Grand Sport",
+      "aliases": ["Corvette Grand Sport", "GS"]
+    },
+    {
+      "id": "electric-axle",
+      "question": "Which pair of wheels does the electric motor drive on the 2024 Corvette E-Ray?",
+      "answer": "Front wheels",
+      "aliases": ["Front", "Front axle", "Both front wheels"]
+    },
+    {
+      "id": "mercury-astronaut",
+      "question": "Which astronaut received a 1962 Corvette from General Motors after becoming the first American in space?",
+      "answer": "Alan Shepard",
+      "aliases": ["Shepard", "Alan Shepard Junior"]
+    },
+    {
+      "id": "removable-roof",
+      "question": "What do Corvette fans call the C3 coupe's pair of lift-out roof panels with a fixed bar down the middle?",
+      "answer": "T-tops",
+      "aliases": ["T-top", "T-roof", "T-bar roof"]
+    },
+    {
+      "id": "two-clutch-gearbox",
+      "question": "What type of transmission uses separate clutches for odd and even gears in the 2020 Corvette?",
+      "answer": "Dual-clutch transmission",
+      "aliases": ["Dual clutch", "DCT", "Twin-clutch gearbox", "Double-clutch transmission"]
+    },
+    {
+      "id": "le-mans-class-win",
+      "question": "At which French endurance race did the Corvette C5-R win its class in 2001?",
+      "answer": "24 Hours of Le Mans",
+      "aliases": ["Le Mans", "Le Mans 24 Hours", "Twenty-four Hours of Le Mans"]
+    },
+    {
+      "id": "zr1-boost",
+      "question": "What belt-driven device forces extra air into the V8 of the 2019 Corvette ZR1?",
+      "answer": "Supercharger",
+      "aliases": ["Supercharging", "Blower"]
+    },
+    {
+      "id": "naval-namesake",
+      "question": "What kind of vessel did the word corvette describe before Chevrolet borrowed it for a sports car?",
+      "answer": "A small warship",
+      "aliases": ["Warship", "Naval escort ship", "Escort ship", "Navy ship", "Military ship", "Naval warship"]
+    },
+    {
+      "id": "lt5-design-partner",
+      "question": "Which British sports-car company helped GM design the engine for the 1990 Corvette ZR-1?",
+      "answer": "Lotus",
+      "aliases": ["Lotus Engineering", "Lotus Cars"]
+    },
+    {
+      "id": "little-red-corvette",
+      "question": "Which musician recorded the 1980s hit Little Red Corvette?",
+      "answer": "Prince",
+      "aliases": ["Prince Rogers Nelson"]
+    },
+    {
+      "id": "z06-crankshaft",
+      "question": "What type of crankshaft gives the eighth-generation Corvette Z06 its distinctive high-revving V8 sound?",
+      "answer": "Flat-plane crankshaft",
+      "aliases": ["Flat-plane crank", "Flat plane", "Flat-plane design"]
+    }
+  ]
+}

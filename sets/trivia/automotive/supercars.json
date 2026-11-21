@@ -1,0 +1,127 @@
+{
+  "mode": "trivia",
+  "title": "Supercar Icons",
+  "category": "Supercars",
+  "questions": [
+    {
+      "id": "countach-hinges",
+      "question": "What style of door swings upward on a front hinge, as seen on the Lamborghini Countach?",
+      "answer": "Scissor doors",
+      "aliases": ["Scissors doors", "Scissor", "Lamborghini doors", "Lambo doors"]
+    },
+    {
+      "id": "stark-garage",
+      "question": "Which Audi supercar with side blades behind the doors did Tony Stark drive in the first Iron Man film?",
+      "answer": "Audi R8",
+      "aliases": ["R8", "R eight", "Audi R eight"]
+    },
+    {
+      "id": "anniversary-ferrari",
+      "question": "Which twin-turbo Ferrari celebrated the company's fortieth anniversary in 1987?",
+      "answer": "Ferrari F40",
+      "aliases": ["F40", "F forty", "Ferrari F forty"]
+    },
+    {
+      "id": "three-seat-cockpit",
+      "question": "Which of the three seats in a McLaren F1 has the steering wheel?",
+      "answer": "The center seat",
+      "aliases": ["Center", "Centre", "Middle", "The middle seat", "In the center"]
+    },
+    {
+      "id": "veyron-boost",
+      "question": "How many turbochargers fed the sixteen-cylinder engine in the original Bugatti Veyron?",
+      "answer": "Four",
+      "aliases": ["4", "Four turbochargers", "Quad turbo"]
+    },
+    {
+      "id": "american-roadster",
+      "question": "Which American supercar debuted as the RT/10 roadster with an eight-liter V10?",
+      "answer": "Dodge Viper",
+      "aliases": ["Viper", "Viper RT/10", "Dodge Viper RT/10"]
+    },
+    {
+      "id": "suzuka-feedback",
+      "question": "Which Brazilian Formula One champion helped Honda fine-tune the original NSX at Suzuka?",
+      "answer": "Ayrton Senna",
+      "aliases": ["Senna"]
+    },
+    {
+      "id": "ford-dimension",
+      "question": "What dimension of Ford's original GT40 was roughly forty inches?",
+      "answer": "Height",
+      "aliases": ["Roof height", "Overall height", "The height of the car"]
+    },
+    {
+      "id": "pagani-debut",
+      "question": "Before the Huayra, which Pagani supercar made its debut in Geneva as the C12?",
+      "answer": "Pagani Zonda",
+      "aliases": ["Zonda", "Zonda C12", "Pagani Zonda C12"]
+    },
+    {
+      "id": "nevera-hometown",
+      "question": "In which European country does Rimac build the electric Nevera near the capital city of Zagreb?",
+      "answer": "Croatia",
+      "aliases": ["Republic of Croatia"]
+    },
+    {
+      "id": "carrera-shifter",
+      "question": "What natural material gives the Porsche Carrera GT's gear knob its distinctive grain?",
+      "answer": "Wood",
+      "aliases": ["Laminated wood", "Walnut", "Walnut wood"]
+    },
+    {
+      "id": "racing-nickname",
+      "question": "What racing nickname do the letters LT stand for on a McLaren 675LT?",
+      "answer": "Longtail",
+      "aliases": ["Long tail"]
+    },
+    {
+      "id": "eyelash-headlights",
+      "question": "Which 1960s Lamborghini had eyelashes around its headlights and carried a V12 sideways behind the seats?",
+      "answer": "Lamborghini Miura",
+      "aliases": ["Miura", "Miura P400", "Lamborghini Miura P400"]
+    },
+    {
+      "id": "hypercar-trio",
+      "question": "Which plug-in Porsche joined the McLaren P1 and LaFerrari in the trio nicknamed the Holy Trinity?",
+      "answer": "Porsche 918 Spyder",
+      "aliases": ["918 Spyder", "Porsche 918", "918", "Nine eighteen", "Nine eighteen Spyder"]
+    },
+    {
+      "id": "hybrid-racing-roots",
+      "question": "Mercedes adapted the hybrid engine in its AMG One road car from which racing series?",
+      "answer": "Formula One",
+      "aliases": ["Formula 1", "F1", "F one"]
+    },
+    {
+      "id": "family-namesake",
+      "question": "How was Jesko, the namesake of Koenigsegg's Jesko hypercar, related to company founder Christian von Koenigsegg?",
+      "answer": "His father",
+      "aliases": ["Father", "Dad", "His dad", "The founder's father"]
+    },
+    {
+      "id": "jaguar-engine",
+      "question": "Jaguar showed a V12 in the XJ220 concept, but what cylinder layout did the twin-turbo production car use?",
+      "answer": "V6",
+      "aliases": ["V six", "Twin-turbo V6", "A V-shaped six-cylinder engine"]
+    },
+    {
+      "id": "valkyrie-partner",
+      "question": "Which Formula One team's Advanced Technologies division helped Aston Martin develop the Valkyrie?",
+      "answer": "Red Bull Racing",
+      "aliases": ["Red Bull", "Red Bull Advanced Technologies"]
+    },
+    {
+      "id": "roadgoing-racer",
+      "question": "What racing approval process required Porsche to build roadgoing examples of its 911 GT1?",
+      "answer": "Homologation",
+      "aliases": ["Race homologation", "FIA homologation"]
+    },
+    {
+      "id": "le-mans-canvas",
+      "question": "Which pop artist famous for painting soup cans also painted a BMW M1 that raced at Le Mans in 1979?",
+      "answer": "Andy Warhol",
+      "aliases": ["Warhol"]
+    }
+  ]
+}
