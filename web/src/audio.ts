@@ -1,5 +1,6 @@
 import soundLibrary from './soundLibrary.json' with { type: 'json' }
 import narrators from '../../shared/narrators.json' with { type: 'json' }
+import { followWordCues, readWordCues, type WordCue } from './wordTimings.ts'
 
 export { soundLibrary, narrators }
 export type Engine = keyof typeof narrators
@@ -111,7 +112,7 @@ type SpeechEvents = {
   onPlaying?: () => void
   onEnd: () => void
   onError: (message?: string) => void
-  onPosition?: (seconds: number, duration: number) => void
+  onPosition?: (seconds: number, duration: number, hasWordCues: boolean) => void
   onBrowserFallback?: () => void
 }
 
@@ -157,19 +158,21 @@ function browserSpeech(text: string, preferences: AudioPreferences, events: Spee
   return cancel
 }
 
-async function fetchNarration(text: string, narrator: Narrator, signal: AbortSignal) {
+type NarrationClip = { wav: Blob; cues: WordCue[] }
+
+async function fetchNarration(text: string, narrator: Narrator, signal: AbortSignal): Promise<NarrationClip> {
   const response = await fetch('/api/narration', { method: 'POST', signal, cache: 'no-store',
     headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...narrator, text }) })
   if (!response.ok || !response.headers.get('content-type')?.startsWith('audio/wav')) {
     const error = await response.json().catch(() => null)
     throw new Error(typeof error?.detail === 'string' ? error.detail : 'The local narrator is unavailable.')
   }
-  return response.blob()
+  return { wav: await response.blob(), cues: readWordCues(response.headers, text.trim().split(/\s+/).length) }
 }
 
 /** A session owns the two requests so moving to the next question can join a render already in flight. */
 export class RoundAudio {
-  private clips = new Map<string, { controller: AbortController; audio: Promise<Blob> }>()
+  private clips = new Map<string, { controller: AbortController; audio: Promise<NarrationClip> }>()
 
   private key(text: string, { engine, voice, speaker }: Narrator) {
     return JSON.stringify([engine, voice, speaker, text])
@@ -218,10 +221,14 @@ export function speakQuestion(text: string, preferences: AudioPreferences, event
   player.preload = 'auto'
   let url: string | undefined
   let fallback: (() => void) | undefined
+  let clip: NarrationClip
+  let stopFollowing: (() => void) | undefined
   let active = true
   let watchdog = window.setTimeout(() => fail('Narration timed out.'), 135000)
   function position() {
-    if (player.currentTime > 0 && Number.isFinite(player.duration)) events.onPosition?.(player.currentTime, player.duration)
+    if (player.currentTime > 0 && Number.isFinite(player.duration)) {
+      events.onPosition?.(player.currentTime, player.duration, Boolean(clip?.cues.length))
+    }
   }
   function stop() {
     if (!active) return
@@ -229,6 +236,7 @@ export function speakQuestion(text: string, preferences: AudioPreferences, event
     window.clearTimeout(watchdog)
     controller.abort()
     fallback?.()
+    stopFollowing?.()
     position()
     player.onended = player.onerror = player.ontimeupdate = player.onloadedmetadata = player.onplaying = null
     player.pause()
@@ -246,9 +254,8 @@ export function speakQuestion(text: string, preferences: AudioPreferences, event
     watchdog = window.setTimeout(() => fail('Audio playback stalled.'), 15000)
   }
   async function play() {
-    let blob: Blob
     try {
-      blob = await (round ? round.read(text, preferences.narrator) : fetchNarration(text, preferences.narrator, controller.signal))
+      clip = await (round ? round.read(text, preferences.narrator) : fetchNarration(text, preferences.narrator, controller.signal))
     } catch (error) {
       if (!active) return
       if (!events.onBrowserFallback) { fail(error instanceof Error ? error.message : undefined); return }
@@ -259,10 +266,15 @@ export function speakQuestion(text: string, preferences: AudioPreferences, event
       return
     }
     if (!active) return
-    url = URL.createObjectURL(blob)
+    url = URL.createObjectURL(clip.wav)
     player.volume = preferences.muted ? 0 : preferences.volume / 100
     player.onerror = () => fail('This voice could not play.')
-    player.onplaying = () => { if (active) events.onPlaying?.() }
+    player.onplaying = () => {
+      if (!active) return
+      stopFollowing?.()
+      stopFollowing = followWordCues(clip.cues, player, events.onWord)
+      events.onPlaying?.()
+    }
     player.onended = () => { if (active) { stop(); events.onEnd() } }
     player.ontimeupdate = () => { if (active) { position(); watchPlayback() } }
     player.onloadedmetadata = () => {

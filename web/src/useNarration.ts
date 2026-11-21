@@ -37,13 +37,13 @@ export function useNarration(text: string, enabled: boolean, preferences: AudioP
     const start = saved?.start ?? cursor.current
     let local = preferences.narrator.engine !== 'browser'
     setPreparing(preferences.narrator.engine !== 'browser')
-    if (preferences.narrator.engine !== 'browser') setWord(-1)
+    if (local && !saved) setWord(-1)
     return speakQuestion(words.slice(start).join(' '), preferences, {
       onPlaying() { setPreparing(false); if (local) onLocalPlaying() },
-      onPosition(seconds, duration) {
+      onPosition(seconds, duration, hasWordCues) {
         recording.current = { key, start, seconds }
-        // WAV has no word boundaries. Estimate a resume word only for switches to silent reading or another voice.
-        cursor.current = Math.min(words.length - 1, start + Math.floor(seconds / duration * (words.length - start)))
+        // Untimed voices only need an estimated word when switching narrator or muting.
+        if (!hasWordCues) cursor.current = Math.min(words.length - 1, start + Math.floor(seconds / duration * (words.length - start)))
       },
       onBrowserFallback() { local = false; recording.current = null; setPreparing(false); setBrowserFallback(true) },
       onWord(index) {

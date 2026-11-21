@@ -9,10 +9,12 @@ import sysconfig
 import tempfile
 import wave
 from concurrent.futures import ProcessPoolExecutor
+from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
 
 from pydantic import BaseModel, Field, model_validator
+from .kokoro_timing import word_starts_ms
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = ROOT / ".models" / "narration"
@@ -21,6 +23,13 @@ GPU_ORT_VERSION = "1.23.2"  # CUDA 12 and cuDNN 9, shared with Whisper.
 KOKORO_RUNTIME = MODELS / "kokoro" / f"ort-{GPU_ORT_VERSION}-{sys.implementation.cache_tag}-{sysconfig.get_platform()}"
 _kokoro = None
 _dll_handles = []
+
+
+@dataclass
+class NarrationClip:
+    wav: bytes
+    # One onset per whitespace-delimited source word. None denotes an unspoken word.
+    word_starts_ms: list[int | None] = field(default_factory=list)
 
 
 class SpeechRequest(BaseModel):
@@ -67,13 +76,12 @@ def load_kokoro(cpu_only=False):
     return Kokoro.from_session(session, str(MODELS / "kokoro/voices.bin"))
 
 
-def kokoro_samples(text, voice):
+def kokoro_samples(text, voice, language):
     global _kokoro
     if _kokoro is None:
         _kokoro = load_kokoro()
-    language = "en-gb" if voice.startswith("b") else "en-us"
     try:
-        return _kokoro.create(text, voice=voice, lang=language)
+        return _kokoro.create_timed(text, voice=voice, lang=language)
     except Exception:
         if "CUDAExecutionProvider" not in _kokoro.sess.get_providers():
             raise
@@ -81,7 +89,7 @@ def kokoro_samples(text, voice):
         logging.getLogger(__name__).warning("Kokoro CUDA render failed; retrying on CPU.", exc_info=True)
         _kokoro = None
     _kokoro = load_kokoro(cpu_only=True)
-    return _kokoro.create(text, voice=voice, lang=language)
+    return _kokoro.create_timed(text, voice=voice, lang=language)
 
 
 @lru_cache(maxsize=1)
@@ -92,16 +100,22 @@ def piper_model(voice):
 
 def onnx_audio(engine, voice, speaker, text):
     buffer = io.BytesIO()
+    starts = []
     with wave.open(buffer, "wb") as wav:
         if engine == "kokoro":
             import numpy as np
-            samples, rate = kokoro_samples(text, voice)
+            language = "en-gb" if voice.startswith("b") else "en-us"
+            samples, rate, marks = kokoro_samples(text, voice, language)
+            try:
+                starts = word_starts_ms(text, language, marks)
+            except Exception:
+                logging.getLogger(__name__).warning("Could not align Kokoro word timings.", exc_info=True)
             wav.setparams((1, 2, rate, 0, "NONE", "not compressed"))
             wav.writeframes((np.clip(samples, -1, 1) * 32767).astype("<i2").tobytes())
         else:
             from piper import SynthesisConfig
             piper_model(voice).synthesize_wav(text, wav, syn_config=SynthesisConfig(speaker_id=speaker))
-    return buffer.getvalue()
+    return NarrationClip(buffer.getvalue(), starts)
 
 
 @lru_cache(maxsize=2)
@@ -132,4 +146,4 @@ def render(engine, voice, speaker, text):
         if result.returncode:
             logging.getLogger(__name__).warning("%s renderer: %s", engine, os.fsdecode(result.stdout[-1000:]))
             raise RuntimeError("Speech synthesis failed.")
-        return output.read_bytes()
+        return NarrationClip(output.read_bytes())
