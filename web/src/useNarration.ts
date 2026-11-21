@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { speakQuestion, type AudioPreferences } from './audio'
+import { speakQuestion, type AudioPreferences, type RoundAudio } from './audio'
 
-export function useNarration(text: string, enabled: boolean, preferences: AudioPreferences, onFinished: () => void) {
+export function useNarration(text: string, enabled: boolean, preferences: AudioPreferences, onFinished: () => void,
+  round: RoundAudio, onLocalPlaying: () => void) {
   const [word, setWord] = useState(-1)
   const [failed, setFailed] = useState(false)
   const [attempt, setAttempt] = useState(0)
@@ -34,16 +35,17 @@ export function useNarration(text: string, enabled: boolean, preferences: AudioP
     const key = JSON.stringify([text, preferences.narrator])
     const saved = recording.current?.key === key ? recording.current : null
     const start = saved?.start ?? cursor.current
+    let local = preferences.narrator.engine !== 'browser'
     setPreparing(preferences.narrator.engine !== 'browser')
     if (preferences.narrator.engine !== 'browser') setWord(-1)
     return speakQuestion(words.slice(start).join(' '), preferences, {
-      onPlaying() { setPreparing(false) },
+      onPlaying() { setPreparing(false); if (local) onLocalPlaying() },
       onPosition(seconds, duration) {
         recording.current = { key, start, seconds }
         // WAV has no word boundaries. Estimate a resume word only for switches to silent reading or another voice.
         cursor.current = Math.min(words.length - 1, start + Math.floor(seconds / duration * (words.length - start)))
       },
-      onBrowserFallback() { recording.current = null; setPreparing(false); setBrowserFallback(true) },
+      onBrowserFallback() { local = false; recording.current = null; setPreparing(false); setBrowserFallback(true) },
       onWord(index) {
         cursor.current = start + index
         setWord(cursor.current)
@@ -54,8 +56,8 @@ export function useNarration(text: string, enabled: boolean, preferences: AudioP
         onFinished()
       },
       onError() { setFailed(true) },
-    }, saved?.seconds)
-  }, [text, enabled, attempt, preferences, onFinished])
+    }, saved?.seconds, start === 0 ? round : undefined)
+  }, [text, enabled, attempt, preferences, onFinished, round, onLocalPlaying])
 
   function retry() {
     cursor.current = 0

@@ -28,7 +28,7 @@ async def narrate(choice: narration.SpeechRequest, request: Request):
         except Exception as exc:
             logging.getLogger("uvicorn.error").exception("Narration failed")
             raise HTTPException(503, "This voice could not read the text.") from exc
-    return Response(audio, media_type="audio/wav")
+    return Response(audio, media_type="audio/wav", headers={"Cache-Control": "no-store"})
 
 
 @app.middleware("http")

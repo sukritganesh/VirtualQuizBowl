@@ -157,7 +157,61 @@ function browserSpeech(text: string, preferences: AudioPreferences, events: Spee
   return cancel
 }
 
-export function speakQuestion(text: string, preferences: AudioPreferences, events: SpeechEvents, offset = 0) {
+async function fetchNarration(text: string, narrator: Narrator, signal: AbortSignal) {
+  const response = await fetch('/api/narration', { method: 'POST', signal, cache: 'no-store',
+    headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...narrator, text }) })
+  if (!response.ok || !response.headers.get('content-type')?.startsWith('audio/wav')) {
+    const error = await response.json().catch(() => null)
+    throw new Error(typeof error?.detail === 'string' ? error.detail : 'The local narrator is unavailable.')
+  }
+  return response.blob()
+}
+
+/** A session owns the two requests so moving to the next question can join a render already in flight. */
+export class RoundAudio {
+  private clips = new Map<string, { controller: AbortController; audio: Promise<Blob> }>()
+
+  private key(text: string, { engine, voice, speaker }: Narrator) {
+    return JSON.stringify([engine, voice, speaker, text])
+  }
+
+  keep(texts: string[], narrator: Narrator) {
+    const wanted = new Set(texts.map(text => this.key(text, narrator)))
+    for (const [key, clip] of this.clips) {
+      if (!wanted.has(key)) {
+        clip.controller.abort()
+        this.clips.delete(key)
+      }
+    }
+  }
+
+  clear() {
+    for (const clip of this.clips.values()) clip.controller.abort()
+    this.clips.clear()
+  }
+
+  prepare(text: string, narrator: Narrator) {
+    const key = this.key(text, narrator)
+    const existing = this.clips.get(key)
+    if (existing) return existing.audio
+    const controller = new AbortController()
+    const audio = fetchNarration(text, narrator, AbortSignal.any([controller.signal, AbortSignal.timeout(130000)]))
+    this.clips.set(key, { controller, audio })
+    return audio
+  }
+
+  async read(text: string, narrator: Narrator) {
+    const audio = this.prepare(text, narrator)
+    try { return await audio } catch (error) {
+      // Deliver a failed preload to the normal fallback once. A later retry can render again.
+      const key = this.key(text, narrator)
+      if (this.clips.get(key)?.audio === audio) this.clips.delete(key)
+      throw error
+    }
+  }
+}
+
+export function speakQuestion(text: string, preferences: AudioPreferences, events: SpeechEvents, offset = 0, round?: RoundAudio) {
   if (preferences.narrator.engine === 'browser') return browserSpeech(text, preferences, events)
   const controller = new AbortController()
   const player = new Audio()
@@ -194,13 +248,7 @@ export function speakQuestion(text: string, preferences: AudioPreferences, event
   async function play() {
     let blob: Blob
     try {
-      const response = await fetch('/api/narration', { method: 'POST', signal: controller.signal,
-        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...preferences.narrator, text }) })
-      if (!response.ok || !response.headers.get('content-type')?.startsWith('audio/wav')) {
-        const error = await response.json().catch(() => null)
-        throw new Error(typeof error?.detail === 'string' ? error.detail : 'The local narrator is unavailable.')
-      }
-      blob = await response.blob()
+      blob = await (round ? round.read(text, preferences.narrator) : fetchNarration(text, preferences.narrator, controller.signal))
     } catch (error) {
       if (!active) return
       if (!events.onBrowserFallback) { fail(error instanceof Error ? error.message : undefined); return }

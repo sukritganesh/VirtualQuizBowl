@@ -8,6 +8,8 @@ On the home screen, open **Browse** to explore question sets by category, or cho
 
 Each visit to the home screen picks one of two music tracks at random and loops it until the round begins. Settings is available from home and the pause menu, with separate music and narration volumes. Under **Host voice**, the default is **Kokoro · Liam**. Play a model or voice to hear the same fox sentence, then select its name to use it in rounds. In home Settings, expand **Sound effects** and open a cue’s dropdown. Play any clip to hear it, then select its name to use it for a valid buzz, a verdict, or either clock expiring. Quick mute silences all game audio. With narration muted or set to zero, the question highlights silently before the buzzer opens.
 
+When you press **Play**, the opening screen prepares the first local voice clip and, for AI scoring, gets the microphone ready. You can cancel and return to the selected set. During the round the host prepares one question ahead.
+
 1. The host reads the whole question as one sentence. The buzzer stays locked until the host finishes, then the player has five seconds to buzz. If the window expires, the question ends with zero points.
 2. Buzzing gives the player a fresh five seconds to say their entire answer, even if they buzz at the last moment.
 3. In local AI play, the buzz starts a recording. The game stops it at the answer deadline or when the player presses R to submit early. It displays what it heard and compares the reply with the answer key. A missed buzz or an early pass skips recording.

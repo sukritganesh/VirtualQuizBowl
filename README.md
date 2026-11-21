@@ -47,7 +47,9 @@ The default is **Kokoro-82M · Liam**. Existing installations can add the host b
 .\.venv\Scripts\python.exe -m api.prepare_narration kokoro
 ```
 
-Start or restart the local API after upgrading. To install the other local voices, run the same preparation command with `pocket`, `piper`, `qwen`, or `all`. Pocket and Qwen target Windows x64. Qwen builds its CPU runner and requires Git, CMake and Visual Studio’s C++ build tools on your path. The models run on CPU and store their downloads under `.models/narration/`. Piper downloads its English voices and their individual license cards. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [Qwen3-TTS](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) · [Pocket TTS](https://github.com/kyutai-labs/pocket-tts) · [Piper voices](https://huggingface.co/rhasspy/piper-voices)
+Start or restart the local API after upgrading. On Windows with NVIDIA drivers, Kokoro setup also installs its isolated CUDA 12 runtime. Liam and the other Kokoro voices automatically use CUDA when available and fall back to CPU. The API console records the selected provider. [ONNX Runtime CUDA support](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)
+
+To install the other local voices, run the same preparation command with `pocket`, `piper`, `qwen`, or `all`. These narrators run on CPU. Pocket and Qwen target Windows x64. Qwen builds its runner and requires Git, CMake and Visual Studio’s C++ build tools on your path. Downloads live under `.models/narration/`. Piper includes individual license cards for its English voices. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [Qwen3-TTS](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) · [Pocket TTS](https://github.com/kyutai-labs/pocket-tts) · [Piper voices](https://huggingface.co/rhasspy/piper-voices)
 
 **Browser speech** lists the voices your device provides. If a round cannot reach the selected local model, it tries browser speech and identifies the fallback on screen. Previews report when a chosen model needs setup.
 

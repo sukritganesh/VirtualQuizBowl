@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.request import urlopen
 
-from .narration import CATALOG, MODELS
+from .narration import CATALOG, GPU_ORT_VERSION, KOKORO_RUNTIME, MODELS
 
 HUB = "https://huggingface.co"
 
@@ -44,6 +44,18 @@ def kokoro(directory):
     url = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/"
     download(url + "kokoro-v1.0.onnx", directory / "model.onnx", "beb0d1848dee9a49da392cc3df26958d46cfa35d321edf434f52949153f0df3a")
     download(url + "voices-v1.0.bin", directory / "voices.bin", "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d")
+    if sys.platform == "win32" and shutil.which("nvidia-smi") and not KOKORO_RUNTIME.is_dir():
+        # Both ORT wheels install the same Python module. Isolate CUDA and publish only a complete install.
+        with tempfile.TemporaryDirectory(dir=directory) as temp:
+            staged = Path(temp) / "runtime"
+            try:
+                subprocess.run([sys.executable, "-m", "pip", "install", "--only-binary=:all:", "--no-deps",
+                                "--target", str(staged), f"onnxruntime-gpu=={GPU_ORT_VERSION}",
+                                "nvidia-cuda-runtime-cu12>=12,<13", "nvidia-cufft-cu12>=11,<12"], check=True)
+                if not KOKORO_RUNTIME.is_dir():
+                    staged.rename(KOKORO_RUNTIME)
+            except subprocess.CalledProcessError:
+                print("Optional Kokoro CUDA runtime unavailable. CPU narration is ready.", file=sys.stderr)
 
 
 def piper(directory):

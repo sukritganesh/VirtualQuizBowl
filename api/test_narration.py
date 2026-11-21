@@ -1,7 +1,7 @@
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from pydantic import ValidationError
 from . import narration
@@ -26,3 +26,16 @@ class NarrationTests(unittest.TestCase):
         with TemporaryDirectory() as temp, patch.object(narration, "MODELS", Path(temp)):
             with self.assertRaises(FileNotFoundError):
                 narration.render("kokoro", "am_liam", 0, "Missing model?")
+
+    def test_failed_cuda_render_retries_same_voice_and_stays_on_cpu(self):
+        gpu, cpu = Mock(), Mock()
+        gpu.sess.get_providers.return_value = ["CUDAExecutionProvider", "CPUExecutionProvider"]
+        gpu.create.side_effect = RuntimeError("CUDA allocation failed")
+        cpu.create.return_value = ([0.5], 24000)
+        with patch.object(narration, "_kokoro", gpu), patch.object(narration, "load_kokoro", return_value=cpu) as load:
+            self.assertEqual(narration.kokoro_samples("First?", "am_liam"), ([0.5], 24000))
+            narration.kokoro_samples("Second?", "am_liam")
+            load.assert_called_once_with(cpu_only=True)
+            gpu.create.assert_called_once_with("First?", voice="am_liam", lang="en-us")
+            self.assertEqual(cpu.create.call_args_list[0], gpu.create.call_args)
+            self.assertEqual(cpu.create.call_count, 2)
