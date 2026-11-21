@@ -1,4 +1,15 @@
 .stage { min-height: 100vh; min-height: 100svh; }
+.round-loading { flex: 1; width: min(100%, 760px); align-self: center; display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start; padding: clamp(40px, 9vh, 100px) 0; }
+.round-loading h1 { margin: 12px 0 20px; font-size: clamp(38px, 6vw, 76px); line-height: 1.04;
+  letter-spacing: -.045em; font-weight: 600; overflow-wrap: anywhere; }
+.round-loading p { display: flex; gap: 10px; align-items: center; margin: 0; color: var(--silver); }
+.round-loading button { margin-top: 36px; }
+.loading-light { width: 7px; height: 7px; border-radius: 50%; background: var(--ice); }
+.loading-wave { display: flex; align-items: center; gap: 5px; height: 68px; margin-bottom: 32px; }
+.loading-wave i { width: 4px; border-radius: 4px; background: var(--ice); animation: host-wave 1.4s ease-in-out infinite alternate; }
+@keyframes host-wave { from { transform: scaleY(.36); opacity: .45; } to { transform: scaleY(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .loading-wave i { animation: none; } }
 .art img { display: block; width: 100%; height: auto; }
 .pack-select {
   width: 100%; padding: 14px; background: var(--surface); border: 1px solid #455875;

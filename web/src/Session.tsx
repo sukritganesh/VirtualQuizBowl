@@ -1,8 +1,7 @@
 import { Fragment, useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
-import { BrandRail } from './Home'
+import { BrandRail, type RoundSession } from './Home'
 import { MuteButton, SettingsButton, useAudio } from './AudioSettings'
 import { startGame, transition, type Command, type Game } from './game'
-import type { TriviaSet } from './sets'
 import { useNarration } from './useNarration'
 import { useSpokenAnswer } from './spokenAnswers'
 import { playSound, type SoundCue } from './audio'
@@ -11,7 +10,7 @@ const shortcuts: Record<string, Command | undefined> = {
   a: 'buzz', r: 'reveal', c: 'correct', i: 'incorrect', n: 'next',
 }
 
-type RoundProps = { game: Game; set: TriviaSet; stream: MediaStream | null; send: (command: Command) => void; onQuit: () => void }
+type RoundProps = RoundSession & { game: Game; send: (command: Command) => void; onQuit: () => void }
 
 function PauseMenu({ resume, quit }: { resume: () => void; quit: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null)
@@ -47,7 +46,7 @@ function useCountdown(deadline: number | null, send: RoundProps['send']) {
   return seconds
 }
 
-function Round({ game, set, stream, send, onQuit }: RoundProps) {
+function Round({ game, set, stream, audio, send, onQuit }: RoundProps) {
   const { preferences } = useAudio()
   const question = set.questions[game.index]
   const { phase, outcome } = game
@@ -80,7 +79,21 @@ function Round({ game, set, stream, send, onQuit }: RoundProps) {
     return () => window.removeEventListener('keydown', handleKey)
   }, [game.paused, automatic, send])
   const finishReading = useCallback(() => send('read'), [send])
-  const narration = useNarration(question.question, phase === 'reading' && !game.paused, preferences, finishReading)
+  const nextText = set.questions[game.index + 1]?.question
+  const { narrator } = preferences
+  const localVoice = !preferences.muted && preferences.volume > 0 && narrator.engine !== 'browser'
+  useLayoutEffect(() => {
+    const texts = nextText ? [question.question, nextText] : [question.question]
+    audio.keep(localVoice ? texts : [], narrator)
+  }, [audio, localVoice, narrator, question.question, nextText])
+  const prepareNext = useCallback(() => {
+    if (nextText && localVoice) void audio.prepare(nextText, narrator).catch(() => { /* Handled when played. */ })
+  }, [audio, nextText, localVoice, narrator])
+  const narration = useNarration(question.question, phase === 'reading' && !game.paused, preferences, finishReading, audio, prepareNext)
+  useEffect(() => {
+    // Passing before playback, or changing voices after reading, can also start the look-ahead.
+    if (phase !== 'reading' && !game.paused) prepareNext()
+  }, [phase, game.paused, prepareNext])
   const seconds = useCountdown(game.deadline, send)
   const menu = useRef<HTMLButtonElement>(null)
   const showingAnswer = (phase === 'grade' && !automatic) || phase === 'result'
@@ -148,12 +161,14 @@ function Round({ game, set, stream, send, onQuit }: RoundProps) {
   </>
 }
 
-export function Session({ set, stream, onQuit }: { set: TriviaSet; stream: MediaStream | null; onQuit: () => void }) {
+export function Session({ set, stream, audio, onQuit }: RoundSession & { onQuit: () => void }) {
   const [game, dispatch] = useReducer(transition, set.questions.length, startGame)
   const send = useCallback((command: Command) => dispatch({ command, now: performance.now() }), [])
   const activeStream = game.phase === 'summary' ? null : stream
   useEffect(() => () => activeStream?.getTracks().forEach(track => track.stop()), [activeStream])
-  if (game.phase !== 'summary') return <Round key={game.index} game={game} set={set} stream={stream} send={send} onQuit={onQuit}/>
+  useEffect(() => () => audio.clear(), [audio])
+  useEffect(() => { if (game.phase === 'summary') audio.clear() }, [audio, game.phase])
+  if (game.phase !== 'summary') return <Round key={game.index} game={game} set={set} stream={stream} audio={audio} send={send} onQuit={onQuit}/>
   return <><BrandRail/><main className="summary">
     <span className="eyebrow">Set complete</span><h1>{set.title}</h1>
     <div className="total"><strong>{game.counts.correct * 5}</strong><span>points</span></div>

@@ -1,9 +1,11 @@
-"""CPU host voices. Each ONNX engine owns its eSpeak state in a separate worker."""
+"""Local host voices. Each ONNX engine owns its phonemizer in a separate worker."""
 import io
 import json
 import logging
 import os
 import subprocess
+import sys
+import sysconfig
 import tempfile
 import wave
 from concurrent.futures import ProcessPoolExecutor
@@ -15,6 +17,10 @@ from pydantic import BaseModel, Field, model_validator
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = ROOT / ".models" / "narration"
 CATALOG = json.loads((ROOT / "shared" / "narrators.json").read_text("utf-8"))
+GPU_ORT_VERSION = "1.23.2"  # CUDA 12 and cuDNN 9, shared with Whisper.
+KOKORO_RUNTIME = MODELS / "kokoro" / f"ort-{GPU_ORT_VERSION}-{sys.implementation.cache_tag}-{sysconfig.get_platform()}"
+_kokoro = None
+_dll_handles = []
 
 
 class SpeechRequest(BaseModel):
@@ -34,15 +40,48 @@ class SpeechRequest(BaseModel):
         return self
 
 
-@lru_cache(maxsize=1)
-def kokoro_model():
-    from kokoro_onnx import Kokoro
+def load_kokoro(cpu_only=False):
+    # Only the Kokoro worker imports this GPU wheel. Whisper and Piper keep their own ORT.
+    if KOKORO_RUNTIME.is_dir() and str(KOKORO_RUNTIME) not in sys.path:
+        sys.path.insert(0, str(KOKORO_RUNTIME))
+        if sys.platform == "win32":
+            for root in (KOKORO_RUNTIME, Path(sysconfig.get_paths()["purelib"])):
+                for directory in (root / "nvidia").glob("*/bin"):
+                    _dll_handles.append(os.add_dll_directory(str(directory)))
+                    os.environ["PATH"] = str(directory) + os.pathsep + os.environ["PATH"]
     import onnxruntime as ort
+    from kokoro_onnx import Kokoro
 
     options = ort.SessionOptions()
     options.intra_op_num_threads = 4
-    session = ort.InferenceSession(str(MODELS / "kokoro/model.onnx"), options, providers=["CPUExecutionProvider"])
+    model = str(MODELS / "kokoro/model.onnx")
+    session = None
+    if not cpu_only and "CUDAExecutionProvider" in ort.get_available_providers():
+        try:
+            session = ort.InferenceSession(model, options, providers=["CUDAExecutionProvider", "CPUExecutionProvider"])
+        except Exception:
+            logging.getLogger(__name__).warning("Kokoro CUDA initialization failed; using CPU.", exc_info=True)
+    if session is None:
+        session = ort.InferenceSession(model, options, providers=["CPUExecutionProvider"])
+    logging.getLogger(__name__).warning("Kokoro narrator using %s", session.get_providers()[0])
     return Kokoro.from_session(session, str(MODELS / "kokoro/voices.bin"))
+
+
+def kokoro_samples(text, voice):
+    global _kokoro
+    if _kokoro is None:
+        _kokoro = load_kokoro()
+    language = "en-gb" if voice.startswith("b") else "en-us"
+    try:
+        return _kokoro.create(text, voice=voice, lang=language)
+    except Exception:
+        if "CUDAExecutionProvider" not in _kokoro.sess.get_providers():
+            raise
+        # A driver can load successfully and still fail on the first inference (e.g. VRAM).
+        logging.getLogger(__name__).warning("Kokoro CUDA render failed; retrying on CPU.", exc_info=True)
+        _kokoro = None
+    _kokoro = load_kokoro(cpu_only=True)
+    return _kokoro.create(text, voice=voice, lang=language)
 
 
 @lru_cache(maxsize=1)
@@ -56,7 +95,7 @@ def onnx_audio(engine, voice, speaker, text):
     with wave.open(buffer, "wb") as wav:
         if engine == "kokoro":
             import numpy as np
-            samples, rate = kokoro_model().create(text, voice=voice, lang="en-gb" if voice.startswith("b") else "en-us")
+            samples, rate = kokoro_samples(text, voice)
             wav.setparams((1, 2, rate, 0, "NONE", "not compressed"))
             wav.writeframes((np.clip(samples, -1, 1) * 32767).astype("<i2").tobytes())
         else:
@@ -70,7 +109,6 @@ def onnx_worker(engine):
     return ProcessPoolExecutor(max_workers=1)
 
 
-@lru_cache(maxsize=32)
 def render(engine, voice, speaker, text):
     if engine in ("kokoro", "piper"):
         # Fail before spawning a worker or opening a WAV when setup is incomplete.

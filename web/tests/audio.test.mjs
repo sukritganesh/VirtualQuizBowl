@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync } from 'node:fs'
-import { chooseVoice, defaultAudio, modelDefault, readAudioPreferences, serializeAudioPreferences, soundLibrary, speakQuestion, voiceSample } from '../src/audio.ts'
+import { chooseVoice, defaultAudio, modelDefault, readAudioPreferences, RoundAudio, serializeAudioPreferences, soundLibrary, speakQuestion, voiceSample } from '../src/audio.ts'
 
 test('saved audio keeps the last audible volume even while muted and tolerates old or damaged data', () => {
   const saved = { volume: 36, muted: true, voiceURI: 'host-2' }
@@ -129,4 +129,44 @@ test('local narration uses the selected model and only the playback end complete
   assert.equal(request.signal.aborted, true)
   assert.equal(events.onEnd.mock.callCount(), 1)
   assert.equal(events.onError.mock.callCount(), 0)
+})
+
+test('the round shares pending clips, drops previous questions and discards superseded voices', async t => {
+  const work = []
+  t.mock.method(globalThis, 'fetch', (_, { signal }) => {
+    const { promise, resolve, reject } = Promise.withResolvers()
+    signal.addEventListener('abort', () => reject(signal.reason), { once: true })
+    work.push({ signal, resolve })
+    return promise
+  })
+  const round = new RoundAudio()
+  const liam = defaultAudio.narrator
+  const first = round.prepare('First?', liam)
+  const next = round.prepare('Second?', liam)
+  const playing = round.read('Second?', liam)
+  assert.equal(work.length, 2)
+  round.keep(['Second?', 'Third?'], liam)
+  await assert.rejects(first, { name: 'AbortError' })
+  work[1].resolve(new Response('wave', { headers: { 'Content-Type': 'audio/wav' } }))
+  assert.equal(await playing, await next)
+  assert.equal(await round.read('Second?', liam), await next)
+  const third = round.prepare('Third?', liam)
+  round.keep(['Second?', 'Third?'], modelDefault('piper'))
+  await assert.rejects(third, { name: 'AbortError' })
+  const replacement = round.prepare('Third?', modelDefault('piper'))
+  assert.equal(work.length, 4)
+  round.clear()
+  await assert.rejects(replacement, { name: 'AbortError' })
+})
+
+test('a failed speculative render is delivered once and the next attempt can recover', async t => {
+  const fetch = t.mock.method(globalThis, 'fetch', async () => new Response(null, { status: 503 }))
+  const round = new RoundAudio()
+  await assert.rejects(round.prepare('Next?', defaultAudio.narrator))
+  await assert.rejects(round.read('Next?', defaultAudio.narrator))
+  assert.equal(fetch.mock.callCount(), 1)
+  fetch.mock.mockImplementation(async () => new Response('ok', { headers: { 'Content-Type': 'audio/wav' } }))
+  assert.equal(await (await round.read('Next?', defaultAudio.narrator)).text(), 'ok')
+  assert.equal(fetch.mock.callCount(), 2)
+  round.clear()
 })
