@@ -7,7 +7,7 @@ React runs the round in the browser. The host uses browser speech synthesis. A l
 Use the [UI pack](design/trivia-ui/SKILL.md) for screen layouts, narration highlighting, pause behavior, and visual references.
 
 - **React, TypeScript, and Vite** for the home screen and round UI. The browser validates the imported JSON set, checks that its mode is `trivia`, and keeps the current question and session score in memory.
-- **Browser speech synthesis** for the host. Read the available voices through `getVoices()` and refresh the settings selector on `voiceschanged`. Store the chosen voice URI, volume, and mute preference in browser local storage. Use the selected voice for both preview and narration, falling back to an available English voice when needed. Silent reading advances the highlight on a local timer. If audible narration fails, offer to replay the question before starting the timer.
+- **Browser speech synthesis** for the host. Read the available voices through `getVoices()` and refresh the settings selector on `voiceschanged`. Store the chosen voice URI, volume, and mute preference in browser local storage. Use the selected voice for both preview and narration, falling back to an available English voice when needed. Speak the question in one utterance and drive the highlight from its word events. Its end event opens the buzzer even if the voice supplied no word positions. Silent reading advances the highlight on a local timer. If audible narration fails, offer to replay the question before starting the timer.
 - **Manual judging.** The browser owns both deadlines and pauses them with the round. Revealing an answer after buzzing enables manual scoring. A pass or missed buzz resolves the question locally.
 
 ## Local AI answer processing

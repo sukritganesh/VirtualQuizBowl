@@ -8,7 +8,7 @@ Try [The Night Sky](sets/trivia/astronomy/the-night-sky.json) for an eight-quest
 
 The home screen and pause menu both offer audio settings. Players can preview a host voice, adjust volume, or mute directly from the home screen or round. While muted, the question highlights silently before the buzzer opens.
 
-1. The buzzer stays locked while the host reads. When the host finishes, the player has five seconds to buzz. If the window expires, the question ends with zero points.
+1. The host reads the whole question as one sentence. The buzzer stays locked until the host finishes, then the player has five seconds to buzz. If the window expires, the question ends with zero points.
 2. Buzzing gives the player a fresh five seconds to say their entire answer, even if they buzz at the last moment.
 3. In local AI play, the buzz starts a recording. The game stops it at the answer deadline or when the player presses R to submit early. It displays what it heard and compares the reply with the answer key. A missed buzz or an early pass skips recording.
 4. Correct earns five points. Wrong answers, silence, and missed buzzes earn zero. Judging happens outside both timers. If the judge runs out of tokens or time, the question stays unscored. Choose **Mark manually** to see the answer and mark it correct or incorrect. Manual scoring is also available before a session.
