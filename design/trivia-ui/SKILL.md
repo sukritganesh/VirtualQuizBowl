@@ -19,7 +19,7 @@ Build around one thing the player needs to see right now. On the home screen tha
 | Points | Gold `#E7C47D` | Score, score delta, and occasional small details. |
 | Narration | Red `#FF827F` | Spoken words accumulate in red. Underline the active word as a second cue. Reserve red for narration across the round. |
 
-Use Inter or a clean system sans for the title, question, and controls. Use a system monospace with tabular digits for the timer, question count, and score. Let the question wrap naturally. Keep all its words visible from the start and change their styling in place as the host reads. Drive the highlight from actual speech progress. If the voice lacks word boundaries, highlight completed phrases at known narration boundaries.
+Use Inter or a clean system sans for the title, question, and controls. Use a system monospace with tabular digits for the timer, question count, and score. Let the question wrap naturally. Keep all its words visible from the start and change their styling in place as the host reads. The host speaks the question in one utterance. Highlight each word when the voice reports its position. If the voice supplies no word positions, turn the question red when the utterance ends.
 
 ## Screens
 
