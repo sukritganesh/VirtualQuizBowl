@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 from typing import Annotated
 
@@ -22,13 +23,16 @@ async def narrate(choice: narration.SpeechRequest, request: Request):
         if await request.is_disconnected():
             return Response(status_code=204)
         try:
-            audio = await asyncio.to_thread(narration.render, choice.engine, choice.voice, choice.speaker, choice.text)
+            clip = await asyncio.to_thread(narration.render, choice.engine, choice.voice, choice.speaker, choice.text)
         except (FileNotFoundError, ImportError) as exc:
             raise HTTPException(503, f"Set up the {narration.CATALOG[choice.engine]['name']} narrator on this computer.") from exc
         except Exception as exc:
             logging.getLogger("uvicorn.error").exception("Narration failed")
             raise HTTPException(503, "This voice could not read the text.") from exc
-    return Response(audio, media_type="audio/wav", headers={"Cache-Control": "no-store"})
+    headers = {"Cache-Control": "no-store"}
+    if clip.word_starts_ms:
+        headers["X-Narration-Word-Starts-Ms"] = json.dumps(clip.word_starts_ms, separators=(",", ":"))
+    return Response(clip.wav, media_type="audio/wav", headers=headers)
 
 
 @app.middleware("http")

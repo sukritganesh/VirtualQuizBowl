@@ -4,6 +4,7 @@ uvicorn>=0.34,<1
 python-multipart>=0.0.20,<1
 faster-whisper>=1.2,<2
 kokoro-onnx==0.6.1
+phonemizer>=3.4,<4
 piper-tts==1.8.0
 nvidia-cublas-cu12>=12,<13; sys_platform == "win32"
 nvidia-cudnn-cu12>=9,<10; sys_platform == "win32"

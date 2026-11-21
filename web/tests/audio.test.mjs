@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync } from 'node:fs'
 import { chooseVoice, defaultAudio, modelDefault, readAudioPreferences, RoundAudio, serializeAudioPreferences, soundLibrary, speakQuestion, voiceSample } from '../src/audio.ts'
+import { followWordCues, readWordCues } from '../src/wordTimings.ts'
 
 test('saved audio keeps the last audible volume even while muted and tolerates old or damaged data', () => {
   const saved = { volume: 36, muted: true, voiceURI: 'host-2' }
@@ -147,8 +148,9 @@ test('the round shares pending clips, drops previous questions and discards supe
   assert.equal(work.length, 2)
   round.keep(['Second?', 'Third?'], liam)
   await assert.rejects(first, { name: 'AbortError' })
-  work[1].resolve(new Response('wave', { headers: { 'Content-Type': 'audio/wav' } }))
+  work[1].resolve(new Response('wave', { headers: { 'Content-Type': 'audio/wav', 'X-Narration-Word-Starts-Ms': '[80]' } }))
   assert.equal(await playing, await next)
+  assert.deepEqual((await playing).cues, [{ word: 0, seconds: 0.08 }])
   assert.equal(await round.read('Second?', liam), await next)
   const third = round.prepare('Third?', liam)
   round.keep(['Second?', 'Third?'], modelDefault('piper'))
@@ -159,6 +161,41 @@ test('the round shares pending clips, drops previous questions and discards supe
   await assert.rejects(replacement, { name: 'AbortError' })
 })
 
+test('word cues follow the playback clock across stalls, pause and resume', t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  globalThis.window = { setTimeout, clearTimeout }
+  t.after(() => { delete globalThis.window })
+  const headers = new Headers({ 'X-Narration-Word-Starts-Ms': '[80,340,null,700]' })
+  const cues = readWordCues(headers, 4)
+  const player = { currentTime: 0 }
+  const seen = []
+  const report = index => seen.push(index)
+  const pause = followWordCues(cues, player, report)
+  t.mock.timers.tick(90)
+  assert.deepEqual(seen, [])
+  player.currentTime = 0.09
+  t.mock.timers.tick(90)
+  assert.deepEqual(seen, [0])
+  pause()
+  player.currentTime = 0.6
+  t.mock.timers.tick(500)
+  assert.deepEqual(seen, [0])
+  const stop = followWordCues(cues, player, report)
+  assert.deepEqual(seen, [0, 1])
+  player.currentTime = 0.75
+  t.mock.timers.tick(110)
+  assert.deepEqual(seen, [0, 1, 3])
+  stop()
+})
+
+test('missing or malformed optional timing metadata leaves a playable untimed clip', () => {
+  for (const value of [null, 'oops', '[]', '[90,80]', '[-1,80]', '[0,"80"]']) {
+    const headers = new Headers()
+    if (value !== null) headers.set('X-Narration-Word-Starts-Ms', value)
+    assert.deepEqual(readWordCues(headers, 2), [])
+  }
+})
+
 test('a failed speculative render is delivered once and the next attempt can recover', async t => {
   const fetch = t.mock.method(globalThis, 'fetch', async () => new Response(null, { status: 503 }))
   const round = new RoundAudio()
@@ -166,7 +203,7 @@ test('a failed speculative render is delivered once and the next attempt can rec
   await assert.rejects(round.read('Next?', defaultAudio.narrator))
   assert.equal(fetch.mock.callCount(), 1)
   fetch.mock.mockImplementation(async () => new Response('ok', { headers: { 'Content-Type': 'audio/wav' } }))
-  assert.equal(await (await round.read('Next?', defaultAudio.narrator)).text(), 'ok')
+  assert.equal(await (await round.read('Next?', defaultAudio.narrator)).wav.text(), 'ok')
   assert.equal(fetch.mock.callCount(), 2)
   round.clear()
 })

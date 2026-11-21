@@ -1,10 +1,12 @@
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 from pydantic import ValidationError
 from . import narration
+from .kokoro_timing import align_words
 
 
 class NarrationTests(unittest.TestCase):
@@ -30,12 +32,17 @@ class NarrationTests(unittest.TestCase):
     def test_failed_cuda_render_retries_same_voice_and_stays_on_cpu(self):
         gpu, cpu = Mock(), Mock()
         gpu.sess.get_providers.return_value = ["CUDAExecutionProvider", "CPUExecutionProvider"]
-        gpu.create.side_effect = RuntimeError("CUDA allocation failed")
-        cpu.create.return_value = ([0.5], 24000)
+        gpu.create_timed.side_effect = RuntimeError("CUDA allocation failed")
+        cpu.create_timed.return_value = ([0.5], 24000, ["timing"])
         with patch.object(narration, "_kokoro", gpu), patch.object(narration, "load_kokoro", return_value=cpu) as load:
-            self.assertEqual(narration.kokoro_samples("First?", "am_liam"), ([0.5], 24000))
-            narration.kokoro_samples("Second?", "am_liam")
+            self.assertEqual(narration.kokoro_samples("First?", "am_liam", "en-us"), cpu.create_timed.return_value)
+            narration.kokoro_samples("Second?", "am_liam", "en-us")
             load.assert_called_once_with(cpu_only=True)
-            gpu.create.assert_called_once_with("First?", voice="am_liam", lang="en-us")
-            self.assertEqual(cpu.create.call_args_list[0], gpu.create.call_args)
-            self.assertEqual(cpu.create.call_count, 2)
+            gpu.create_timed.assert_called_once_with("First?", voice="am_liam", lang="en-us")
+            self.assertEqual(cpu.create_timed.call_args_list[0], gpu.create_timed.call_args)
+            self.assertEqual(cpu.create_timed.call_count, 2)
+
+    def test_expanded_joined_and_unspoken_words_keep_their_printed_indices(self):
+        # The isolated forms of "for the V8" have different vowels and spacing.
+        marks = [SimpleNamespace(phoneme=p, start=i / 10) for i, p in enumerate("fərðə vi eɪt")]
+        self.assertEqual(align_words(["fɔr", "ðə", "", "vi eɪt"], marks), [0, 300, None, 600])

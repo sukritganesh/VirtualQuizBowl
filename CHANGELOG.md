@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Kokoro voices highlight the word being spoken, including years and model names. Each question’s word timings are prepared with its audio.
+
 - Kokoro uses NVIDIA acceleration when available and falls back to CPU. A round prepares its opening question on a loading screen and gets the next voice clip ready during play.
 - Kokoro’s Liam is the default host. In Settings, preview and choose voices from Kokoro, Qwen3-TTS, Kyutai Pocket TTS, Piper, or your browser.
 
