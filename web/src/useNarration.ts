@@ -5,14 +5,19 @@ export function useNarration(text: string, enabled: boolean, preferences: AudioP
   const [word, setWord] = useState(-1)
   const [failed, setFailed] = useState(false)
   const [attempt, setAttempt] = useState(0)
+  const [preparing, setPreparing] = useState(false)
+  const [browserFallback, setBrowserFallback] = useState(false)
   const cursor = useRef(0)
+  const recording = useRef<{ key: string; start: number; seconds: number } | null>(null)
 
   useEffect(() => {
     if (!enabled) return
     setFailed(false)
+    setBrowserFallback(false)
     const words = text.split(' ')
     if (cursor.current >= words.length) { onFinished(); return }
     if (preferences.muted || preferences.volume === 0) {
+      recording.current = null
       // Keep the read-along and both game windows playable even without a speech engine.
       let timer: number
       const advance = () => {
@@ -26,8 +31,19 @@ export function useNarration(text: string, enabled: boolean, preferences: AudioP
       advance()
       return () => window.clearTimeout(timer)
     }
-    const start = cursor.current
+    const key = JSON.stringify([text, preferences.narrator])
+    const saved = recording.current?.key === key ? recording.current : null
+    const start = saved?.start ?? cursor.current
+    setPreparing(preferences.narrator.engine !== 'browser')
+    if (preferences.narrator.engine !== 'browser') setWord(-1)
     return speakQuestion(words.slice(start).join(' '), preferences, {
+      onPlaying() { setPreparing(false) },
+      onPosition(seconds, duration) {
+        recording.current = { key, start, seconds }
+        // WAV has no word boundaries. Estimate a resume word only for switches to silent reading or another voice.
+        cursor.current = Math.min(words.length - 1, start + Math.floor(seconds / duration * (words.length - start)))
+      },
+      onBrowserFallback() { recording.current = null; setPreparing(false); setBrowserFallback(true) },
       onWord(index) {
         cursor.current = start + index
         setWord(cursor.current)
@@ -38,13 +54,14 @@ export function useNarration(text: string, enabled: boolean, preferences: AudioP
         onFinished()
       },
       onError() { setFailed(true) },
-    })
+    }, saved?.seconds)
   }, [text, enabled, attempt, preferences, onFinished])
 
   function retry() {
     cursor.current = 0
+    recording.current = null
     setWord(-1)
     setAttempt(value => value + 1)
   }
-  return { word, failed, retry }
+  return { word, failed, retry, preparing, browserFallback }
 }

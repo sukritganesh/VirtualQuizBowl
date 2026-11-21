@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Kokoro’s Liam is the default host. In Settings, preview and choose voices from Kokoro, Qwen3-TTS, Kyutai Pocket TTS, Piper, or your browser.
+
 - Added four 20-question automotive sets for casual car enthusiasts, covering Corvettes, supercars, Chinese electric cars, and a general automotive smorgasbord.
 - Home Settings now offers 22 round sounds. Each dropdown shows up to four sounds at a time and scrolls to the rest. Play a sound to preview it, then click its name to select it. New players start with Arcade select, Menu confirmation, Falling synth, and Last-life alert.
 

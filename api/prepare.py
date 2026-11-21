@@ -1,9 +1,12 @@
-"""Download the Whisper weights once, ahead of offline play."""
+"""Download the default host and Whisper weights once, ahead of offline play."""
 
 from pathlib import Path
 from huggingface_hub import snapshot_download
+from .prepare_narration import MODELS, kokoro
 
 if __name__ == "__main__":
+    kokoro(MODELS / "kokoro")
+    print("Kokoro host ready")
     directory = Path(__file__).resolve().parents[1] / ".models" / "large-v3-turbo"
     snapshot_download(
         "mobiuslabsgmbh/faster-whisper-large-v3-turbo",

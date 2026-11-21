@@ -7,7 +7,7 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 52741,
     strictPort: true,
-    fs: { allow: ['.', '../node_modules', '../sets/trivia', '../schemas', '../design/trivia-ui/mockups'] },
+    fs: { allow: ['.', '../node_modules', '../sets/trivia', '../schemas', '../shared', '../design/trivia-ui/mockups'] },
   },
   preview: { host: '127.0.0.1', port: 52742, strictPort: true },
 })

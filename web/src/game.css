@@ -79,6 +79,18 @@
 .effect-label { padding-top: 12px; color: var(--silver); font-size: 15px; }
 .effect-trigger { width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid #455875; border-radius: 7px; color: var(--white); background: var(--surface); text-align: left; font-size: 15px; }
 .effect-trigger:hover, .effect-trigger[aria-expanded=true] { border-color: var(--ice); }
+.effect-trigger > span:first-child, .choice-name, .effect-choice small, .narrator-current {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.disclosure-arrow { flex: none; }
+.narrator-current { margin-left: auto; color: var(--silver); font-size: 14px; font-weight: normal; }
+.narrator-settings summary { white-space: nowrap; }
+.effect-choice { height: var(--sound-row-height); }
+.effect-choice small { margin-left: auto; color: var(--silver); font-size: 12px; }
+.picker-filter { display: block; box-sizing: border-box; width: 100%; padding: 10px 12px; font: inherit;
+  font-size: 14px; color: var(--white); background: var(--ink); border: 1px solid #455875; border-top: 0; }
+.picker-filter:focus-visible { outline: 2px solid var(--ice); outline-offset: -2px; }
+.picker-empty { color: var(--silver); padding-inline: 8px; }
 .effect-trigger[aria-expanded=true] { border-radius: 7px 7px 0 0; }
 .effect-options {
   --sound-row-height: 44px;

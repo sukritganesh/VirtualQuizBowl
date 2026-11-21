@@ -1,13 +1,15 @@
 # Virtual Quiz Bowl tech stack
 
-React runs the round in the browser. The host uses browser speech synthesis. A loopback FastAPI service runs Whisper on the RTX 4090 and calls the local Ollama judge. The [game overview](GAME_OVERVIEW.md) defines the rules and scoring.
+React runs the round in the browser. The host defaults to Kokoro-82M with the Liam voice. A loopback FastAPI service runs Whisper on the RTX 4090 and calls the local Ollama judge. The [game overview](GAME_OVERVIEW.md) defines the rules and scoring.
 
 ## Browser
 
 Use the [UI pack](design/trivia-ui/SKILL.md) for screen layouts, narration highlighting, pause behavior, and visual references.
 
 - **React, TypeScript, and Vite** for the home screen and round UI. The browser validates the imported JSON set, checks that its mode is `trivia`, and keeps the current question and session score in memory.
-- **Browser speech synthesis** for the host. Read the available voices through `getVoices()` and refresh the settings selector on `voiceschanged`. Store the chosen voice URI, volume, and mute preference in browser local storage. Use the selected voice for both preview and narration, falling back to an available English voice when needed. Speak the question in one utterance and drive the highlight from its word events. Its end event opens the buzzer even if the voice supplied no word positions. Silent reading advances the highlight on a local timer. If audible narration fails, offer to replay the question before starting the timer.
+- **Host narration** uses a shared model and voice catalog in [shared/narrators.json](shared/narrators.json). The browser saves the model, voice, speaker, volume, and mute setting. Explicit voice URIs from older settings carry over to Browser speech. Settings and rounds share the playback path.
+- **Local speech** posts one question or preview sentence to `/api/narration` and plays the returned WAV. The service serializes synthesis, caches the last 32 renders in memory, and keeps Kokoro and Piper in separate workers because their phonemizers each own process-wide native state. Pocket and Qwen use local CPU executables. The browser cancels stale requests, resumes paused audio at its saved position and opens the buzzer on playback end.
+- **Browser speech** discovers system voices through `getVoices()` and `voiceschanged`. It also serves as the round fallback if the local service is unavailable. Voices with word boundaries drive the read-along. WAVs and other voices without word positions mark the full question as spoken at the end. Muting advances the read-along on a local timer. If audible narration fails, the player can retry or open the buzzer manually.
 - **Manual judging.** The browser owns both deadlines and pauses them with the round. Revealing an answer after buzzing enables manual scoring. A pass or missed buzz resolves the question locally.
 
 - **Menu music** uses a looping HTML audio element owned by the home screen. Each visit selects one of two bundled tracks. Music volume is saved with the other audio preferences.

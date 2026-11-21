@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { createPortal } from 'react-dom'
-import { chooseVoice, defaultAudio, hostUtterance, playSound, readAudioPreferences, serializeAudioPreferences, type AudioPreferences, type SoundCue } from './audio'
+import { defaultAudio, playSound, speakQuestion, voiceSample, readAudioPreferences, serializeAudioPreferences, type AudioPreferences, type Narrator, type SoundCue } from './audio'
+import { NarratorPicker, narrationKey } from './NarratorPicker'
 import { SoundEffectPicker } from './SoundEffectPicker'
 
 const storageKey = 'virtual-quiz-bowl.audio'
@@ -47,91 +48,57 @@ export function SettingsButton({ inMenu = false }: { inMenu?: boolean }) {
 
 function SettingsPage({ back, showSoundEffects }: { back: () => void; showSoundEffects: boolean }) {
   const { preferences, update } = useAudio()
-  const { muted, volume, voiceURI } = preferences
+  const { muted, volume } = preferences
   const dialog = useRef<HTMLDialogElement>(null)
-  const sample = useRef<SpeechSynthesisUtterance | null>(null)
-  const synth = window.speechSynthesis
-  const canSpeak = !!synth && typeof SpeechSynthesisUtterance !== 'undefined'
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
-  const [preview, setPreview] = useState<'idle' | 'playing' | 'failed'>('idle')
-  const stopEffect = useRef<(() => void) | null>(null)
-  const [playingFile, setPlayingFile] = useState<string | null>(null)
-  const [effectFailed, setEffectFailed] = useState(false)
+  const cancel = useRef<(() => void) | undefined>(undefined)
+  const generation = useRef(0)
+  const [playing, setPlaying] = useState<string | null>(null)
+  const [preparingVoice, setPreparingVoice] = useState(false)
+  const [error, setError] = useState<{ kind: 'effect' | 'voice'; message: string } | null>(null)
 
-  const stopEffectPreview = useCallback(() => {
-    stopEffect.current?.()
-    stopEffect.current = null
-    setPlayingFile(null)
-    setEffectFailed(false)
+  const stopPreview = useCallback(() => {
+    generation.current++
+    cancel.current?.()
+    cancel.current = undefined
+    setPlaying(null)
+    setPreparingVoice(false)
+    setError(null)
   }, [])
-  useEffect(() => {
-    setPlayingFile(null)
-    return () => { stopEffect.current?.(); stopEffect.current = null }
-  }, [muted])
-
-  function previewEffect(cue: SoundCue, file: string) {
-    stopEffectPreview()
-    if (playingFile === file) return
-    if (sample.current) {
-      sample.current = null
-      synth.cancel()
-      setPreview('idle')
-    }
-    setPlayingFile(file)
-    stopEffect.current = playSound(cue, file, failed => {
-      stopEffect.current = null
-      setPlayingFile(null)
-      setEffectFailed(failed)
-    })
-  }
 
   useLayoutEffect(() => {
     const element = dialog.current!
     element.showModal()
     return () => element.close()
   }, [])
-
   useEffect(() => {
-    if (!synth) return
-    const refresh = () => setVoices([...synth.getVoices()].sort((a,b) => a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name)))
-    refresh()
-    synth.addEventListener?.('voiceschanged', refresh)
-    return () => synth.removeEventListener?.('voiceschanged', refresh)
-  }, [synth])
+    stopPreview()
+    return () => { generation.current++; cancel.current?.(); cancel.current = undefined }
+  }, [muted, volume, stopPreview])
 
-  useEffect(() => {
-    setPreview('idle')
-    return () => {
-      if (sample.current) {
-        sample.current = null
-        synth?.cancel()
-      }
-    }
-  }, [synth, voiceURI, muted, volume])
-
-  function previewVoice() {
-    stopEffectPreview()
-    if (sample.current) {
-      sample.current = null
-      synth.cancel()
-      setPreview('idle')
-      return
-    }
-    const speech = hostUtterance('Welcome to Virtual Quiz Bowl. Here is your next question.', preferences)
-    sample.current = speech
-    function finish(state: 'idle' | 'failed') {
-      if (sample.current !== speech) return
-      sample.current = null
-      setPreview(state)
-    }
-    speech.onend = () => finish('idle')
-    speech.onerror = () => finish('failed')
-    setPreview('playing')
-    synth.speak(speech)
+  function audition(key: string, kind: 'effect' | 'voice', play: (finish: (message?: string) => void) => (() => void) | undefined) {
+    stopPreview()
+    if (playing === key) return
+    const ticket = generation.current
+    setPlaying(key)
+    setPreparingVoice(kind === 'voice')
+    cancel.current = play(message => {
+      if (ticket !== generation.current) return
+      setPlaying(null)
+      setPreparingVoice(false)
+      setError(message ? { kind, message } : null)
+    })
   }
 
-  const selectedMissing = voiceURI && !voices.some(voice => voice.voiceURI === voiceURI)
-  const automaticVoice = chooseVoice(voices, '')
+  function previewEffect(cue: SoundCue, file: string) {
+    audition(file, 'effect', finish => playSound(cue, file, failed => finish(failed ? 'This sound could not play.' : undefined)))
+  }
+  function previewVoice(narrator: Narrator) {
+    audition(narrationKey(narrator), 'voice', finish => speakQuestion(voiceSample, { ...preferences, narrator }, {
+      onWord() {}, onPlaying: () => setPreparingVoice(false),
+      onEnd: () => finish(), onError: message => finish(message ?? 'This voice could not play.'),
+    }))
+  }
+
   function volumeControl(field: 'volume' | 'musicVolume', id: string, label: string) {
     const level = muted ? 0 : preferences[field]
     return <div className="setting-row">
@@ -150,21 +117,12 @@ function SettingsPage({ back, showSoundEffects }: { back: () => void; showSoundE
         <h1 id="settings-title">Settings</h1>
         {volumeControl('volume', 'host-volume', 'Narration volume')}
         {volumeControl('musicVolume', 'music-volume', 'Music volume')}
-        {showSoundEffects && <SoundEffectPicker preferences={preferences} playingFile={playingFile}
-          preview={previewEffect} stopPreview={stopEffectPreview} failed={effectFailed}
+        {showSoundEffects && <SoundEffectPicker preferences={preferences} playingFile={playing}
+          preview={previewEffect} stopPreview={stopPreview} failed={error?.kind === 'effect'}
           choose={(cue, file) => update(previous => ({ ...previous, sounds: { ...previous.sounds, [cue]: file } }))}/>}
-        <div className="setting-row">
-          <label htmlFor="host-voice">Host voice</label>
-          <select id="host-voice" className="pack-select" value={voiceURI} disabled={!canSpeak}
-            onChange={event => { const uri = event.target.value; update(previous => ({ ...previous, voiceURI: uri })) }}>
-            <option value="">Automatic{automaticVoice ? ' · ' + automaticVoice.name : ''}</option>
-            {selectedMissing && <option value={voiceURI} disabled>Saved voice unavailable · using automatic</option>}
-            {voices.map(voice => <option key={voice.voiceURI} value={voice.voiceURI}>{voice.name} · {voice.lang}{voice.localService ? '' : ' · Online'}</option>)}
-          </select>
-          <p className="pack-detail">{canSpeak ? 'Available voices depend on your browser and device.' : 'This browser does not provide speech synthesis.'}</p>
-          <button className="quiet" disabled={muted || volume === 0 || !canSpeak} onClick={previewVoice}>{preview === 'playing' ? 'Stop preview' : 'Preview voice'}</button>
-          {preview === 'failed' && <p role="status">This voice could not play. Try another voice.</p>}
-        </div>
+        <NarratorPicker narrator={preferences.narrator} choose={narrator => update(previous => ({ ...previous, narrator }))}
+          preview={previewVoice} stop={stopPreview} playing={playing} disabled={muted || volume === 0}
+          status={error?.kind === 'voice' ? error.message : preparingVoice ? 'Preparing voice preview…' : null}/>
       </main>
     </div>
   </dialog>
