@@ -3,6 +3,7 @@ import { prepareMicrophone } from './spokenAnswers'
 import { library, parseSet, type TriviaSet } from './sets'
 import buzzer from './assets/buzzer.png'
 import { MuteButton, SettingsButton } from './AudioSettings'
+import { HomeMusic } from './HomeMusic'
 
 export function BrandRail({ home = false }: { home?: boolean }) {
   return <header className="rail">
@@ -62,7 +63,7 @@ export function Home({ onPlay }: { onPlay: (set: TriviaSet, stream: MediaStream 
     }
   }
 
-  return <><BrandRail home/><main className="home-main">
+  return <><HomeMusic/><BrandRail home/><main className="home-main">
     <div className="home-copy"><h1 className="home-title">Virtual<span>Quiz Bowl</span></h1>
       <div className="form">
         <label className="eyebrow" htmlFor="pack">Question set</label>

@@ -38,7 +38,7 @@ Press **Play** and grant microphone access. The mic track is disabled until a va
 
 ## Play a round
 
-Open **Settings** from the home screen or pause menu to set narration volume and preview the voices your browser offers. Your choices are saved in this browser. The speaker button toggles mute immediately and restores your previous volume when unmuted. While muted, words highlight silently before the buzz window opens.
+Each visit to the home screen picks a random music track and loops it until you start a round. If your browser waits for an interaction before playing audio, click the menu or press a key. Open **Settings** from home or the pause menu to adjust **Music volume** and **Narration volume** separately or preview the host voices. Your browser remembers both levels. The speaker button mutes both, and questions highlight silently when narration is muted.
 
 | Key | Button | When to use it |
 | --- | --- | --- |

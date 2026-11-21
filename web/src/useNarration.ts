@@ -12,7 +12,7 @@ export function useNarration(text: string, enabled: boolean, preferences: AudioP
     setFailed(false)
     const words = text.split(' ')
     if (cursor.current >= words.length) { onFinished(); return }
-    if (preferences.muted) {
+    if (preferences.muted || preferences.volume === 0) {
       // Keep the read-along and both game windows playable even without a speech engine.
       let timer: number
       const advance = () => {

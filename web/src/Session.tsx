@@ -76,7 +76,7 @@ function Round({ game, set, stream, send, onQuit }: RoundProps) {
   const showingAnswer = (phase === 'grade' && !automatic) || phase === 'result'
   const timed = phase === 'buzz' || phase === 'answer'
   const label = {
-    reading: preferences.muted ? 'Reading silently' : narration.failed ? 'Voice unavailable' : 'Host is reading',
+    reading: preferences.muted || preferences.volume === 0 ? 'Reading silently' : narration.failed ? 'Voice unavailable' : 'Host is reading',
     buzz: 'Buzz window open',
     answer: automatic ? 'Recording answer' : 'Buzzed in',
     grade: automatic ? (spoken.error ? 'Could not check answer' : 'Checking answer') : 'Mark your answer',

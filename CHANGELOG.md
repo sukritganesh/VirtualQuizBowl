@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added two looping home-menu tracks. Each visit picks one at random, and Settings now has a separate music volume control.
 - The host now reads each trivia question in one continuous sentence. Voices that report word positions still highlight each word as they speak.
 - Limited the trivia judge to 768 generated tokens per answer. If it reaches the limit or times out, the game explains what happened and offers manual scoring.
 - Added four 20-question automotive trivia sets covering production cars, workshop know-how, motorsport, and car culture. All four are available in the home screen's question-set picker.
