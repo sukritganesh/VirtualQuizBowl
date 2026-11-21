@@ -1,5 +1,22 @@
-export type AudioPreferences = { volume: number; musicVolume: number; muted: boolean; voiceURI: string }
-export const defaultAudio: AudioPreferences = { volume: 100, musicVolume: 30, muted: false, voiceURI: '' }
+import soundLibrary from './soundLibrary.json' with { type: 'json' }
+
+export { soundLibrary }
+export type SoundCue = keyof typeof soundLibrary
+export const soundCues = Object.keys(soundLibrary) as SoundCue[]
+type SoundPicks = Record<SoundCue, string>
+
+function readSoundPicks(saved: Partial<SoundPicks> | null = {}): SoundPicks {
+  const picks = {} as SoundPicks
+  for (const cue of soundCues) {
+    const { options } = soundLibrary[cue]
+    // The first clip is the chosen default for this cue.
+    picks[cue] = (options.find(clip => clip.file === saved?.[cue]) ?? options[0]).file
+  }
+  return picks
+}
+
+export type AudioPreferences = { volume: number; musicVolume: number; muted: boolean; voiceURI: string; sounds: SoundPicks }
+export const defaultAudio: AudioPreferences = { volume: 100, musicVolume: 30, muted: false, voiceURI: '', sounds: readSoundPicks() }
 
 function readVolume(value: unknown, fallback: number) {
   return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 100 ? value : fallback
@@ -13,9 +30,31 @@ export function readAudioPreferences(raw: string | null): AudioPreferences {
       musicVolume: readVolume(saved.musicVolume, defaultAudio.musicVolume),
       muted: saved.muted === true,
       voiceURI: typeof saved.voiceURI === 'string' ? saved.voiceURI : '',
+      sounds: readSoundPicks(saved.sounds),
     }
   } catch {
     return defaultAudio
+  }
+}
+
+/** Use the same clip and audition-level gain for a settings preview and a round. */
+export function playSound(cue: SoundCue, picks: SoundPicks, onFinish?: (failed: boolean) => void) {
+  const { options } = soundLibrary[cue]
+  const clip = options.find(option => option.file === picks[cue]) ?? options[0]
+  const player = new Audio(import.meta.env.BASE_URL + 'sounds/' + clip.file)
+  player.volume = 0.6 * clip.gain
+  function finish(failed: boolean) {
+    player.onended = player.onerror = null
+    onFinish?.(failed)
+    onFinish = undefined
+  }
+  player.onended = () => finish(false)
+  player.onerror = () => finish(true)
+  void player.play().catch(() => finish(true))
+  return () => {
+    onFinish = undefined
+    player.onended = player.onerror = null
+    player.pause()
   }
 }
 

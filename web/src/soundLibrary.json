@@ -1,0 +1,38 @@
+{
+  "buzzer": {
+    "label": "Buzzer",
+    "options": [
+      { "name": "Two-tone call", "file": "twoTone1.ogg", "gain": 0.265 },
+      { "name": "Vocal buzzer", "file": "Buzzer.ogg", "gain": 1 },
+      { "name": "Switch click", "file": "switch_002.ogg", "gain": 0.352 },
+      { "name": "Arcade button", "file": "sfx_sounds_button6.wav", "gain": 0.706 }
+    ]
+  },
+  "correct": {
+    "label": "Correct",
+    "options": [
+      { "name": "Confirmation chime", "file": "confirmation_001.ogg", "gain": 0.398 },
+      { "name": "Power-up", "file": "sfx_sounds_powerup3.wav", "gain": 0.364 },
+      { "name": "Pizzicato jingle", "file": "jingles_PIZZI01.ogg", "gain": 0.376 },
+      { "name": "Glass ping", "file": "glass_003.ogg", "gain": 0.416 }
+    ]
+  },
+  "incorrect": {
+    "label": "Incorrect",
+    "options": [
+      { "name": "Falling synth", "file": "lowDown.ogg", "gain": 0.29 },
+      { "name": "Error tone", "file": "error_003.ogg", "gain": 0.428 },
+      { "name": "Arcade rejection", "file": "sfx_sounds_negative1.wav", "gain": 0.707 },
+      { "name": "Spoken “Wrong”", "file": "wrong.ogg", "gain": 0.394 }
+    ]
+  },
+  "timeout": {
+    "label": "Time’s up",
+    "options": [
+      { "name": "Arcade alarm", "file": "sfx_alarm_loop3.wav", "gain": 0.367 },
+      { "name": "Bell strike", "file": "impactBell_heavy_001.ogg", "gain": 1 },
+      { "name": "Referee whistle", "file": "sfx_sound_refereewhistle.wav", "gain": 0.316 },
+      { "name": "Three-tone signal", "file": "threeTone2.ogg", "gain": 0.347 }
+    ]
+  }
+}

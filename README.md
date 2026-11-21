@@ -38,7 +38,7 @@ Press **Play** and grant microphone access. The mic track is disabled until a va
 
 ## Play a round
 
-Each visit to the home screen picks a random music track and loops it until you start a round. If your browser waits for an interaction before playing audio, click the menu or press a key. Open **Settings** from home or the pause menu to adjust **Music volume** and **Narration volume** separately or preview the host voices. Your browser remembers both levels. The speaker button mutes both, and questions highlight silently when narration is muted.
+Each visit to the home screen picks a random music track and loops it until you start a round. If your browser waits for an interaction before playing audio, click the menu or press a key. Open **Settings** from home or the pause menu to adjust **Music volume** and **Narration volume** separately or preview the host voices. From home, expand **Sound effects** to choose and preview the buzzer, correct, incorrect, and time’s-up sounds. Your browser remembers your choices. The speaker button mutes all game audio, and questions highlight silently when narration is muted.
 
 | Key | Button | When to use it |
 | --- | --- | --- |

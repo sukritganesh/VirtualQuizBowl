@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { createPortal } from 'react-dom'
-import { chooseVoice, defaultAudio, hostUtterance, readAudioPreferences, type AudioPreferences } from './audio'
+import { chooseVoice, defaultAudio, hostUtterance, playSound, readAudioPreferences, soundCues, soundLibrary, type AudioPreferences, type SoundCue } from './audio'
 
 const storageKey = 'virtual-quiz-bowl.audio'
 type AudioState = { preferences: AudioPreferences; update: Dispatch<SetStateAction<AudioPreferences>> }
@@ -40,11 +40,11 @@ export function SettingsButton({ inMenu = false }: { inMenu?: boolean }) {
     <button aria-haspopup="dialog" className={inMenu ? 'quit menu-settings' : 'quiet settings-link'} onClick={() => setOpen(true)}>
       Settings {inMenu && <span aria-hidden="true">→</span>}
     </button>
-    {open && createPortal(<SettingsPage back={() => setOpen(false)}/>, document.body)}
+    {open && createPortal(<SettingsPage showSoundEffects={!inMenu} back={() => setOpen(false)}/>, document.body)}
   </>
 }
 
-function SettingsPage({ back }: { back: () => void }) {
+function SettingsPage({ back, showSoundEffects }: { back: () => void; showSoundEffects: boolean }) {
   const { preferences, update } = useAudio()
   const { muted, volume, voiceURI } = preferences
   const dialog = useRef<HTMLDialogElement>(null)
@@ -53,6 +53,36 @@ function SettingsPage({ back }: { back: () => void }) {
   const canSpeak = !!synth && typeof SpeechSynthesisUtterance !== 'undefined'
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const [preview, setPreview] = useState<'idle' | 'playing' | 'failed'>('idle')
+  const stopEffect = useRef<(() => void) | null>(null)
+  const [playingCue, setPlayingCue] = useState<SoundCue | null>(null)
+  const [effectFailed, setEffectFailed] = useState(false)
+
+  function stopEffectPreview() {
+    stopEffect.current?.()
+    stopEffect.current = null
+    setPlayingCue(null)
+    setEffectFailed(false)
+  }
+  useEffect(() => {
+    setPlayingCue(null)
+    return () => { stopEffect.current?.(); stopEffect.current = null }
+  }, [muted])
+
+  function previewEffect(cue: SoundCue) {
+    stopEffectPreview()
+    if (playingCue === cue) return
+    if (sample.current) {
+      sample.current = null
+      synth.cancel()
+      setPreview('idle')
+    }
+    setPlayingCue(cue)
+    stopEffect.current = playSound(cue, preferences.sounds, failed => {
+      stopEffect.current = null
+      setPlayingCue(null)
+      setEffectFailed(failed)
+    })
+  }
 
   useLayoutEffect(() => {
     const element = dialog.current!
@@ -79,6 +109,7 @@ function SettingsPage({ back }: { back: () => void }) {
   }, [synth, voiceURI, muted, volume])
 
   function previewVoice() {
+    stopEffectPreview()
     if (sample.current) {
       sample.current = null
       synth.cancel()
@@ -118,6 +149,34 @@ function SettingsPage({ back }: { back: () => void }) {
         <h1 id="settings-title">Settings</h1>
         {volumeControl('volume', 'host-volume', 'Narration volume')}
         {volumeControl('musicVolume', 'music-volume', 'Music volume')}
+        {showSoundEffects && <details className="effect-settings" onToggle={event => {
+          if (!event.currentTarget.open) stopEffectPreview()
+        }}>
+          <summary>Sound effects <span className="disclosure-arrow" aria-hidden="true"/></summary>
+          <div className="effect-list">
+            {soundCues.map(cue => {
+              const { label, options } = soundLibrary[cue]
+              const playing = playingCue === cue
+              const action = playing ? 'Stop' : 'Preview'
+              return <div className="effect-row" key={cue}>
+                <label htmlFor={'effect-' + cue}>{label}</label>
+                <select id={'effect-' + cue} className="pack-select" value={preferences.sounds[cue]}
+                  onChange={event => {
+                    const file = event.target.value
+                    stopEffectPreview()
+                    update(previous => ({ ...previous, sounds: { ...previous.sounds, [cue]: file } }))
+                  }}>
+                  {options.map(option => <option key={option.file} value={option.file}>{option.name}</option>)}
+                </select>
+                <button className="effect-preview" disabled={muted} aria-label={action + ' ' + label + ' sound'}
+                  title={muted ? 'Unmute to preview' : action + ' sound'} onClick={() => previewEffect(cue)}>
+                  <span className={playing ? 'stop-shape' : 'play-shape'} aria-hidden="true"/>
+                </button>
+              </div>
+            })}
+            {effectFailed && <p role="status" className="pack-detail">This sound could not play. Try previewing it again.</p>}
+          </div>
+        </details>}
         <div className="setting-row">
           <label htmlFor="host-voice">Host voice</label>
           <select id="host-voice" className="pack-select" value={voiceURI} disabled={!canSpeak}
