@@ -23,6 +23,6 @@ The browser checks local model availability and requests microphone permission b
 
 ## Workspace and deployment
 
-Use `web/` for the browser app and `api/` for the Python service. Store named sets anywhere under `sets/trivia/`. The browser validates files against the [trivia set schema](schemas/trivia-set.schema.json), checks that question IDs are unique within the set, and uses array order for play. The initial session needs no database.
+Use `web/` for the browser app and `api/` for the Python service. Vite bundles the JSON files under `sets/trivia/`. Each directory becomes a category in the set browser, and a directory can contain both sets and subcategories. The set's JSON supplies its title and in-game category. The browser validates files against the [trivia set schema](schemas/trivia-set.schema.json), checks that question IDs are unique within the set, and uses array order for play. The initial session needs no database.
 
 Vite serves the playable version locally and builds a static site in `web/dist/`. Development and preview proxy `/api` to FastAPI on `127.0.0.1:52743`. Setup commands are in the [README](README.md). A standalone static deployment supports manual mode and requires an inference service for AI mode.
