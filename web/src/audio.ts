@@ -1,6 +1,27 @@
 import soundLibrary from './soundLibrary.json' with { type: 'json' }
+import narrators from '../../shared/narrators.json' with { type: 'json' }
 
-export { soundLibrary }
+export { soundLibrary, narrators }
+export type Engine = keyof typeof narrators
+export type Narrator = { engine: Engine; voice: string; speaker: number }
+export const voiceSample = 'The quick brown fox jumps over the lazy dog.'
+export function modelDefault(engine: Engine): Narrator {
+  return { engine, voice: narrators[engine].default, speaker: 0 }
+}
+export function speakerNames(voice: string): string[] {
+  const names: Record<string, string[]> = narrators.piper.speakers
+  return Object.hasOwn(names, voice) ? names[voice] : []
+}
+function readNarrator(saved?: Partial<Narrator>, legacyURI?: unknown): Narrator {
+  if (typeof saved?.engine !== 'string' || !Object.hasOwn(narrators, saved.engine)) {
+    return typeof legacyURI === 'string' && legacyURI
+      ? { engine: 'browser', voice: legacyURI, speaker: 0 } : modelDefault('kokoro')
+  }
+  const { engine, voice, speaker } = saved
+  if (typeof voice !== 'string' || (engine !== 'browser' && !narrators[engine].voices.includes(voice))) return modelDefault(engine)
+  const validSpeaker = engine === 'piper' && typeof speaker === 'number' && Number.isInteger(speaker) && speaker >= 0 && speaker < speakerNames(voice).length
+  return { engine, voice, speaker: validSpeaker ? speaker : 0 }
+}
 export type SoundCue = keyof typeof soundLibrary
 export const soundCues = Object.keys(soundLibrary) as SoundCue[]
 type SoundPicks = Record<SoundCue, string>
@@ -21,8 +42,8 @@ function readSoundPicks(saved?: Partial<SoundPicks> | null, legacy = false): Sou
   return picks
 }
 
-export type AudioPreferences = { volume: number; musicVolume: number; muted: boolean; voiceURI: string; sounds: SoundPicks }
-export const defaultAudio: AudioPreferences = { volume: 100, musicVolume: 30, muted: false, voiceURI: '', sounds: readSoundPicks() }
+export type AudioPreferences = { volume: number; musicVolume: number; muted: boolean; narrator: Narrator; sounds: SoundPicks }
+export const defaultAudio: AudioPreferences = { volume: 100, musicVolume: 30, muted: false, narrator: modelDefault('kokoro'), sounds: readSoundPicks() }
 
 export function serializeAudioPreferences(preferences: AudioPreferences) {
   return JSON.stringify({ ...preferences, soundDefaultsVersion: 2 })
@@ -39,7 +60,7 @@ export function readAudioPreferences(raw: string | null): AudioPreferences {
       volume: readVolume(saved.volume, defaultAudio.volume),
       musicVolume: readVolume(saved.musicVolume, defaultAudio.musicVolume),
       muted: saved.muted === true,
-      voiceURI: typeof saved.voiceURI === 'string' ? saved.voiceURI : '',
+      narrator: readNarrator(saved.narrator, saved.voiceURI),
       sounds: readSoundPicks(saved.sounds, saved.soundDefaultsVersion === undefined),
     }
   } catch {
@@ -79,17 +100,22 @@ export function chooseVoice(voices: SpeechSynthesisVoice[], uri: string) {
 
 export function hostUtterance(text: string, preferences: AudioPreferences) {
   const speech = new SpeechSynthesisUtterance(text)
-  speech.voice = chooseVoice(window.speechSynthesis.getVoices(), preferences.voiceURI)
+  speech.voice = chooseVoice(window.speechSynthesis.getVoices(), preferences.narrator.voice)
   speech.lang = speech.voice?.lang ?? 'en-US'
   speech.volume = preferences.muted ? 0 : preferences.volume / 100
   return speech
 }
 
-export function speakQuestion(text: string, preferences: AudioPreferences, events: {
+type SpeechEvents = {
   onWord: (index: number) => void
+  onPlaying?: () => void
   onEnd: () => void
-  onError: () => void
-}) {
+  onError: (message?: string) => void
+  onPosition?: (seconds: number, duration: number) => void
+  onBrowserFallback?: () => void
+}
+
+function browserSpeech(text: string, preferences: AudioPreferences, events: SpeechEvents) {
   const synth = window.speechSynthesis
   if (!synth || typeof SpeechSynthesisUtterance === 'undefined') {
     events.onError()
@@ -114,7 +140,7 @@ export function speakQuestion(text: string, preferences: AudioPreferences, event
     window.clearTimeout(watchdog)
     watchdog = window.setTimeout(fail, 12000 + text.length * 100)
   }
-  speech.onstart = () => { if (active) allowPlayback() }
+  speech.onstart = () => { if (active) { allowPlayback(); events.onPlaying?.() } }
   speech.onboundary = event => {
     if (!active || event.name === 'sentence') return
     allowPlayback()
@@ -129,4 +155,76 @@ export function speakQuestion(text: string, preferences: AudioPreferences, event
   speech.onerror = fail
   synth.speak(speech)
   return cancel
+}
+
+export function speakQuestion(text: string, preferences: AudioPreferences, events: SpeechEvents, offset = 0) {
+  if (preferences.narrator.engine === 'browser') return browserSpeech(text, preferences, events)
+  const controller = new AbortController()
+  const player = new Audio()
+  player.preload = 'auto'
+  let url: string | undefined
+  let fallback: (() => void) | undefined
+  let active = true
+  let watchdog = window.setTimeout(() => fail('Narration timed out.'), 135000)
+  function position() {
+    if (player.currentTime > 0 && Number.isFinite(player.duration)) events.onPosition?.(player.currentTime, player.duration)
+  }
+  function stop() {
+    if (!active) return
+    active = false
+    window.clearTimeout(watchdog)
+    controller.abort()
+    fallback?.()
+    position()
+    player.onended = player.onerror = player.ontimeupdate = player.onloadedmetadata = player.onplaying = null
+    player.pause()
+    player.removeAttribute('src')
+    player.load()
+    if (url) URL.revokeObjectURL(url)
+  }
+  function fail(message?: string) {
+    if (!active) return
+    stop()
+    events.onError(message)
+  }
+  function watchPlayback() {
+    window.clearTimeout(watchdog)
+    watchdog = window.setTimeout(() => fail('Audio playback stalled.'), 15000)
+  }
+  async function play() {
+    let blob: Blob
+    try {
+      const response = await fetch('/api/narration', { method: 'POST', signal: controller.signal,
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...preferences.narrator, text }) })
+      if (!response.ok || !response.headers.get('content-type')?.startsWith('audio/wav')) {
+        const error = await response.json().catch(() => null)
+        throw new Error(typeof error?.detail === 'string' ? error.detail : 'The local narrator is unavailable.')
+      }
+      blob = await response.blob()
+    } catch (error) {
+      if (!active) return
+      if (!events.onBrowserFallback) { fail(error instanceof Error ? error.message : undefined); return }
+      // A static or offline game can still read questions. Previews always use the requested voice.
+      window.clearTimeout(watchdog)
+      events.onBrowserFallback()
+      fallback = browserSpeech(text, { ...preferences, narrator: modelDefault('browser') }, events)
+      return
+    }
+    if (!active) return
+    url = URL.createObjectURL(blob)
+    player.volume = preferences.muted ? 0 : preferences.volume / 100
+    player.onerror = () => fail('This voice could not play.')
+    player.onplaying = () => { if (active) events.onPlaying?.() }
+    player.onended = () => { if (active) { stop(); events.onEnd() } }
+    player.ontimeupdate = () => { if (active) { position(); watchPlayback() } }
+    player.onloadedmetadata = () => {
+      if (!active) return
+      if (offset > 0 && offset < player.duration) player.currentTime = offset
+      void player.play().catch(() => fail('This voice could not play.'))
+    }
+    watchPlayback()
+    player.src = url
+  }
+  void play()
+  return stop
 }

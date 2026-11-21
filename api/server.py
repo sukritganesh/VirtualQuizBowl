@@ -1,16 +1,34 @@
+import asyncio
 import logging
 from typing import Annotated
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import ValidationError
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from . import inference
+from . import inference, narration
 
 app = FastAPI(title="Virtual Quiz Bowl local AI", docs_url=None, redoc_url=None)
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]"])
 MAX_UPLOAD = 2 * 1024 * 1024
+narration_slot = asyncio.Lock()
+
+
+@app.post("/api/narration")
+async def narrate(choice: narration.SpeechRequest, request: Request):
+    # Superseded previews can leave the queue without starting an expensive render.
+    async with narration_slot:
+        if await request.is_disconnected():
+            return Response(status_code=204)
+        try:
+            audio = await asyncio.to_thread(narration.render, choice.engine, choice.voice, choice.speaker, choice.text)
+        except (FileNotFoundError, ImportError) as exc:
+            raise HTTPException(503, f"Set up the {narration.CATALOG[choice.engine]['name']} narrator on this computer.") from exc
+        except Exception as exc:
+            logging.getLogger("uvicorn.error").exception("Narration failed")
+            raise HTTPException(503, "This voice could not read the text.") from exc
+    return Response(audio, media_type="audio/wav")
 
 
 @app.middleware("http")

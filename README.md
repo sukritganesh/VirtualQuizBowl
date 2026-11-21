@@ -1,6 +1,6 @@
 # Virtual Quiz Bowl
 
-Play a single-player trivia set in your browser. Choose **Browse** to explore built-in packs by category, or use **Import JSON** to open your own [trivia set](sets/trivia/science/astronomy/the-night-sky.json). The browser reads each question. Buzz, say your answer, and see the local transcript and score. Uncheck **Use local AI** on the home screen to play with manual scoring.
+Play a single-player trivia set in your browser. Choose **Browse** to explore built-in packs by category, or use **Import JSON** to open your own [trivia set](sets/trivia/science/astronomy/the-night-sky.json). The host reads each question. Buzz, say your answer, and see the local transcript and score. Uncheck **Use local AI** on the home screen to play with manual scoring.
 
 ## Run locally
 
@@ -17,7 +17,7 @@ For a production build, run `npm run build` and serve `web/dist/`, or run `npm r
 
 ## Local AI on Windows
 
-Use Python 3.13, an NVIDIA GPU with a CUDA 12-compatible driver, and a running [Ollama for Windows](https://ollama.com/download/windows). Run these commands once from the repository root in PowerShell. The downloads include CUDA inference libraries, Whisper large-v3-turbo weights and the local Ollama judge.
+Use Python 3.13, an NVIDIA GPU with a CUDA 12-compatible driver, and a running [Ollama for Windows](https://ollama.com/download/windows). Run these commands once from the repository root in PowerShell. The downloads include Kokoro’s host voices, CUDA inference libraries, Whisper large-v3-turbo weights and the local Ollama judge.
 
 ```powershell
 python -m venv .venv
@@ -35,6 +35,21 @@ With Ollama running, start the local API in a separate terminal before playing:
 Both Vite development and preview forward `/api` to that loopback service. The default judge is Phi-4 Mini (`phi4-mini:3.8b`). Set `VQB_OLLAMA_MODEL` before starting the API to use another installed local model. `VQB_WHISPER_MODEL` accepts a local faster-whisper model directory. The API performs transcription on CUDA and keeps the model loaded between questions. Run its tests with `.\.venv\Scripts\python.exe -m unittest api.test_answers`.
 
 Press **Play** and grant microphone access. The mic track is disabled until a valid buzz. Pausing suspends capture and preserves the remaining time. Clips are processed in memory on the PC. Exact answers and aliases receive immediate credit after transcription. Ollama checks other phrasing against the question and answer key. If processing fails, retry the same clip or choose manual grading for that question.
+
+## Choose a narrator
+
+Open **Settings → Host voice** from home or a paused round. Open **Model** to hear the alternatives, or **Voice** to compare voices within one model. Each play button reads “The quick brown fox jumps over the lazy dog.” Click a name to save it. Long lists have a search field, and multi-speaker Piper voices have a **Speaker** menu.
+
+The default is **Kokoro-82M · Liam**. Existing installations can add the host by updating the Python environment and downloading Kokoro from PowerShell:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r api/requirements.txt
+.\.venv\Scripts\python.exe -m api.prepare_narration kokoro
+```
+
+Start or restart the local API after upgrading. To install the other local voices, run the same preparation command with `pocket`, `piper`, `qwen`, or `all`. Pocket and Qwen target Windows x64. Qwen builds its CPU runner and requires Git, CMake and Visual Studio’s C++ build tools on your path. The models run on CPU and store their downloads under `.models/narration/`. Piper downloads its English voices and their individual license cards. [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) · [Qwen3-TTS](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) · [Pocket TTS](https://github.com/kyutai-labs/pocket-tts) · [Piper voices](https://huggingface.co/rhasspy/piper-voices)
+
+**Browser speech** lists the voices your device provides. If a round cannot reach the selected local model, it tries browser speech and identifies the fallback on screen. Previews report when a chosen model needs setup.
 
 ## Play a round
 

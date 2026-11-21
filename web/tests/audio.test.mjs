@@ -1,18 +1,29 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync } from 'node:fs'
-import { chooseVoice, defaultAudio, readAudioPreferences, serializeAudioPreferences, soundLibrary, speakQuestion } from '../src/audio.ts'
+import { chooseVoice, defaultAudio, modelDefault, readAudioPreferences, serializeAudioPreferences, soundLibrary, speakQuestion, voiceSample } from '../src/audio.ts'
 
 test('saved audio keeps the last audible volume even while muted and tolerates old or damaged data', () => {
   const saved = { volume: 36, muted: true, voiceURI: 'host-2' }
-  assert.deepEqual(readAudioPreferences(JSON.stringify(saved)), { ...defaultAudio, ...saved })
-  assert.deepEqual(readAudioPreferences(JSON.stringify({ ...saved, musicVolume: 0 })), { ...defaultAudio, ...saved, musicVolume: 0 })
+  const migrated = { ...defaultAudio, volume: 36, muted: true, narrator: { engine: 'browser', voice: 'host-2', speaker: 0 } }
+  assert.deepEqual(readAudioPreferences(JSON.stringify(saved)), migrated)
+  assert.deepEqual(readAudioPreferences(JSON.stringify({ ...saved, musicVolume: 0 })), { ...migrated, musicVolume: 0 })
   const musicOnly = { ...defaultAudio, volume: 0, musicVolume: 80 }
   assert.deepEqual(readAudioPreferences(JSON.stringify(musicOnly)), musicOnly)
   assert.equal(readAudioPreferences('{"musicVolume":101}').musicVolume, defaultAudio.musicVolume)
   for (const raw of [null, '{', 'null', '{"volume":999,"voiceURI":false,"muted":"true"}']) {
     assert.deepEqual(readAudioPreferences(raw), defaultAudio)
   }
+})
+
+test('the default host is Liam and valid model, voice and speaker choices survive reload', () => {
+  assert.deepEqual(readAudioPreferences('{"voiceURI":""}').narrator, { engine: 'kokoro', voice: 'am_liam', speaker: 0 })
+  const narrator = { engine: 'piper', voice: 'en_US-arctic-medium', speaker: 2 }
+  assert.deepEqual(readAudioPreferences(serializeAudioPreferences({ ...defaultAudio, narrator })).narrator, narrator)
+  const load = narrator => readAudioPreferences(JSON.stringify({ narrator })).narrator
+  assert.deepEqual(load({ ...narrator, speaker: 9999 }), { ...narrator, speaker: 0 })
+  assert.deepEqual(load({ ...narrator, voice: 'missing' }), modelDefault('piper'))
+  assert.deepEqual(load({ engine: '__proto__' }), defaultAudio.narrator)
 })
 
 test('missing and retired sounds use the new defaults while supported player choices survive', () => {
@@ -53,7 +64,8 @@ test('a whole question uses one utterance and only its end opens the buzzer', t 
 
   const text = 'Looking at a car head-on, what kind of camber makes the wheels lean inward?'
   const events = { onWord: t.mock.fn(), onEnd: t.mock.fn(), onError: t.mock.fn() }
-  const cancel = speakQuestion(text, defaultAudio, events)
+  const preferences = { ...defaultAudio, narrator: modelDefault('browser') }
+  const cancel = speakQuestion(text, preferences, events)
   const speech = synth.speak.mock.calls[0].arguments[0]
   assert.equal(speech.text, text)
   speech.onstart()
@@ -70,13 +82,51 @@ test('a whole question uses one utterance and only its end opens the buzzer', t 
   assert.equal(events.onEnd.mock.callCount(), 1)
   assert.equal(synth.speak.mock.callCount(), 1)
 
-  const stop = speakQuestion(text, defaultAudio, events)
+  const stop = speakQuestion(text, preferences, events)
   const interrupted = synth.speak.mock.calls[1].arguments[0]
   stop()
   interrupted.onend()
   interrupted.onerror()
   t.mock.timers.tick(30000)
   assert.equal(synth.cancel.mock.callCount(), 1)
+  assert.equal(events.onEnd.mock.callCount(), 1)
+  assert.equal(events.onError.mock.callCount(), 0)
+})
+
+test('local narration uses the selected model and only the playback end completes the question', async t => {
+  let player, request
+  const ready = Promise.withResolvers()
+  globalThis.window = { setTimeout, clearTimeout }
+  globalThis.Audio = class {
+    constructor() { player = this; this.currentTime = 0; this.duration = 4 }
+    set src(url) { ready.resolve(url) }
+    async play() {}
+    pause() {}
+    load() {}
+    removeAttribute() {}
+  }
+  t.after(() => { delete globalThis.window; delete globalThis.Audio })
+  t.mock.method(globalThis, 'fetch', async (_, options) => {
+    request = options
+    return { ok: true, headers: new Headers({ 'Content-Type': 'audio/wav' }), blob: async () => new Blob(['wave']) }
+  })
+  const events = { onWord() {}, onEnd: t.mock.fn(), onError: t.mock.fn() }
+  assert.equal(voiceSample, 'The quick brown fox jumps over the lazy dog.')
+  const stop = speakQuestion(voiceSample, defaultAudio, events, 1.25)
+  await ready.promise
+  assert.deepEqual(JSON.parse(request.body), { ...modelDefault('kokoro'), text: voiceSample })
+  player.onloadedmetadata()
+  assert.equal(player.currentTime, 1.25)
+  assert.equal(events.onEnd.mock.callCount(), 0)
+  const end = player.onended
+  end()
+  end()
+  stop()
+  assert.equal(events.onEnd.mock.callCount(), 1)
+  const stopNext = speakQuestion('Next question?', defaultAudio, events)
+  stopNext()
+  await new Promise(resolve => setImmediate(resolve))
+  assert.equal(request.signal.aborted, true)
   assert.equal(events.onEnd.mock.callCount(), 1)
   assert.equal(events.onError.mock.callCount(), 0)
 })
