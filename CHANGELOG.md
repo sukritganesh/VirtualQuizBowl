@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Switched the default Ollama judge to Phi-4 Mini for faster spoken-answer verdicts.
 - Browse built-in trivia sets by category from the home screen. Science includes Astronomy and Geology, with a new 10-question geology pack, *Written in Stone*.
 - Added two looping home-menu tracks. Each visit picks one at random, and Settings now has a separate music volume control.
 - The host now reads each trivia question in one continuous sentence. Voices that report word positions still highlight each word as they speak.

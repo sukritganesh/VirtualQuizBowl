@@ -10,7 +10,7 @@ The default game also replayed four recordings through Whisper and the updated j
 
 ## Baseline results
 
-These verdicts and timings use the judge prompt from game commit `f936fcb`, before the explicit rule for changes of answer.
+These verdicts and timings use the judge prompt from game commit `f936fcb`, before the explicit rule for changes of answer. The benchmark's `current` profile is pinned to DeepSeek R1 7B to reproduce the original GPU results. The game now defaults to Phi-4 Mini.
 
 | Measured on this laptop | Current GPU setup | Smaller CPU setup |
 |---|---:|---:|

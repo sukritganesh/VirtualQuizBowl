@@ -31,6 +31,32 @@ class AnswerTests(unittest.TestCase):
                 self.assertEqual(prompt["aliases"], ["Whitney"])
                 self.assertEqual(prompt["player_reply"], answer)
 
+    def test_phi_receives_both_parts_of_an_explicit_correction(self):
+        key = inference.Key(question="Which Honda compact car comes in a Type R version?",
+                            answer="Honda Civic", aliases=["Civic"])
+        for transcript in ("Camry No Weight Correction Honda Civic", "Camry, no, wait. Correction, Honda Civic"):
+            with (
+                self.subTest(transcript=transcript),
+                patch.object(inference, "OLLAMA_MODEL", inference.DEFAULT_OLLAMA_MODEL),
+                patch.object(inference, "ollama", return_value={"message": {"content": '{"correct":false}'}}) as chat,
+            ):
+                verdict = inference.judge(key, transcript)
+                self.assertFalse(verdict.correct)
+                self.assertEqual(verdict.transcript, transcript)
+                payload = json.loads(chat.call_args.args[1]["messages"][1]["content"])
+                self.assertEqual(payload, {**key.model_dump(), "first_part": "Camry", "second_part": "Honda Civic"})
+
+        transcript = "Camry, no wait, Honda Civic"
+        with patch.object(inference, "OLLAMA_MODEL", "deepseek-r1:7b"):
+            payload = json.loads(inference.judge_messages(key, transcript)[1]["content"])
+            self.assertEqual(payload, {**key.model_dump(), "player_reply": transcript})
+
+    def test_phi_receives_every_guess_when_player_corrects_twice(self):
+        transcript = "Whitney, no wait, Shasta, no wait, Mount Whitney."
+        with patch.object(inference, "OLLAMA_MODEL", inference.DEFAULT_OLLAMA_MODEL):
+            payload = json.loads(inference.judge_messages(self.key, transcript)[1]["content"])
+            self.assertEqual(payload["reply_parts"], ["Whitney", "Shasta", "Mount Whitney."])
+
     def test_invalid_model_response_is_retryable(self):
         with patch.object(inference, "ollama", return_value={"message": {"content": '{"correct":"false"}'}}):
             with self.assertRaises(inference.NotReady):
