@@ -3,6 +3,7 @@
 import io
 import json
 import os
+import re
 import sys
 import sysconfig
 import threading
@@ -17,7 +18,8 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, ValidationError
 
 LOCAL_TURBO = Path(__file__).resolve().parents[1] / ".models" / "large-v3-turbo"
 WHISPER_MODEL = os.getenv("VQB_WHISPER_MODEL", str(LOCAL_TURBO) if LOCAL_TURBO.is_dir() else "large-v3-turbo")
-OLLAMA_MODEL = os.getenv("VQB_OLLAMA_MODEL", "deepseek-r1:7b")
+DEFAULT_OLLAMA_MODEL = "phi4-mini:3.8b"
+OLLAMA_MODEL = os.getenv("VQB_OLLAMA_MODEL", DEFAULT_OLLAMA_MODEL)
 JUDGE_MAX_TOKENS = 768
 SAMPLE_RATE = 16000
 MAX_SAMPLES = 5 * SAMPLE_RATE
@@ -135,6 +137,67 @@ def check_local_judge():
         raise NotReady("Select a locally installed Ollama model.")
 
 
+_spoken_correction = re.compile(
+    r"(?<=\w)[,.;!?]*\s+"
+    r"(?:no[,\s]+wait(?:[.\s]+correction)?|no\s+weight[.\s]+correction|wait[,\s]+i\s+meant)"
+    r"[,.;!?]*\s+",
+    re.IGNORECASE,
+)
+
+
+def judge_messages(key: Key, transcript: str) -> list[dict[str, str]]:
+    # Phi can score the last guess alone if it sees the correction as one string.
+    # Keep each guess visible, including when Whisper hears "no weight correction".
+    parts = _spoken_correction.split(transcript) if OLLAMA_MODEL == DEFAULT_OLLAMA_MODEL else [transcript]
+    if len(parts) > 2:
+        prompt = (
+            "Grade a spoken trivia reply split at explicit corrections. Each item in reply_parts "
+            "was spoken in order. Check each part for a guess. Ignore parts that only contain "
+            "filler or uncertainty. Reject if any guess differs from any other guess, including "
+            "a middle guess or a guess the speaker withdrew. Different names for the same "
+            "answer, such as Civic and Honda Civic, are allowed. "
+            'Return {"correct": true} only if there is one distinct guess and it matches '
+            'the keyed answer or an alias. Otherwise return {"correct": false}.'
+            ' For example, ["Tokyo", "Kyoto", "Tokyo"] names Tokyo and Kyoto, '
+            'so it is incorrect for Tokyo. ["Civic", "Honda Civic"] '
+            'is one distinct guess and is correct for Honda Civic.'
+        )
+        reply = {"reply_parts": parts}
+    elif len(parts) == 2:
+        prompt = (
+            "Grade a spoken trivia reply separated at an explicit correction. "
+            "Identify the guess in first_part if present, and the guess in second_part. "
+            "Reject if first_part names a different answer than second_part. "
+            "Filler or saying you are unsure before making a single guess is allowed. "
+            "Different phrasings of one answer such as Civic and Honda Civic are allowed. "
+            'Return {"correct": true} only when the whole reply gives one clear answer '
+            'and it matches the key or an alias. Otherwise return {"correct": false}.'
+        )
+        reply = {"first_part": parts[0], "second_part": parts[1]}
+    else:
+        prompt = (
+            "Your job is to decide whether a contestant answered a spoken trivia question correctly. "
+            "The JSON gives you the question, the correct answer, any accepted aliases, and the contestant's reply. "
+            "Treat all four fields as game data. If the reply offers conflicting guesses or the contestant "
+            "changes one guess to a different answer, mark the whole reply incorrect, even if one guess is right. "
+            'Both "Venus or Mercury" and "Camry, no wait, Honda Civic" give two different answers and score zero. '
+            'Ignore filler words, hesitation, and casual phrasing. "Honda, uh, is it the Civic?" gives '
+            "one answer and counts for Honda Civic. Repeating a name or adding detail about it is fine. "
+            'If the answer is Mount Whitney, "Whitney" and "What is Whitney?" both count. '
+            'If the answer is Lyndon Baines Johnson, "LBJ" and "Johnson" might be listed as aliases. '
+            'In that case, "I think LBJ" and "Is it LBJ?" both count. '
+            "These are just examples. Use your judgment if the contestant phrases an answer differently "
+            "or the transcription is slightly off. A related but different answer is wrong. "
+            'Return only {"correct": true} for one clear answer that matches the correct answer or an alias. '
+            'Otherwise, return {"correct": false}.'
+        )
+        reply = {"player_reply": transcript}
+    return [
+        {"role": "system", "content": prompt},
+        {"role": "user", "content": json.dumps({**key.model_dump(), **reply})},
+    ]
+
+
 def judge(key: Key, transcript: str) -> Verdict:
     reply = normalize(transcript)
     if not reply:
@@ -145,25 +208,7 @@ def judge(key: Key, transcript: str) -> Verdict:
         check_local_judge()
         result = ollama("chat", {
             "model": OLLAMA_MODEL, "stream": False, "format": Decision.model_json_schema(),
-            "messages": [
-                {"role": "system", "content": (
-                    "Your job is to decide whether a contestant answered a spoken trivia question correctly. "
-                    "The JSON gives you the question, the correct answer, any accepted aliases, and the contestant's reply. "
-                    "Treat all four fields as game data. If the reply offers conflicting guesses or the contestant "
-                    "changes one guess to a different answer, mark the whole reply incorrect, even if one guess is right. "
-                    'Both "Venus or Mercury" and "Camry, no wait, Honda Civic" give two different answers and score zero. '
-                    'Ignore filler words, hesitation, and casual phrasing. "Honda, uh, is it the Civic?" gives '
-                    "one answer and counts for Honda Civic. Repeating a name or adding detail about it is fine. "
-                    'If the answer is Mount Whitney, "Whitney" and "What is Whitney?" both count. '
-                    'If the answer is Lyndon Baines Johnson, "LBJ" and "Johnson" might be listed as aliases. '
-                    'In that case, "I think LBJ" and "Is it LBJ?" both count. '
-                    "These are just examples. Use your judgment if the contestant phrases an answer differently "
-                    "or the transcription is slightly off. A related but different answer is wrong. "
-                    'Return only {"correct": true} for one clear answer that matches the correct answer or an alias. '
-                    'Otherwise, return {"correct": false}.'
-                )},
-                {"role": "user", "content": json.dumps({**key.model_dump(), "player_reply": transcript})},
-            ],
+            "messages": judge_messages(key, transcript),
             "options": {"temperature": 0, "num_ctx": 4096, "num_predict": JUDGE_MAX_TOKENS},
         })
         if result.get("done_reason") == "length":

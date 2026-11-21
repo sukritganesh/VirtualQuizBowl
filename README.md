@@ -23,7 +23,7 @@ Use Python 3.13, an NVIDIA GPU with a CUDA 12-compatible driver, and a running [
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r api/requirements.txt
 .\.venv\Scripts\python.exe -m api.prepare
-ollama pull deepseek-r1:7b
+ollama pull phi4-mini:3.8b
 ```
 
 With Ollama running, start the local API in a separate terminal before playing:
@@ -32,7 +32,7 @@ With Ollama running, start the local API in a separate terminal before playing:
 .\.venv\Scripts\python.exe -m uvicorn api.server:app --host 127.0.0.1 --port 52743
 ```
 
-Both Vite development and preview forward `/api` to that loopback service. The default judge is `deepseek-r1:7b`. Set `VQB_OLLAMA_MODEL` before starting the API to use another installed local model. `VQB_WHISPER_MODEL` accepts a local faster-whisper model directory. The API performs transcription on CUDA and keeps the model loaded between questions. Run its tests with `.\.venv\Scripts\python.exe -m unittest api.test_answers`.
+Both Vite development and preview forward `/api` to that loopback service. The default judge is Phi-4 Mini (`phi4-mini:3.8b`). Set `VQB_OLLAMA_MODEL` before starting the API to use another installed local model. `VQB_WHISPER_MODEL` accepts a local faster-whisper model directory. The API performs transcription on CUDA and keeps the model loaded between questions. Run its tests with `.\.venv\Scripts\python.exe -m unittest api.test_answers`.
 
 Press **Play** and grant microphone access. The mic track is disabled until a valid buzz. Pausing suspends capture and preserves the remaining time. Clips are processed in memory on the PC. Exact answers and aliases receive immediate credit after transcription. Ollama checks other phrasing against the question and answer key. If processing fails, retry the same clip or choose manual grading for that question.
 
