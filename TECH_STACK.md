@@ -12,6 +12,8 @@ Use the [UI pack](design/trivia-ui/SKILL.md) for screen layouts, narration highl
 
 - **Menu music** uses a looping HTML audio element owned by the home screen. Each visit selects one of two bundled tracks. Music volume is saved with the other audio preferences.
 
+- **Round sound effects** use local audio files and the shared [sound catalog](web/src/soundLibrary.json). Home Settings saves one filename per cue with the audio preferences. The round reducer identifies an accepted buzz, verdict or expired deadline so keyboard and button inputs produce the same sound. Playback runs independently of microphone capture and scoring. The [asset credits](web/public/sounds/CREDITS.md) record the sources and licenses.
+
 ## Local AI answer processing
 
 The browser checks local model availability and requests microphone permission before play. A valid buzz enables the mic and starts `MediaRecorder`. Pausing suspends the recorder and disables the track. Each question owns its clip, request and verdict. The session releases the microphone on quit or completion. [Browser microphone requirements](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#privacy_and_security)

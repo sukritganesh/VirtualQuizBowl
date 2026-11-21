@@ -5,6 +5,7 @@ import { startGame, transition, type Command, type Game } from './game'
 import type { TriviaSet } from './sets'
 import { useNarration } from './useNarration'
 import { useSpokenAnswer } from './spokenAnswers'
+import { playSound, type SoundCue } from './audio'
 
 const shortcuts: Record<string, Command | undefined> = {
   a: 'buzz', r: 'reveal', c: 'correct', i: 'incorrect', n: 'next',
@@ -52,6 +53,15 @@ function Round({ game, set, stream, send, onQuit }: RoundProps) {
   const { phase, outcome } = game
   const spoken = useSpokenAnswer(stream, question, game)
   const automatic = !!stream && !spoken.manual
+  const lastCue = useRef<SoundCue | null>(null)
+  useEffect(() => {
+    const fresh = game.cue !== lastCue.current
+    lastCue.current = game.cue
+    // Pause and mute cut off the current clip. Resuming never replays a past cue.
+    if (fresh && game.cue && !game.paused && !preferences.muted) {
+      return playSound(game.cue, preferences.sounds)
+    }
+  }, [game.cue, game.paused, preferences.muted, preferences.sounds])
   useEffect(() => {
     if (automatic && !game.paused && phase === 'grade' && spoken.verdict) {
       send(spoken.verdict.correct ? 'correct' : 'incorrect')

@@ -4,14 +4,21 @@ import { chooseVoice, defaultAudio, readAudioPreferences, speakQuestion } from '
 
 test('saved audio keeps the last audible volume even while muted and tolerates old or damaged data', () => {
   const saved = { volume: 36, muted: true, voiceURI: 'host-2' }
-  assert.deepEqual(readAudioPreferences(JSON.stringify(saved)), { ...saved, musicVolume: defaultAudio.musicVolume })
-  assert.deepEqual(readAudioPreferences(JSON.stringify({ ...saved, musicVolume: 0 })), { ...saved, musicVolume: 0 })
+  assert.deepEqual(readAudioPreferences(JSON.stringify(saved)), { ...defaultAudio, ...saved })
+  assert.deepEqual(readAudioPreferences(JSON.stringify({ ...saved, musicVolume: 0 })), { ...defaultAudio, ...saved, musicVolume: 0 })
   const musicOnly = { ...defaultAudio, volume: 0, musicVolume: 80 }
   assert.deepEqual(readAudioPreferences(JSON.stringify(musicOnly)), musicOnly)
   assert.equal(readAudioPreferences('{"musicVolume":101}').musicVolume, defaultAudio.musicVolume)
   for (const raw of [null, '{', 'null', '{"volume":999,"voiceURI":false,"muted":"true"}']) {
     assert.deepEqual(readAudioPreferences(raw), defaultAudio)
   }
+})
+
+test('old audio settings get the four selected defaults and invalid picks fall back per cue', () => {
+  const defaults = { buzzer: 'twoTone1.ogg', correct: 'confirmation_001.ogg', incorrect: 'lowDown.ogg', timeout: 'sfx_alarm_loop3.wav' }
+  assert.deepEqual(readAudioPreferences('{}').sounds, defaults)
+  const saved = { sounds: { buzzer: 'switch_002.ogg', correct: 'switch_002.ogg', incorrect: 'unknown.wav' } }
+  assert.deepEqual(readAudioPreferences(JSON.stringify(saved)).sounds, { ...defaults, buzzer: 'switch_002.ogg' })
 })
 
 test('explicit selection wins and a missing voice falls back to local English narration', () => {

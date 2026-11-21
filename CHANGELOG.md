@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added four selectable sounds each for buzzing in, correct and incorrect answers, and time running out. Preview and choose them in home Settings.
+
 - Switched the default Ollama judge to Phi-4 Mini for faster spoken-answer verdicts.
 - Browse built-in trivia sets by category from the home screen. Science includes Astronomy and Geology, with a new 10-question geology pack, *Written in Stone*.
 - Added two looping home-menu tracks. Each visit picks one at random, and Settings now has a separate music volume control.

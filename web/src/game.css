@@ -63,6 +63,25 @@
 .setting-row input[type=range] { width: 100%; margin: 12px 0 0; height: 28px; accent-color: var(--ice); }
 .setting-row input:focus-visible { outline: 3px solid var(--ice); outline-offset: 2px; }
 .setting-row select { margin-top: 14px; }
+.effect-settings { border-top: 1px solid var(--rule); }
+.effect-settings summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 22px 2px 22px 0; font-size: 18px; font-weight: 600; cursor: pointer; list-style: none;
+}
+.effect-settings summary::-webkit-details-marker { display: none; }
+.effect-settings summary:hover, .effect-settings[open] summary { color: var(--ice); }
+.effect-settings summary:focus-visible, .effect-row select:focus-visible { outline: 3px solid var(--ice); outline-offset: 2px; }
+.disclosure-arrow { width: 9px; height: 9px; margin-right: 7px; border: solid var(--ice); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.effect-settings[open] .disclosure-arrow { transform: rotate(225deg); }
+.effect-list { padding: 0 0 20px; }
+.effect-row { display: grid; grid-template-columns: minmax(76px, 1fr) minmax(0, 2fr) 42px; align-items: center; gap: 10px; padding: 5px 0; }
+.effect-row label { color: var(--silver); font-size: 15px; }
+.effect-row select { min-width: 0; min-height: 42px; padding: 8px 9px; font-size: 15px; }
+.effect-preview { display: grid; place-items: center; width: 42px; height: 42px; padding: 0; color: var(--ice); background: transparent; border: 1px solid #455875; border-radius: 7px; }
+.effect-preview:hover:enabled { background: #1c3050; border-color: var(--ice); }
+.effect-preview:disabled { opacity: .45; }
+.play-shape { margin-left: 2px; border-left: 9px solid currentColor; border-block: 6px solid transparent; }
+.stop-shape { width: 10px; height: 10px; border-radius: 1px; background: currentColor; }
 .question, .summary h1, .state p, .category { overflow-wrap: anywhere; }
 @media (max-width: 680px) {
   .rail-tools:has(.settings-link) .tag { display: none; }
@@ -70,4 +89,8 @@
   .rail-group:has(.quick-mute) { gap: 8px; }
   .actions button { width: auto; flex: 1 1 auto; }
   .art { pointer-events: none; }
+}
+@media (max-width: 400px) {
+  .effect-row { grid-template-columns: minmax(0, 1fr) 42px; gap: 5px 8px; padding: 7px 0; }
+  .effect-row label { grid-column: 1 / -1; }
 }
