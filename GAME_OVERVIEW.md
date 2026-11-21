@@ -6,7 +6,7 @@ Try [The Night Sky](sets/trivia/astronomy/the-night-sky.json) for an eight-quest
 
 ## A trivia round
 
-The home screen and pause menu both offer audio settings. Players can preview a host voice, adjust volume, or mute directly from the home screen or round. While muted, the question highlights silently before the buzzer opens.
+Each visit to the home screen picks one of two music tracks at random and loops it until the round begins. Settings is available from home and the pause menu, with separate music and narration volumes and a host voice preview. Quick mute silences both. With narration muted or set to zero, the question highlights silently before the buzzer opens.
 
 1. The host reads the whole question as one sentence. The buzzer stays locked until the host finishes, then the player has five seconds to buzz. If the window expires, the question ends with zero points.
 2. Buzzing gives the player a fresh five seconds to say their entire answer, even if they buzz at the last moment.

@@ -100,20 +100,24 @@ function SettingsPage({ back }: { back: () => void }) {
 
   const selectedMissing = voiceURI && !voices.some(voice => voice.voiceURI === voiceURI)
   const automaticVoice = chooseVoice(voices, '')
+  function volumeControl(field: 'volume' | 'musicVolume', id: string, label: string) {
+    const level = muted ? 0 : preferences[field]
+    return <div className="setting-row">
+      <div className="setting-label"><label htmlFor={id}>{label}</label><output htmlFor={id}>{level}%</output></div>
+      <input id={id} type="range" min="0" max="100" value={level} onChange={event => {
+        const value = event.target.valueAsNumber
+        update(previous => ({ ...previous, [field]: value, muted: previous.muted && value === 0 }))
+      }}/>
+    </div>
+  }
   return <dialog ref={dialog} className="settings-page" aria-labelledby="settings-title"
     onCancel={event => { event.preventDefault(); event.stopPropagation(); back() }}>
     <div className="settings-inner">
       <header className="settings-rail"><button className="quiet" autoFocus onClick={back}>← Back</button><MuteButton/></header>
       <main className="settings-content">
         <h1 id="settings-title">Settings</h1>
-        <div className="setting-row">
-          <div className="setting-label"><label htmlFor="host-volume">Narration volume</label><output htmlFor="host-volume">{muted ? 0 : volume}%</output></div>
-          <input id="host-volume" type="range" min="0" max="100" value={muted ? 0 : volume}
-            onChange={event => {
-              const level = event.target.valueAsNumber
-              update(previous => ({ ...previous, muted: level === 0, volume: level || previous.volume }))
-            }}/>
-        </div>
+        {volumeControl('volume', 'host-volume', 'Narration volume')}
+        {volumeControl('musicVolume', 'music-volume', 'Music volume')}
         <div className="setting-row">
           <label htmlFor="host-voice">Host voice</label>
           <select id="host-voice" className="pack-select" value={voiceURI} disabled={!canSpeak}
@@ -123,7 +127,7 @@ function SettingsPage({ back }: { back: () => void }) {
             {voices.map(voice => <option key={voice.voiceURI} value={voice.voiceURI}>{voice.name} · {voice.lang}{voice.localService ? '' : ' · Online'}</option>)}
           </select>
           <p className="pack-detail">{canSpeak ? 'Available voices depend on your browser and device.' : 'This browser does not provide speech synthesis.'}</p>
-          <button className="quiet" disabled={muted || !canSpeak} onClick={previewVoice}>{preview === 'playing' ? 'Stop preview' : 'Preview voice'}</button>
+          <button className="quiet" disabled={muted || volume === 0 || !canSpeak} onClick={previewVoice}>{preview === 'playing' ? 'Stop preview' : 'Preview voice'}</button>
           {preview === 'failed' && <p role="status">This voice could not play. Try another voice.</p>}
         </div>
       </main>

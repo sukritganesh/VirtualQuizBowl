@@ -1,11 +1,16 @@
-export type AudioPreferences = { volume: number; muted: boolean; voiceURI: string }
-export const defaultAudio: AudioPreferences = { volume: 100, muted: false, voiceURI: '' }
+export type AudioPreferences = { volume: number; musicVolume: number; muted: boolean; voiceURI: string }
+export const defaultAudio: AudioPreferences = { volume: 100, musicVolume: 30, muted: false, voiceURI: '' }
+
+function readVolume(value: unknown, fallback: number) {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 100 ? value : fallback
+}
 
 export function readAudioPreferences(raw: string | null): AudioPreferences {
   try {
     const saved = JSON.parse(raw ?? '{}')
     return {
-      volume: Number.isInteger(saved.volume) && saved.volume >= 1 && saved.volume <= 100 ? saved.volume : defaultAudio.volume,
+      volume: readVolume(saved.volume, defaultAudio.volume),
+      musicVolume: readVolume(saved.musicVolume, defaultAudio.musicVolume),
       muted: saved.muted === true,
       voiceURI: typeof saved.voiceURI === 'string' ? saved.voiceURI : '',
     }
