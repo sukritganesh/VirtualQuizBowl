@@ -59,7 +59,7 @@ function Round({ game, set, stream, send, onQuit }: RoundProps) {
     lastCue.current = game.cue
     // Pause and mute cut off the current clip. Resuming never replays a past cue.
     if (fresh && game.cue && !game.paused && !preferences.muted) {
-      return playSound(game.cue, preferences.sounds)
+      return playSound(game.cue, preferences.sounds[game.cue])
     }
   }, [game.cue, game.paused, preferences.muted, preferences.sounds])
   useEffect(() => {

@@ -5,18 +5,28 @@ export type SoundCue = keyof typeof soundLibrary
 export const soundCues = Object.keys(soundLibrary) as SoundCue[]
 type SoundPicks = Record<SoundCue, string>
 
-function readSoundPicks(saved: Partial<SoundPicks> | null = {}): SoundPicks {
+const originalSoundDefaults: SoundPicks = {
+  buzzer: 'twoTone1.ogg', correct: 'confirmation_001.ogg', incorrect: 'lowDown.ogg', timeout: 'sfx_alarm_loop3.wav',
+}
+
+function readSoundPicks(saved?: Partial<SoundPicks> | null, legacy = false): SoundPicks {
   const picks = {} as SoundPicks
   for (const cue of soundCues) {
     const { options } = soundLibrary[cue]
-    // The first clip is the chosen default for this cue.
-    picks[cue] = (options.find(clip => clip.file === saved?.[cue]) ?? options[0]).file
+    // The original picker saved every default even if the player never opened Settings.
+    const file = saved?.[cue]
+    const inherited = legacy && file === originalSoundDefaults[cue]
+    picks[cue] = (inherited ? options[0] : options.find(clip => clip.file === file) ?? options[0]).file
   }
   return picks
 }
 
 export type AudioPreferences = { volume: number; musicVolume: number; muted: boolean; voiceURI: string; sounds: SoundPicks }
 export const defaultAudio: AudioPreferences = { volume: 100, musicVolume: 30, muted: false, voiceURI: '', sounds: readSoundPicks() }
+
+export function serializeAudioPreferences(preferences: AudioPreferences) {
+  return JSON.stringify({ ...preferences, soundDefaultsVersion: 2 })
+}
 
 function readVolume(value: unknown, fallback: number) {
   return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 100 ? value : fallback
@@ -30,7 +40,7 @@ export function readAudioPreferences(raw: string | null): AudioPreferences {
       musicVolume: readVolume(saved.musicVolume, defaultAudio.musicVolume),
       muted: saved.muted === true,
       voiceURI: typeof saved.voiceURI === 'string' ? saved.voiceURI : '',
-      sounds: readSoundPicks(saved.sounds),
+      sounds: readSoundPicks(saved.sounds, saved.soundDefaultsVersion === undefined),
     }
   } catch {
     return defaultAudio
@@ -38,9 +48,9 @@ export function readAudioPreferences(raw: string | null): AudioPreferences {
 }
 
 /** Use the same clip and audition-level gain for a settings preview and a round. */
-export function playSound(cue: SoundCue, picks: SoundPicks, onFinish?: (failed: boolean) => void) {
+export function playSound(cue: SoundCue, file: string, onFinish?: (failed: boolean) => void) {
   const { options } = soundLibrary[cue]
-  const clip = options.find(option => option.file === picks[cue]) ?? options[0]
+  const clip = options.find(option => option.file === file) ?? options[0]
   const player = new Audio(import.meta.env.BASE_URL + 'sounds/' + clip.file)
   player.volume = 0.6 * clip.gain
   function finish(failed: boolean) {

@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { createPortal } from 'react-dom'
-import { chooseVoice, defaultAudio, hostUtterance, playSound, readAudioPreferences, soundCues, soundLibrary, type AudioPreferences, type SoundCue } from './audio'
+import { chooseVoice, defaultAudio, hostUtterance, playSound, readAudioPreferences, serializeAudioPreferences, type AudioPreferences, type SoundCue } from './audio'
+import { SoundEffectPicker } from './SoundEffectPicker'
 
 const storageKey = 'virtual-quiz-bowl.audio'
 type AudioState = { preferences: AudioPreferences; update: Dispatch<SetStateAction<AudioPreferences>> }
@@ -12,7 +13,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     catch { return defaultAudio }
   })
   useEffect(() => {
-    try { localStorage.setItem(storageKey, JSON.stringify(preferences)) }
+    try { localStorage.setItem(storageKey, serializeAudioPreferences(preferences)) }
     catch { /* The controls still work for this session when storage is unavailable. */ }
   }, [preferences])
   useEffect(() => { window.speechSynthesis?.getVoices() }, [])
@@ -54,32 +55,32 @@ function SettingsPage({ back, showSoundEffects }: { back: () => void; showSoundE
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const [preview, setPreview] = useState<'idle' | 'playing' | 'failed'>('idle')
   const stopEffect = useRef<(() => void) | null>(null)
-  const [playingCue, setPlayingCue] = useState<SoundCue | null>(null)
+  const [playingFile, setPlayingFile] = useState<string | null>(null)
   const [effectFailed, setEffectFailed] = useState(false)
 
-  function stopEffectPreview() {
+  const stopEffectPreview = useCallback(() => {
     stopEffect.current?.()
     stopEffect.current = null
-    setPlayingCue(null)
+    setPlayingFile(null)
     setEffectFailed(false)
-  }
+  }, [])
   useEffect(() => {
-    setPlayingCue(null)
+    setPlayingFile(null)
     return () => { stopEffect.current?.(); stopEffect.current = null }
   }, [muted])
 
-  function previewEffect(cue: SoundCue) {
+  function previewEffect(cue: SoundCue, file: string) {
     stopEffectPreview()
-    if (playingCue === cue) return
+    if (playingFile === file) return
     if (sample.current) {
       sample.current = null
       synth.cancel()
       setPreview('idle')
     }
-    setPlayingCue(cue)
-    stopEffect.current = playSound(cue, preferences.sounds, failed => {
+    setPlayingFile(file)
+    stopEffect.current = playSound(cue, file, failed => {
       stopEffect.current = null
-      setPlayingCue(null)
+      setPlayingFile(null)
       setEffectFailed(failed)
     })
   }
@@ -149,34 +150,9 @@ function SettingsPage({ back, showSoundEffects }: { back: () => void; showSoundE
         <h1 id="settings-title">Settings</h1>
         {volumeControl('volume', 'host-volume', 'Narration volume')}
         {volumeControl('musicVolume', 'music-volume', 'Music volume')}
-        {showSoundEffects && <details className="effect-settings" onToggle={event => {
-          if (!event.currentTarget.open) stopEffectPreview()
-        }}>
-          <summary>Sound effects <span className="disclosure-arrow" aria-hidden="true"/></summary>
-          <div className="effect-list">
-            {soundCues.map(cue => {
-              const { label, options } = soundLibrary[cue]
-              const playing = playingCue === cue
-              const action = playing ? 'Stop' : 'Preview'
-              return <div className="effect-row" key={cue}>
-                <label htmlFor={'effect-' + cue}>{label}</label>
-                <select id={'effect-' + cue} className="pack-select" value={preferences.sounds[cue]}
-                  onChange={event => {
-                    const file = event.target.value
-                    stopEffectPreview()
-                    update(previous => ({ ...previous, sounds: { ...previous.sounds, [cue]: file } }))
-                  }}>
-                  {options.map(option => <option key={option.file} value={option.file}>{option.name}</option>)}
-                </select>
-                <button className="effect-preview" disabled={muted} aria-label={action + ' ' + label + ' sound'}
-                  title={muted ? 'Unmute to preview' : action + ' sound'} onClick={() => previewEffect(cue)}>
-                  <span className={playing ? 'stop-shape' : 'play-shape'} aria-hidden="true"/>
-                </button>
-              </div>
-            })}
-            {effectFailed && <p role="status" className="pack-detail">This sound could not play. Try previewing it again.</p>}
-          </div>
-        </details>}
+        {showSoundEffects && <SoundEffectPicker preferences={preferences} playingFile={playingFile}
+          preview={previewEffect} stopPreview={stopEffectPreview} failed={effectFailed}
+          choose={(cue, file) => update(previous => ({ ...previous, sounds: { ...previous.sounds, [cue]: file } }))}/>}
         <div className="setting-row">
           <label htmlFor="host-voice">Host voice</label>
           <select id="host-voice" className="pack-select" value={voiceURI} disabled={!canSpeak}
