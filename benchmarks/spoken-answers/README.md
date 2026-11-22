@@ -2,6 +2,30 @@
 
 Twenty English replies test when a contestant should get credit. The [cases](cases.json) give the full questions, answer keys, aliases, replies, and expected verdicts. Ten should earn credit. Ten should score zero. Case 3 follows the player's rule that naming a wrong car before correcting to the right one scores zero. Case 4 counts a manufacturer followed by the right model as a single answer.
 
+## Spelling answers aloud
+
+The [spelling benchmark](spelling.json) has ten spelled-out adaptations of questions from the original model comparison and ten new cases. Each adaptation retains its original question, key, aliases, and expected verdict. Its `source_case` points to the original case ID. The new cases include a transposed pair of letters, an omitted letter, an ambiguous prefix, a different acronym, and guesses changed or repeated across corrections. Ten replies should earn credit and ten should score zero.
+
+On November 21, 2026, the local Phi-4 Mini judge (`phi4-mini:3.8b`) produced these verdicts. Both runs used the game's normal grading path with the same 20 written transcripts. The labels were fixed before comparing prompt wording. These examples were also used to select that wording.
+
+| On the spelling benchmark | Previous prompt (`988ed3f`) | Revised prompt |
+| --- | ---: | ---: |
+| Correct verdicts | 12/20 | 16/20 |
+| Valid replies awarded credit | 9/10 | 9/10 |
+| Wrong replies rejected | 3/10 | 7/10 |
+| False positives | 7 | 3 |
+| False negatives | 1 | 1 |
+
+The revised prompt rejected “V E N U S or Mercury,” spelled XPeng for Xiaomi, spelled Kyoto for Tokyo, and Paris → Lyon → Paris. These previously earned credit. Both prompts accepted “I think it’s X I A O M I” and “F R A N K E N S T I E N.” Both rejected “Show me.”
+
+The three false positives were Manet for Monet (8), ROM for RAM (16), and the unfinished “A U S T R” (17). Both prompts rejected the valid “Samuel, last name C L E M E N S” for Mark Twain (9). Both scored 20/20 on the original written replies and 20/20 on the saved Whisper transcripts from the earlier model comparison.
+
+To replay the spelling cases using the installed game judge, start Ollama and run this from the repository root. The optional argument accepts another case file, including `benchmarks/spoken-answers/cases.json`. Each row reports its verdict against the label. Service failures are reported as unscored.
+
+```powershell
+.\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py
+```
+
 ## Follow-up on the judging rule
 
 On November 20, the prompt explicitly distinguished changed guesses from hesitation and casual phrasing. With that edit, the default DeepSeek judge scored 18/20 on the written replies. It rejected the Camry correction and “Venus or Mercury” and accepted the hesitant Civic answer. Its two misses were rejecting the repeated name for China and awarding credit for a request to repeat the question. Qwen scored 12/20 and still rejected the hesitant Civic reply.

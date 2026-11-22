@@ -192,6 +192,14 @@ def judge_messages(key: Key, transcript: str) -> list[dict[str, str]]:
             'Otherwise, return {"correct": false}.'
         )
         reply = {"player_reply": transcript}
+    prompt += (
+        " Treat a spelled-out word as the player's guess, ignoring filler around the letters. "
+        "For Xiaomi, X I A O M I counts and H U A W E I names a different company and scores zero. "
+        "Count a small spelling slip only if the letters clearly identify the answer or an alias, "
+        "and reject incomplete spellings and conflicting guesses. "
+        "Only allow a spelling slip for individual letters separated by spaces, and return false if three or more "
+        "letters need changing or the letters already name a different answer such as K Y O T O for Tokyo."
+    )
     return [
         {"role": "system", "content": prompt},
         {"role": "user", "content": json.dumps({**key.model_dump(), **reply})},

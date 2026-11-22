@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Players can spell a trivia answer aloud. When the transcript shows space-separated letters, the judge is asked to allow up to two letter errors if the intended answer is clear.
+
 - Kokoro voices highlight the word being spoken, including years and model names. Each question’s word timings are prepared with its audio.
 
 - Kokoro uses NVIDIA acceleration when available and falls back to CPU. A round prepares its opening question on a loading screen and gets the next voice clip ready during play.

@@ -15,7 +15,7 @@ When you press **Play**, the opening screen prepares the first local voice clip 
 3. In local AI play, the buzz starts a recording. The game stops it at the answer deadline or when the player presses R to submit early. It displays what it heard and compares the reply with the answer key. A missed buzz or an early pass skips recording.
 4. Correct earns five points. Wrong answers, silence, and missed buzzes earn zero. Judging happens outside both timers. If the judge runs out of tokens or time, the question stays unscored. Choose **Mark manually** to see the answer and mark it correct or incorrect. Manual scoring is also available before a session.
 
-Hesitation, filler words, and casual phrasing are fine when the player gives one clear answer. Conflicting guesses or changing from one answer to another earn zero, even if the last guess is correct.
+Hesitation, filler words, and casual phrasing are fine when the player gives one clear answer. Players can spell an answer or alias aloud. When the transcript shows individual letters separated by spaces, up to two letter errors are allowed if the spelling still clearly identifies that answer. Spelling a different name earns zero. Conflicting guesses or changing from one answer to another earn zero, even if the last guess is correct.
 
 The player can pause the round from the menu, resume it, or quit and discard the session. Each round action has a button and a shortcut. A buzzes in and N advances after a verdict. The final screen shows total points and counts of correct answers, wrong answers, and questions where the player never buzzed.
 
