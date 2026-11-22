@@ -6,7 +6,7 @@ Twenty English replies test when a contestant should get credit. The [cases](cas
 
 The [spelling benchmark](spelling.json) has ten spelled-out adaptations of questions from the original model comparison and ten new cases. Each adaptation retains its original question, key, aliases, and expected verdict. Its `source_case` points to the original case ID. The new cases include a transposed pair of letters, an omitted letter, an ambiguous prefix, a different acronym, and guesses changed or repeated across corrections. Ten replies should earn credit and ten should score zero.
 
-On November 21, 2026, the local Phi-4 Mini judge (`phi4-mini:3.8b`) produced these verdicts. Both runs used the game's normal grading path with the same 20 written transcripts. The labels were fixed before comparing prompt wording. These examples were also used to select that wording.
+On November 21, 2026, the local Phi-4 Mini judge (`phi4-mini:3.8b`) produced these verdicts for the spelling rule merged in PR #21. Both runs used the game's normal grading path with the same 20 written transcripts. The labels were fixed before comparing prompt wording. These examples were also used to select that wording.
 
 | On the spelling benchmark | Previous prompt (`988ed3f`) | Revised prompt |
 | --- | ---: | ---: |
@@ -24,6 +24,40 @@ To replay the spelling cases using the installed game judge, start Ollama and ru
 
 ```powershell
 .\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py
+```
+
+## When the letters spell a different answer
+
+The [15 close-spelling cases](spelled-alternatives.json) cover eight subjects. Eight replies spell a different real answer within two letter edits of the key. Five contain an unambiguous typo and two spell a valid alias exactly. Seven questions pair a wrong answer with a valid spelling using the same lead-in. The labels were set before the comparison. The new prompt sentence was chosen using the earlier spelling examples, including Manet for Monet.
+
+Phi-4 Mini scored **9/15 with either prompt**. Both accepted six of seven valid replies and rejected three of eight wrong ones. All 15 verdicts stayed the same across four passes per prompt. The five false positives were distinct writers, countries, hydrocarbons, moons and nuclear processes. The false negative was one substituted letter in *violin*.
+
+| Key or alias | Letters in the reply | Expected | Both judges | Previous median (ms) | Revised median (ms) |
+|---|---|---|---|---:|---:|
+| Austen | A U D E N | Reject | **Accept** | 237 | 249 |
+| Titan | T I T A A N | Accept | Accept | 239 | 250 |
+| TCP | U D P | Reject | Reject | 243 | 262 |
+| Fusion | F U I S O N | Accept | Accept | 246 | 250 |
+| Niger | N I G E R I A | Reject | **Accept** | 246 | 238 |
+| Austen | A U S T T E N | Accept | Accept | 250 | 238 |
+| Violin | V I O L A | Reject | Reject | 286 | 286 |
+| TCP | T C P | Accept | Accept | 263 | 262 |
+| Ethene | E T H A N E | Reject | **Accept** | 262 | 282 |
+| Niger | N I G R | Accept | Accept | 267 | 286 |
+| Titan | T I T A N I A | Reject | **Accept** | 235 | 239 |
+| Violin | V I O L I M | Accept | **Reject** | 298 | 269 |
+| Fusion | F I S S I O N | Reject | **Accept** | 268 | 270 |
+| Ethene (ethylene) | E T H Y L E N E | Accept | Accept | 265 | 268 |
+| Cosine | S I N E | Reject | Reject | 268 | 242 |
+
+On the RTX 4090 Laptop GPU, the median time from transcript to verdict was **253 ms before and 252 ms after**. The 90th percentile was 298 ms before and 290 ms after. The revised prompt ranged from 172 to 334 ms. The elapsed time includes the game's model-availability check and Ollama response. Recording, Whisper transcription and initial model loading are outside this measurement.
+
+On the earlier spelling set, the score rose from 16/20 to 18/20. The new sentence explicitly names Manet for Monet, and Phi now rejected both that example and ROM for RAM. It still accepted the unfinished “A U S T R” and rejected Samuel Clemens for Mark Twain. The original 20 written replies and their 20 saved Whisper transcripts both stayed at 20/20.
+
+The local run used `phi4-mini:3.8b` (digest `78fad5d182a7`), Ollama 0.40.16 and the game's normal grading path. The baseline was `ef0b7cb`. Each prompt graded all 15 transcripts four times, alternating which prompt ran first in each pair of passes. Each pass started with a separate, untimed warm-up. All 120 timed replies reached the model and returned a verdict. This command repeats one warm pass with the checked-out prompt.
+
+```powershell
+.\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py benchmarks/spoken-answers/spelled-alternatives.json --warm-up
 ```
 
 ## Follow-up on the judging rule
