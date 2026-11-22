@@ -62,7 +62,9 @@ The local run used `phi4-mini:3.8b` (digest `78fad5d182a7`), Ollama 0.40.16 and 
 
 ### Check what the letters spell before allowing a typo
 
-The next prompt revision made the order explicit for space-separated letters. Against main at `e6fdf10`, Phi-4 Mini went from 9/15 to 10/15 on the close-spelling cases. One verdict changed: it rejected E T H A N E for ethene. Four false positives remained (Auden, Nigeria, Titania and fission), along with one false negative (V I O L I M for violin). These cases were used to compare candidate wordings. The earlier spelling benchmark stayed at 18/20, and the original written replies and saved Whisper transcripts each stayed at 20/20.
+The next prompt revision made the order explicit for space-separated letters. Against main at `e6fdf10`, Phi-4 Mini went from 9/15 to 10/15 on the close-spelling cases. One verdict changed. It rejected “Uh, no wait, not sure, no wait, E T H A N E” for ethene. Four false positives remained (Auden, Nigeria, Titania and fission), along with one false negative (V I O L I M for violin). These cases were used to compare candidate wordings. The earlier spelling benchmark stayed at 18/20, and the original written replies and saved Whisper transcripts each stayed at 20/20.
+
+In a Chrome round, Whisper transcribed the letters alone as “E-T-H-A-N-E” and Phi incorrectly awarded credit for ethene. Replaying the same letters with spaces also earned credit. With the benchmark's “no wait” lead-in, Phi rejected both versions. The lead-in selects the game's correction prompt.
 
 ## Follow-up on the judging rule
 
