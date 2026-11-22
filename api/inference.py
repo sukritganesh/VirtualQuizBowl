@@ -199,8 +199,9 @@ def judge_messages(key: Key, transcript: str) -> list[dict[str, str]]:
         "and reject incomplete spellings and conflicting guesses. "
         "Only allow a spelling slip for individual letters separated by spaces, and return false if three or more "
         "letters need changing or the letters already name a different answer such as K Y O T O for Tokyo. "
-        "Read the spaced letters as written and return false if they name a recognizable wrong answer in the "
-        "same subject, as when M A N E T identifies a different painter from Monet."
+        "Only when the player spells individual letters separated by spaces, read the word before correcting it "
+        "and return false if it could name another answer in this subject, even within two letters of the key, "
+        "as when M A N E T identifies a different painter from Monet."
     )
     return [
         {"role": "system", "content": prompt},
