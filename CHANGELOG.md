@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Players can spell a trivia answer aloud. When the transcript shows space-separated letters, the judge is asked to allow up to two letter errors if the intended answer is clear.
+- The judge now checks whether a close spelling names a different person or term in the same subject, such as Manet for Monet.
 
 - Kokoro voices highlight the word being spoken, including years and model names. Each question’s word timings are prepared with its audio.
 

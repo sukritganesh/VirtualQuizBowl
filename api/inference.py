@@ -198,7 +198,9 @@ def judge_messages(key: Key, transcript: str) -> list[dict[str, str]]:
         "Count a small spelling slip only if the letters clearly identify the answer or an alias, "
         "and reject incomplete spellings and conflicting guesses. "
         "Only allow a spelling slip for individual letters separated by spaces, and return false if three or more "
-        "letters need changing or the letters already name a different answer such as K Y O T O for Tokyo."
+        "letters need changing or the letters already name a different answer such as K Y O T O for Tokyo. "
+        "Read the spaced letters as written and return false if they name a recognizable wrong answer in the "
+        "same subject, as when M A N E T identifies a different painter from Monet."
     )
     return [
         {"role": "system", "content": prompt},
