@@ -201,7 +201,9 @@ def judge_messages(key: Key, transcript: str) -> list[dict[str, str]]:
         "letters need changing or the letters already name a different answer such as K Y O T O for Tokyo. "
         "Only when the player spells individual letters separated by spaces, read the word before correcting it "
         "and return false if it could name another answer in this subject, even within two letters of the key, "
-        "as when M A N E T identifies a different painter from Monet."
+        "as when M A N E T identifies a different painter from Monet. "
+        "For a proper noun or title, the name itself must match the key or a listed alias exactly whether spoken "
+        "or spelled, so reject even one changed, added, or missing letter or word, including a missing plural ending."
     )
     return [
         {"role": "system", "content": prompt},

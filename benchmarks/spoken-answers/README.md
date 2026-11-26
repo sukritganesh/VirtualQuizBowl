@@ -1,8 +1,39 @@
 # Spoken trivia benchmark
 
-Twenty English replies test when a contestant should get credit. The [cases](cases.json) give the full questions, answer keys, aliases, replies, and expected verdicts. Ten should earn credit. Ten should score zero. Case 3 follows the player's rule that naming a wrong car before correcting to the right one scores zero. Case 4 counts a manufacturer followed by the right model as a single answer.
+Use the [30-question comparator benchmark](comparator.json) as the default for comparing judges and prompt changes. It contains 16 new questions and 14 drawn from the earlier suites. Of the 15 ordinary spoken replies, eight deserve credit and seven should be rejected. Of the 15 spelled replies, seven deserve credit and eight should be rejected. Each row supplies a fixed transcript, and all 30 go through the model in the game's normal scoring path.
 
-## Question sets
+Start Ollama and run the default benchmark from the repository root. The runner prints each verdict against its label and counts false positives, false negatives and unscored cases.
+
+```powershell
+.\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py --warm-up
+```
+
+### Exact proper names
+
+The labels were fixed before testing. The name or title itself must match the key or a listed alias, whether said normally or spelled. Words around it can provide context, as in “Charlie Brown’s dog? Snoopy, for sure.” A misspelling of a common noun can still qualify under the game's existing spelling rule. The older suites retain the labels used in their original experiments.
+
+| Phi-4 Mini on the same 30 transcripts | Original prompt | With the proper-name sentence |
+| --- | ---: | ---: |
+| Correct verdicts | 25/30 | 25/30 |
+| Valid answers accepted | 15/15 | 15/15 |
+| Wrong answers rejected | 10/15 | 10/15 |
+| False positives / false negatives / unscored | 5 / 0 / 0 | 5 / 0 / 0 |
+
+Both prompts rejected *Manet* for *Monet* and accepted the exact title *Hidden Figures* in a longer reply. Both incorrectly awarded credit on the same five cases.
+
+| Case | Key | Reply that received credit |
+| --- | --- | --- |
+| 1 | Field of Dreams | “Field of Dream, I think. The one with Kevin Costner.” |
+| 8 | Nintendo | “Let me spell that one. N I N T E N D D O.” |
+| 14 | Titan | “I'm going with T I T A N I A.” |
+| 24 | Ottawa | “O T T ... that's all I can remember.” |
+| 30 | Scrabble | “Is it Scramble? S C R A M B L E.” |
+
+The comparison used local `phi4-mini:3.8b` (digest `78fad5d182a7`), Ollama 0.40.16 and the production judging options. The baseline was `56a3f12`. Each pass started with an unrelated warm-up. A repeat of the retained sentence reproduced all 30 verdicts. Additional wording trials used separate questions. One alternative sentence with a title example scored 24/30 on this suite, additionally accepting the three extra letters in *flamingo*. The retained sentence uses no title example. The earlier spelling instructions already named Manet and Monet.
+
+In a browser round with synthesized microphone input, Whisper returned “My guess is Field of Dream.” The judge awarded five points even though the transcript preserved the singular. The same round correctly awarded credit for “I think it was hidden figures.”
+
+## Earlier question sets
 
 | Set | Cases | What it tests |
 | --- | ---: | --- |
@@ -42,7 +73,7 @@ The three false positives were Manet for Monet (8), ROM for RAM (16), and the un
 To replay the spelling cases using the installed game judge, start Ollama and run this from the repository root. The optional argument accepts another case file, including `benchmarks/spoken-answers/cases.json`. Each row reports its verdict against the label. Service failures are reported as unscored.
 
 ```powershell
-.\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py
+.\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py benchmarks/spoken-answers/spelling.json
 ```
 
 ## When the letters spell a different answer
