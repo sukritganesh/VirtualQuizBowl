@@ -1,0 +1,10 @@
+[
+  {"id": 1, "feature": "Correct spoken answer", "question": "Which Greek cheese is traditionally made from sheep's milk or a blend of sheep's and goat's milk and matured in brine?", "answer": "feta cheese", "aliases": [], "reply": "feta cheese", "expected": true},
+  {"id": 2, "feature": "Correct spoken answer", "question": "What mineral has a hardness of seven on the Mohs scale?", "answer": "quartz", "aliases": [], "reply": "quartz", "expected": true},
+  {"id": 3, "feature": "Correct spoken answer", "question": "Which long, narrow South American country has Santiago as its capital?", "answer": "Chile", "aliases": [], "reply": "Chile", "expected": true},
+  {"id": 4, "feature": "Deliberately wrong spoken answer", "question": "Which French painter created the Water Lilies series at Giverny?", "answer": "Monet", "aliases": [], "reply": "Manet", "expected": false},
+  {"id": 5, "feature": "Correct spoken answer", "question": "What is the French culinary term for a cooked mixture of flour and fat used to thicken sauces?", "answer": "roux", "aliases": [], "reply": "roux", "expected": true},
+  {"id": 6, "feature": "Correct spoken answer", "question": "What strait separates Alaska from the eastern tip of Russia?", "answer": "Bering Strait", "aliases": [], "reply": "Bering Strait", "expected": true},
+  {"id": 7, "feature": "Deliberately wrong spoken answer", "question": "What rubbery material is commonly used to make flexible nonstick baking molds?", "answer": "silicone", "aliases": [], "reply": "silicon", "expected": false},
+  {"id": 8, "feature": "Correct spoken answer", "question": "What flower structure consists of the stigma, style, and ovary?", "answer": "pistil", "aliases": [], "reply": "pistil", "expected": true}
+]
