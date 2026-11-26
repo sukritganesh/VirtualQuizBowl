@@ -15,6 +15,8 @@ Open [Virtual Quiz Bowl](http://127.0.0.1:52741/). The game uses a dedicated loc
 
 For a production build, run `npm run build` and serve `web/dist/`, or run `npm run preview` and open the [local build preview](http://127.0.0.1:52742/). Run the game-rule tests with `npm test`.
 
+Use the [30-question comparator benchmark](benchmarks/spoken-answers/README.md) to compare how local judges score ordinary and spelled-out replies.
+
 ## Local AI on Windows
 
 Use Python 3.13, an NVIDIA GPU with a CUDA 12-compatible driver, and a running [Ollama for Windows](https://ollama.com/download/windows). Run these commands once from the repository root in PowerShell. The downloads include Kokoro’s host voices, CUDA inference libraries, Whisper large-v3-turbo weights and the local Ollama judge.

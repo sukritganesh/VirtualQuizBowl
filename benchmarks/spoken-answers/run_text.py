@@ -46,7 +46,7 @@ def run(path, warm_up=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("cases", type=Path, nargs="?", default=HERE / "spelling.json")
+    parser.add_argument("cases", type=Path, nargs="?", default=HERE / "comparator.json")
     parser.add_argument("--warm-up", action="store_true", help="Grade an unrelated reply before timing the cases.")
     args = parser.parse_args()
     run(args.cases, args.warm_up)
