@@ -2,6 +2,25 @@
 
 Twenty English replies test when a contestant should get credit. The [cases](cases.json) give the full questions, answer keys, aliases, replies, and expected verdicts. Ten should earn credit. Ten should score zero. Case 3 follows the player's rule that naming a wrong car before correcting to the right one scores zero. Case 4 counts a manufacturer followed by the right model as a single answer.
 
+## Question sets
+
+| Set | Cases | What it tests |
+| --- | ---: | --- |
+| [Original model comparison](cases.json) | 20 | Filler, aliases, changed guesses and abstentions across two speech recognition and judging setups. |
+| [Spelled answers](spelling.json) | 20 | Spelled-out adaptations of original replies and additional spelling challenges. |
+| [Closely spelled alternatives](spelled-alternatives.json) | 15 | A near miss that identifies another answer versus an unambiguous typo. |
+| [Spelling boundaries](spelling-boundaries.json) | 13 | Ten cases from the spelling-scope experiment, plus three additional cases from the spelling-limit trials. Includes Iran versus Iraq and two versus three extra letters in *flamingo*. |
+| [Microphone answers](microphone-answers.json) | 8 | Six intended correct replies and two deliberately wrong ones, in recorder order. Say “Manet” for Monet and “silicon” for silicone. |
+| [Whisper question context](whisper-context.json) | 17 | The scripted replies to four questions from the synthetic speech experiment, including wrong answers and abstentions. Each phrase appears once per question across voices and noise conditions. |
+
+Each row has a question, answer key, accepted aliases, scripted reply and expected verdict. For a speech comparison, record or synthesize the **reply** once and give each model the same clip. The expected verdict describes the scripted reply. Compare the transcript to what was said to measure recognition separately. The original synthetic experiment also included silence and noise-only audio controls.
+
+To compare judges on the written replies, pass any of these files to the existing runner with Ollama running. For example, from the repository root on Windows run
+
+```powershell
+.\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py benchmarks/spoken-answers/spelling-boundaries.json --warm-up
+```
+
 ## Spelling answers aloud
 
 The [spelling benchmark](spelling.json) has ten spelled-out adaptations of questions from the original model comparison and ten new cases. Each adaptation retains its original question, key, aliases, and expected verdict. Its `source_case` points to the original case ID. The new cases include a transposed pair of letters, an omitted letter, an ambiguous prefix, a different acronym, and guesses changed or repeated across corrections. Ten replies should earn credit and ten should score zero.

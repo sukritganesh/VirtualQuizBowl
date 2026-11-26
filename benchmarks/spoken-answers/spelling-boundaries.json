@@ -1,0 +1,15 @@
+[
+  {"id": 1, "feature": "Ordinary wrong country", "question": "Which country's capital is Baghdad?", "answer": "Iraq", "aliases": [], "reply": "I think it's Iran.", "expected": false},
+  {"id": 2, "feature": "Spelled wrong country one letter away", "question": "Which country's capital is Baghdad?", "answer": "Iraq", "aliases": [], "reply": "I think it's I R A N.", "expected": false},
+  {"id": 3, "feature": "Spelled exact country", "question": "Which country's capital is Baghdad?", "answer": "Iraq", "aliases": [], "reply": "I think it's I R A Q.", "expected": true},
+  {"id": 4, "feature": "Unambiguous extra letter", "question": "Which country's capital is Baghdad?", "answer": "Iraq", "aliases": [], "reply": "I think it's I R A A Q.", "expected": true},
+  {"id": 5, "feature": "Two duplicate letters", "question": "Which pink wading bird often stands on one leg?", "answer": "Flamingo", "aliases": [], "reply": "I'll spell it F L A M M I N G G O.", "expected": true},
+  {"id": 6, "feature": "Three duplicate letters", "question": "Which pink wading bird often stands on one leg?", "answer": "Flamingo", "aliases": [], "reply": "I'll spell it F L A M M I N N G G O.", "expected": false},
+  {"id": 7, "feature": "An unfinished spelling", "question": "What planet is known for its prominent rings?", "answer": "Saturn", "aliases": [], "reply": "S A T ... I forget the rest.", "expected": false},
+  {"id": 8, "feature": "Ordinary correct guess with filler", "question": "What planet is known for its prominent rings?", "answer": "Saturn", "aliases": [], "reply": "I think it's Saturn, yeah.", "expected": true},
+  {"id": 9, "feature": "Exact spelled chemical symbol", "question": "Which element has atomic number 22?", "answer": "Titanium", "aliases": ["Ti"], "reply": "I'll use its symbol, T I.", "expected": true},
+  {"id": 10, "feature": "Spelled name of a competing element", "question": "Which element has atomic number 22?", "answer": "Titanium", "aliases": ["Ti"], "reply": "Uh, T I N.", "expected": false},
+  {"id": 11, "feature": "Spelled Tokyo", "question": "What is the capital of Japan?", "answer": "Tokyo", "aliases": [], "reply": "I think it's T O K Y O.", "expected": true},
+  {"id": 12, "feature": "Three substituted letters", "question": "Which Mary Shelley novel is subtitled The Modern Prometheus?", "answer": "Frankenstein", "aliases": [], "reply": "F R A N K X N S Z E I Q", "expected": false},
+  {"id": 13, "feature": "One missing letter", "question": "Which Mary Shelley novel is subtitled The Modern Prometheus?", "answer": "Frankenstein", "aliases": [], "reply": "F R A N K N S T E I N", "expected": true}
+]

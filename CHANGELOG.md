@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added reusable question sets from the microphone, Whisper context and spelling-boundary experiments to the [spoken-answer benchmarks](benchmarks/spoken-answers/README.md).
+
 - Players can spell a trivia answer aloud. When the transcript shows space-separated letters, the judge is asked to allow up to two letter errors if the intended answer is clear.
 - For space-separated letters, the judge checks for a plausible different answer before allowing a spelling slip, even when the two names are only one or two letters apart.
 
