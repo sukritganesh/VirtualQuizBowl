@@ -4,7 +4,6 @@ import { library, parseSet, type TriviaSet } from './sets'
 import buzzer from './assets/buzzer.png'
 import { MuteButton, SettingsButton, useAudio } from './AudioSettings'
 import { RoundAudio } from './audio'
-import { HomeMusic } from './HomeMusic'
 import { SetBrowser } from './SetBrowser'
 
 export function BrandRail({ home = false }: { home?: boolean }) {
@@ -97,7 +96,7 @@ export function Home({ onPlay }: { onPlay: (session: RoundSession) => void }) {
     <p role="status"><span className="loading-light" aria-hidden="true"/>{starting}…</p>
     <button className="quiet" onClick={() => { connection.current?.abort(); connection.current = null; setStarting('') }}>Cancel</button>
   </main></>
-  return <><HomeMusic/><BrandRail home/><main className="home-main">
+  return <><BrandRail home/><main className="home-main">
     <div className="home-copy"><h1 className="home-title">Virtual<span>Quiz Bowl</span></h1>
       <div className="form">
         <label className="eyebrow" htmlFor="pack">Question set</label>

@@ -14,7 +14,7 @@ Use the [UI pack](design/trivia-ui/SKILL.md) for screen layouts, narration highl
 - **Browser speech** discovers system voices through `getVoices()` and `voiceschanged`. It also serves as the round fallback if the local service is unavailable. Muting advances the read-along on a local timer. If audible narration fails, the player can retry or open the buzzer manually.
 - **Manual judging.** The browser owns both deadlines and pauses them with the round. Revealing an answer after buzzing enables manual scoring. A pass or missed buzz resolves the question locally.
 
-- **Menu music** uses a looping HTML audio element owned by the home screen. Each visit selects one of two bundled tracks. Music volume is saved with the other audio preferences.
+- **Menu music** uses two persistent HTML audio elements in the audio provider, one for Home and one shared by Settings and the pause menu. Each picks its first track at random and switches tracks on playback end. Leaving a menu pauses its player in place. Previewing a voice or effect temporarily mutes the Settings player. Both players use the saved music volume and mute preference.
 
 - **Round sound effects** use local audio files and the shared [sound catalog](web/src/soundLibrary.json). Home Settings saves one filename per cue with the audio preferences. The round reducer identifies an accepted buzz, verdict or expired deadline so keyboard and button inputs produce the same sound. Playback runs independently of microphone capture and scoring. The [asset credits](web/public/sounds/CREDITS.md) record the sources and licenses.
 

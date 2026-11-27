@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Home now alternates its two songs. Settings and the pause menu share two new songs that resume where you left off. Voice and sound previews temporarily mute the music.
+
 - Browse Automotive → Supercars for five 20-question rounds. Supercar Icons joins four new medium-difficulty packs covering Ferrari, modern supercars, electric supercars, and a mix of supercar history and culture.
 
 - Qwen3 4B Instruct now judges spoken answers by default. It scored 29/30 on the comparator to Phi-4 Mini’s 25/30, with nearly identical median judging times.

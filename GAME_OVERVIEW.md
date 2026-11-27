@@ -6,7 +6,9 @@ On the home screen, open **Browse** to explore question sets by category, or cho
 
 ## A trivia round
 
-Each visit to the home screen picks one of two music tracks at random and loops it until the round begins. Settings is available from home and the pause menu, with separate music and narration volumes. Under **Host voice**, the default is **Kokoro · Liam**. Play a model or voice to hear the same fox sentence, then select its name to use it in rounds. In home Settings, expand **Sound effects** and open a cue’s dropdown. Play any clip to hear it, then select its name to use it for a valid buzz, a verdict, or either clock expiring. Quick mute silences all game audio. With narration muted or set to zero, the question highlights silently before the buzzer opens.
+Home alternates between two music tracks. Settings and the pause menu share a second pair. Each pair starts on a random track when you open the app and resumes where you left it when you return to its menu. Music is silent during rounds and mutes while you preview a voice or sound effect.
+
+Settings has separate music and narration volumes. Under **Host voice**, the default is **Kokoro · Liam**. Play a model or voice to hear the same fox sentence, then select its name to use it in rounds. In home Settings, expand **Sound effects** and open a cue’s dropdown. Play any clip to hear it, then select its name to use it for a valid buzz, a verdict, or either clock expiring. Quick mute silences all game audio. With narration muted or set to zero, the question highlights silently before the buzzer opens.
 
 When you press **Play**, the opening screen prepares the first local voice clip and, for AI scoring, gets the microphone ready. You can cancel and return to the selected set. During the round the host prepares one question ahead. Kokoro voices and supported browser voices underline the word being spoken. Earlier words stay red.
 
