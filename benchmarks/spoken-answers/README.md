@@ -1,6 +1,6 @@
 # Spoken trivia benchmark
 
-Use the [30-question comparator benchmark](comparator.json) as the default for comparing judges and prompt changes. It contains 16 new questions and 14 drawn from the earlier suites. The 15 ordinary spoken replies and 15 spelled replies each include eight that deserve credit and seven that should be rejected. Each row supplies a fixed transcript, and all 30 go through the model in the game's normal scoring path.
+Use the [30-question comparator benchmark](comparator.json) as the default for comparing judges and prompt changes. It contains 16 new questions and 14 drawn from the earlier suites. Eight of the 15 ordinary spoken replies and seven of the 15 spelled replies deserve credit. Each row supplies a fixed transcript, and all 30 go through the model in the game's normal scoring path.
 
 Start Ollama and run the default benchmark from the repository root. The runner prints each verdict against its label and counts false positives, false negatives and unscored cases.
 
@@ -11,36 +11,44 @@ Start Ollama and run the default benchmark from the repository root. The runner 
 To replay the same transcripts with another installed judge, set the model for the runner's PowerShell session.
 
 ```powershell
-$env:VQB_OLLAMA_MODEL = 'qwen3:4b-instruct'
+$env:VQB_OLLAMA_MODEL = 'phi4-mini:3.8b'
 .\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py --warm-up
 ```
 
 ### Proper names and spelling
 
-The spoken name or title must match the key or a listed alias. Words around it can provide context, as in “Charlie Brown’s dog? Snoopy, for sure.” When a player spells an otherwise exact name, a single accidental doubled letter deserves credit if it still identifies the same answer. Case 8 was relabeled accordingly. The player clearly spelled Nintendo with an extra D. Case 1 still rejects the spoken singular *Field of Dream*.
+A proper name or title must match the key or a listed alias, including each letter when spelled aloud. Case 8 rejects “N I N T E N D D O” for the extra D in Nintendo. Case 1 rejects the singular *Field of Dream*. Surrounding words can provide context, as in “Charlie Brown’s dog? Snoopy, for sure.”
 
 A false positive awards credit to an invalid reply, and a false negative denies credit to a valid reply. An unscored reply receives no verdict and is counted separately.
 
 ### Local judges on the same 30 replies
 
-Each judge graded the same 16 valid and 14 invalid transcripts through the game at `18f022c` (PR #25). The game splits explicit corrections into parts for Phi and sends the full reply to each other judge. All four used temperature 0, a 4,096-token context and a 768-token generation limit.
+Each judge graded the same 30 transcripts through the game at `18f022c` (PR #25). The table scores the saved verdicts against the exact-spelling rule, with 15 valid and 15 invalid replies. The game splits explicit corrections into parts for Phi and sends the full reply to each other judge. All four used temperature 0, a 4,096-token context and a 768-token generation limit.
 
 The timings cover one warm pass per model on an RTX 4090 Laptop GPU with Ollama 0.40.16. Each model fit entirely in VRAM. The median and 95th percentile cover all 30 attempts, including the game's model-availability check. Recording, transcription and the initial model load are excluded.
 
 | Judge | “Field of Dream” | Doubled-D Nintendo | Valid accepted | Wrong rejected | Correct | Median | 95th percentile |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Phi-4 Mini 3.8B | Accepted | Accepted | 16/16 | 10/14 | 26/30 | 355 ms | 622 ms |
-| Qwen3 4B Instruct | Rejected | Rejected | 15/16 | 13/14 | 28/30 | 359 ms | 1,081 ms |
-| Qwen2.5 1.5B | Rejected | Rejected | 4/16 | 14/14 | 18/30 | 194 ms | 228 ms |
-| DeepSeek R1 7B | Rejected | Rejected | 12/16 | 8/14 | 20/30 | 32.11 s | 62.70 s |
+| Phi-4 Mini 3.8B | Accepted | Accepted | 15/15 | 10/15 | 25/30 | 355 ms | 622 ms |
+| Qwen3 4B Instruct | Rejected | Rejected | 15/15 | 14/15 | 29/30 | 359 ms | 1,081 ms |
+| Qwen2.5 1.5B | Rejected | Rejected | 4/15 | 15/15 | 19/30 | 194 ms | 228 ms |
+| DeepSeek R1 7B | Rejected | Rejected | 12/15 | 9/15 | 21/30 | 32.11 s | 62.70 s |
 
-Qwen3 rejected three wrong answers that Phi credited. They were the singular film title, *Titania* for *Titan*, and *Scramble* for *Scrabble*. Its only missed valid answer was Nintendo. Both judges credited the unfinished “O T T” for Ottawa. The smaller Qwen rejected all 14 wrong answers but also rejected 12 valid ones, including the exact spelled surname “M O Z A R T.”
+Qwen3 rejected four wrong answers that Phi credited. They were the singular film title, the extra D in Nintendo, *Titania* for *Titan*, and *Scramble* for *Scrabble*. Qwen3’s only error was giving credit for the unfinished “O T T” for Ottawa. The smaller Qwen rejected all 15 wrong answers and 11 valid ones, including the exact spelled surname “M O Z A R T.”
 
-DeepSeek denied credit for Nintendo and for “Charlie Brown's dog? Snoopy, for sure.” It reached the token limit on six other replies (cases 5, 11, 14, 21, 22 and 26). Two of the six deserved credit. The other three models returned verdicts on all 30 replies.
+DeepSeek correctly rejected the Nintendo misspelling and denied credit for the valid “Charlie Brown's dog? Snoopy, for sure.” It reached the token limit on six other replies (cases 5, 11, 14, 21, 22 and 26). Two of the six deserved credit. The other three models returned verdicts on all 30 replies.
 
 In a separate Chrome game with synthesized microphone input, Whisper transcribed “My guess is Field of Dream.” and “n-i-n-t-e-n-d-d-o”. Phi awarded five points for each. Both the missing S and the extra D survived transcription.
 
-In a separate pass, the last prompt sentence explicitly allowed one accidental doubled letter in an otherwise exact spelled name. Both Qwen models gave the same 30 verdicts as before. Phi still accepted Nintendo but also credited *Manet* for *Monet* and *ROM* for *RAM*, dropping from 26/30 to 24/30. DeepSeek scored 22/30 with one unscored reply. It began crediting the singular film title and still rejected Nintendo.
+With Qwen3 4B Instruct set as the default, a fresh run reproduced all 30 Qwen verdicts at a 432 ms median. In Chrome, the new default scored “My guess is Field of Dream.” zero and “I think it was hidden figures.” five points.
+
+In a separate pass, the last prompt sentence explicitly allowed one accidental doubled letter in an otherwise exact spelled name. Both Qwen models gave the same 30 verdicts as before. Phi still accepted the Nintendo misspelling and also credited *Manet* for *Monet* and *ROM* for *RAM*, dropping from 25/30 to 23/30. DeepSeek scored 23/30 with one unscored reply. It began crediting the singular film title and still rejected the Nintendo misspelling.
+
+### Qwen3.5 9B and the output limit
+
+On the same 30 replies with the game's 768-token output cap, Qwen3.5 9B with thinking enabled returned 22 correct verdicts and hit the token limit on eight replies. With thinking disabled it returned all 30 verdicts, scoring 27/30. The 4B Instruct judge scored 29/30 in that comparison.
+
+Only the eight unfinished replies were retried with a 1,536-token cap. Four finished correctly, including sodium at 770 generated tokens, *Hidden Figures* at 806 and the Nintendo rejection at 1,034. Cases 10 (fusion), 13 (Istanbul), 28 (flamingo) and 29 (egg yolk and white) reached the separate 90-second request timeout. For those requests the game received neither a verdict nor a final token count.
 
 ### Earlier Phi-4 Mini prompt comparison
 
@@ -48,21 +56,22 @@ The table uses the saved verdicts from before and after PR #25, scored with the 
 
 | Phi-4 Mini on the same 30 transcripts | Original prompt | With the proper-name sentence |
 | --- | ---: | ---: |
-| Correct verdicts | 26/30 | 26/30 |
-| Valid answers accepted | 16/16 | 16/16 |
-| Wrong answers rejected | 10/14 | 10/14 |
-| False positives / false negatives / unscored | 4 / 0 / 0 | 4 / 0 / 0 |
+| Correct verdicts | 25/30 | 25/30 |
+| Valid answers accepted | 15/15 | 15/15 |
+| Wrong answers rejected | 10/15 | 10/15 |
+| False positives / false negatives / unscored | 5 / 0 / 0 | 5 / 0 / 0 |
 
-Both prompts rejected *Manet* for *Monet* and accepted the exact title *Hidden Figures* in a longer reply. Both incorrectly awarded credit on the same four cases.
+Both prompts rejected *Manet* for *Monet* and accepted the exact title *Hidden Figures* in a longer reply. Both incorrectly awarded credit on the same five cases.
 
 | Case | Key | Reply that received credit |
 | --- | --- | --- |
 | 1 | Field of Dreams | “Field of Dream, I think. The one with Kevin Costner.” |
+| 8 | Nintendo | “Let me spell that one. N I N T E N D D O.” |
 | 14 | Titan | “I'm going with T I T A N I A.” |
 | 24 | Ottawa | “O T T ... that's all I can remember.” |
 | 30 | Scrabble | “Is it Scramble? S C R A M B L E.” |
 
-The comparison used local `phi4-mini:3.8b` (digest `78fad5d182a7`), Ollama 0.40.16 and the production judging options. The baseline was `56a3f12` and the proper-name sentence was in `aa990c3`. Each pass started with an unrelated warm-up. A repeat of the proper-name sentence reproduced all 30 verdicts. Additional wording trials used separate questions. One alternative sentence with a title example scored 25/30 with the corrected labels, additionally accepting the three extra letters in *flamingo*. The earlier spelling instructions already named Manet and Monet.
+The comparison used local `phi4-mini:3.8b` (digest `78fad5d182a7`), Ollama 0.40.16 and the production judging options. The baseline was `56a3f12` and the proper-name sentence was in `aa990c3`. Each pass started with an unrelated warm-up. A repeat of the proper-name sentence reproduced all 30 verdicts. Additional wording trials used separate questions. One alternative sentence with a title example scored 24/30, additionally accepting the three extra letters in *flamingo*. The earlier spelling instructions already named Manet and Monet.
 
 In a browser round with synthesized microphone input, Whisper returned “My guess is Field of Dream.” The judge awarded five points even though the transcript preserved the singular. The same round correctly awarded credit for “I think it was hidden figures.”
 
@@ -157,7 +166,7 @@ The default game also replayed four recordings through Whisper and the updated j
 
 ## Baseline results
 
-These verdicts and timings use the judge prompt from game commit `f936fcb`, before the explicit rule for changes of answer. The benchmark's `current` profile is pinned to DeepSeek R1 7B to reproduce the original GPU results. The game now defaults to Phi-4 Mini.
+These verdicts and timings use the judge prompt from game commit `f936fcb`, before the explicit rule for changes of answer. The benchmark's `current` profile is pinned to DeepSeek R1 7B to reproduce the original GPU results. The game defaults to Qwen3 4B Instruct.
 
 | Measured on this laptop | Current GPU setup | Smaller CPU setup |
 |---|---:|---:|

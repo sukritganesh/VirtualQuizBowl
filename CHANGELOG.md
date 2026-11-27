@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Added a 30-question comparator benchmark and asked the judge to require exact proper names, titles or listed aliases. The benchmark credits an unambiguous doubled letter in a spelled name and compares four local judges on the same replies.
+- Qwen3 4B Instruct now judges spoken answers by default. It scored 29/30 on the comparator to Phi-4 Mini’s 25/30, with nearly identical median judging times.
+
+- Added a 30-question comparator benchmark and asked the judge to require exact proper names, titles or listed aliases. The benchmark rejects a doubled letter in a spelled proper name and reports local judge accuracy and timing on the same replies.
 
 - Added reusable question sets from the microphone, Whisper context and spelling-boundary experiments to the [spoken-answer benchmarks](benchmarks/spoken-answers/README.md).
 
@@ -17,7 +19,6 @@
 - Added four 20-question automotive sets for casual car enthusiasts, covering Corvettes, supercars, Chinese electric cars, and a general automotive smorgasbord.
 - Home Settings now offers 22 round sounds. Each dropdown shows up to four sounds at a time and scrolls to the rest. Play a sound to preview it, then click its name to select it. New players start with Arcade select, Menu confirmation, Falling synth, and Last-life alert.
 
-- Switched the default Ollama judge to Phi-4 Mini for faster spoken-answer verdicts.
 - Browse built-in trivia sets by category from the home screen. Science includes Astronomy and Geology, with a new 10-question geology pack, *Written in Stone*.
 - Added two looping home-menu tracks. Each visit picks one at random, and Settings now has a separate music volume control.
 - The host now reads each trivia question in one continuous sentence. Voices that report word positions still highlight each word as they speak.
