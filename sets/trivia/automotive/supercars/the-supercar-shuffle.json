@@ -1,0 +1,125 @@
+{
+  "mode": "trivia",
+  "title": "The Supercar Shuffle",
+  "category": "Supercars",
+  "questions": [
+    {
+      "id": "blue-and-orange",
+      "question": "Which oil company put its light blue and orange colors on the Ford GT40 that won Le Mans in 1968 and 1969?",
+      "answer": "Gulf Oil",
+      "aliases": ["Gulf"]
+    },
+    {
+      "id": "weekend-jaguar",
+      "question": "What weekend nickname did Jaguar give the group of engineers who worked after hours on the original XJ220 concept?",
+      "answer": "The Saturday Club",
+      "aliases": ["Saturday Club"]
+    },
+    {
+      "id": "underwater-lotus",
+      "question": "In which James Bond film does a white Lotus Esprit dive into the sea and turn into a submarine?",
+      "answer": "The Spy Who Loved Me"
+    },
+    {
+      "id": "bugatti-birthday",
+      "question": "Whose 110th birthday did Bugatti mark by unveiling the EB110 in 1991?",
+      "answer": "Ettore Bugatti",
+      "aliases": ["Ettore"]
+    },
+    {
+      "id": "desert-porsche",
+      "question": "Which desert rally did René Metge win in 1986 at the wheel of a Porsche 959?",
+      "answer": "The Paris-Dakar Rally",
+      "aliases": ["Dakar Rally", "Paris-Dakar", "Dakar"]
+    },
+    {
+      "id": "musical-v10",
+      "question": "Which Japanese musical instrument maker helped tune the sound of the Lexus LFA's V10?",
+      "answer": "Yamaha",
+      "aliases": ["Yamaha Corporation"]
+    },
+    {
+      "id": "pantera-engine",
+      "question": "Which American automaker supplied the Cleveland V8 for the early De Tomaso Pantera?",
+      "answer": "Ford",
+      "aliases": ["Ford Motor Company"]
+    },
+    {
+      "id": "m1-support-series",
+      "question": "What was the name of the one-make championship in which Formula One drivers raced identical BMW M1s on Grand Prix weekends?",
+      "answer": "Procar",
+      "aliases": ["BMW M1 Procar Championship", "BMW Procar", "Procar Championship"]
+    },
+    {
+      "id": "roof-storage",
+      "question": "Where could Porsche Carrera GT owners stow both removable roof panels while driving with the top off?",
+      "answer": "The front trunk",
+      "aliases": ["Frunk", "Front boot", "Under the front hood", "Front luggage compartment"]
+    },
+    {
+      "id": "alpine-opening",
+      "question": "In which 1969 heist film does an orange Lamborghini Miura wind through the Alps before the action shifts to Turin?",
+      "answer": "The Italian Job"
+    },
+    {
+      "id": "mc12-relative",
+      "question": "Which Ferrari road car provided the mechanical foundation for Maserati's MC12?",
+      "answer": "Ferrari Enzo",
+      "aliases": ["Enzo", "Enzo Ferrari"]
+    },
+    {
+      "id": "veyron-speed-mode",
+      "question": "What extra object did a Bugatti Veyron driver need to activate top speed mode before a record run?",
+      "answer": "A second key",
+      "aliases": ["Speed key", "Top speed key", "A special key"]
+    },
+    {
+      "id": "astonished-name",
+      "question": "Which wedge-shaped Lamborghini took its name from a Piedmontese exclamation of astonishment?",
+      "answer": "Lamborghini Countach",
+      "aliases": ["Countach"]
+    },
+    {
+      "id": "moss-clock",
+      "question": "What did the number 722 represent for Stirling Moss at the Mille Miglia before Mercedes used it on an SLR McLaren edition?",
+      "answer": "His start time",
+      "aliases": ["Starting time", "Seven twenty-two in the morning", "7:22 a.m."]
+    },
+    {
+      "id": "huayra-flaps",
+      "question": "How many movable aerodynamic flaps did Pagani fit to the original Huayra, counting both the front and the rear?",
+      "answer": "Four",
+      "aliases": ["4", "Four flaps"]
+    },
+    {
+      "id": "rubber-lipped-spoiler",
+      "question": "Which sea creature gave its name to the tail spoiler on the early Porsche 911 Turbo?",
+      "answer": "A whale",
+      "aliases": ["Whale", "Whale tail"]
+    },
+    {
+      "id": "bmw-in-a-mclaren",
+      "question": "Which German manufacturer built the naturally aspirated V12 for Gordon Murray's original McLaren F1?",
+      "answer": "BMW",
+      "aliases": ["BMW Motorsport", "Bayerische Motoren Werke"]
+    },
+    {
+      "id": "monaco-driver",
+      "question": "Which Bugatti model succeeded the Veyron and shared its name with a Monegasque Grand Prix winner?",
+      "answer": "Bugatti Chiron",
+      "aliases": ["Chiron"]
+    },
+    {
+      "id": "one-77-skin",
+      "question": "What lightweight metal did Aston Martin's craftspeople shape by hand around the One-77's carbon-fiber structure?",
+      "answer": "Aluminum",
+      "aliases": ["Aluminium"]
+    },
+    {
+      "id": "italdesign-wedge",
+      "question": "Which Italdesign cofounder drew the wedge-shaped body of BMW's original M1?",
+      "answer": "Giorgetto Giugiaro",
+      "aliases": ["Giugiaro"]
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browse Automotive → Supercars for five 20-question rounds. Supercar Icons joins four new medium-difficulty packs covering Ferrari, modern supercars, electric supercars, and a mix of supercar history and culture.
+
 - Qwen3 4B Instruct now judges spoken answers by default. It scored 29/30 on the comparator to Phi-4 Mini’s 25/30, with nearly identical median judging times.
 
 - Added a 30-question comparator benchmark and asked the judge to require exact proper names, titles or listed aliases. The benchmark rejects a doubled letter in a spelled proper name and reports local judge accuracy and timing on the same replies.

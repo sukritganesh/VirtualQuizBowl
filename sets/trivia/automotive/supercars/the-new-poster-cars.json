@@ -1,0 +1,121 @@
+{
+  "mode": "trivia",
+  "title": "The New Poster Cars",
+  "category": "Supercars",
+  "questions": [
+    {
+      "id": "gravel-huracan",
+      "question": "Which raised Lamborghini Huracán has all-terrain tires and a Rally mode for loose surfaces?",
+      "answer": "Huracán Sterrato",
+      "aliases": ["Sterrato", "Lamborghini Huracán Sterrato"]
+    },
+    {
+      "id": "tourbillon-instruments",
+      "question": "What kind of Swiss craftspeople built the Bugatti Tourbillon's mechanical instrument cluster?",
+      "answer": "Watchmakers",
+      "aliases": ["Watchmakers from Switzerland", "Horologists"]
+    },
+    {
+      "id": "canadian-assembly",
+      "question": "In which country did Multimatic assemble the Ford GT that went into production in Markham in 2016?",
+      "answer": "Canada"
+    },
+    {
+      "id": "utopia-shift-gate",
+      "question": "How many forward gears can a Pagani Utopia driver select with the optional clutch pedal and gated shifter?",
+      "answer": "Seven",
+      "aliases": ["7", "Seven speeds"]
+    },
+    {
+      "id": "sian-energy-store",
+      "question": "What device gives the Lamborghini Sián a quick burst of electrical power and recharges rapidly under braking?",
+      "answer": "A supercapacitor",
+      "aliases": ["Supercapacitor", "Ultracapacitor"]
+    },
+    {
+      "id": "supercar-sky",
+      "question": "What does the Italian word Cielo mean in the name of Maserati's open-top MC20?",
+      "answer": "Sky",
+      "aliases": ["The sky"]
+    },
+    {
+      "id": "murray-ground-effect",
+      "question": "What spinning device at the tail of Gordon Murray's T.50 helps control the airflow underneath the car?",
+      "answer": "A fan",
+      "aliases": ["Rear fan", "An aerodynamic fan"]
+    },
+    {
+      "id": "valkyrie-engine-builder",
+      "question": "Which British engine maker developed the Aston Martin Valkyrie's V12 and the DFV once used by Formula One teams?",
+      "answer": "Cosworth"
+    },
+    {
+      "id": "porsche-drs",
+      "question": "On the 2022 Porsche 911 GT3 RS, what do the letters DRS stand for when the wing flattens on a straight?",
+      "answer": "Drag reduction system"
+    },
+    {
+      "id": "second-generation-nsx",
+      "question": "In which US state did Acura build the second-generation NSX at its Performance Manufacturing Center in Marysville?",
+      "answer": "Ohio"
+    },
+    {
+      "id": "regera-single-ratio",
+      "question": "What conventional part of the drivetrain did Koenigsegg replace with a single fixed ratio in the Regera?",
+      "answer": "The multi-speed gearbox",
+      "aliases": ["Gearbox", "Transmission", "Multi-speed transmission"]
+    },
+    {
+      "id": "element-six",
+      "question": "Which chemical element gave the Sesto Elemento its Italian name and helped Lamborghini keep the car under a thousand kilograms?",
+      "answer": "Carbon"
+    },
+    {
+      "id": "ford-roof-arches",
+      "question": "What architectural term does Ford use for the sweeping supports linking the GT's roof to its rear fenders?",
+      "answer": "Flying buttresses",
+      "aliases": ["Flying buttress"]
+    },
+    {
+      "id": "speedtail-mirrors",
+      "question": "What retractable devices on the McLaren Speedtail show the driver the view normally supplied by exterior mirrors?",
+      "answer": "Cameras",
+      "aliases": ["Rear-view cameras", "Side-view cameras"]
+    },
+    {
+      "id": "absolut-tail",
+      "question": "What paired features on the tail of the Koenigsegg Jesko Absolut echo the vertical stabilizers of a fighter jet?",
+      "answer": "Two fins",
+      "aliases": ["Fins", "Twin tail fins", "Vertical fins"]
+    },
+    {
+      "id": "mistral-name",
+      "question": "What kind of weather phenomenon in southern France gave Bugatti's open-top W16 Mistral its name?",
+      "answer": "A wind",
+      "aliases": ["Wind", "A cold wind", "A strong wind"]
+    },
+    {
+      "id": "elva-airflow",
+      "question": "What piece of glass could McLaren Elva buyers leave off because an air management system diverted wind over the cockpit?",
+      "answer": "The windshield",
+      "aliases": ["Windscreen", "Front windshield"]
+    },
+    {
+      "id": "titanium-tailpipes",
+      "question": "Which lightweight metal did McLaren use for the four exhaust outlets on the 765LT?",
+      "answer": "Titanium"
+    },
+    {
+      "id": "see-through-roof",
+      "question": "Which part of the Maserati MC20 Cielo changes from clear to opaque at the touch of a button?",
+      "answer": "The glass roof",
+      "aliases": ["Roof", "Retractable roof", "Roof panel"]
+    },
+    {
+      "id": "murray-track-tribute",
+      "question": "Which Austrian Formula One champion gave his name to the track version of Gordon Murray's T.50?",
+      "answer": "Niki Lauda",
+      "aliases": ["Lauda"]
+    }
+  ]
+}
