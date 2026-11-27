@@ -1,0 +1,125 @@
+{
+  "mode": "trivia",
+  "title": "The Kilowatt Club",
+  "category": "Supercars",
+  "questions": [
+    {
+      "id": "adriatic-weather",
+      "question": "What sudden Adriatic weather event gave the Rimac Nevera its Croatian name?",
+      "answer": "A storm",
+      "aliases": ["Thunderstorm", "A Mediterranean storm"]
+    },
+    {
+      "id": "hethel-hypercar",
+      "question": "Which British carmaker developed its Type 130 electric hypercar at Hethel in Norfolk?",
+      "answer": "Lotus",
+      "aliases": ["Lotus Cars"]
+    },
+    {
+      "id": "electric-timekeeper",
+      "question": "What removable timing instrument can a Porsche Mission X passenger mount on the dashboard to clock a lap?",
+      "answer": "A stopwatch",
+      "aliases": ["Stopwatch module", "A chronometer", "Lap timer"]
+    },
+    {
+      "id": "electric-gullwing",
+      "question": "Which Mercedes coupe kept its gullwing doors when four electric motors replaced its V8 for the Electric Drive edition?",
+      "answer": "Mercedes-Benz SLS AMG",
+      "aliases": ["SLS", "SLS AMG", "AMG SLS", "SLS AMG Electric Drive"]
+    },
+    {
+      "id": "four-seat-electric",
+      "question": "Including the driver, how many people can ride in the two rows of a Drako GTE?",
+      "answer": "Four",
+      "aliases": ["4", "Four people"]
+    },
+    {
+      "id": "owl-origins",
+      "question": "In which country did Aspark conceive the Owl before teaming up with an Italian firm to build it in Turin?",
+      "answer": "Japan"
+    },
+    {
+      "id": "backwards-at-papenburg",
+      "question": "What was unusual about the direction a Rimac Nevera was traveling when it reached 171 miles per hour at Papenburg in 2023?",
+      "answer": "It was going backward",
+      "aliases": ["In reverse", "Backwards", "Reversing"]
+    },
+    {
+      "id": "evija-air-tunnels",
+      "question": "Which tunnels, named for an Italian physicist, carry air through the Lotus Evija's rear quarters?",
+      "answer": "Venturi tunnels",
+      "aliases": ["Venturi", "Venturi ducts"]
+    },
+    {
+      "id": "farina-tribute",
+      "question": "Which 1950 Formula One world champion did Pininfarina honor with a special edition of the electric Battista?",
+      "answer": "Giuseppe Farina",
+      "aliases": ["Nino Farina", "Giuseppe Nino Farina", "Farina"]
+    },
+    {
+      "id": "empty-cockpit",
+      "question": "How was the NIO EP9 being driven when it lapped the Circuit of the Americas in two minutes and forty seconds in 2017?",
+      "answer": "Autonomously",
+      "aliases": ["Without a driver", "Driverless", "Self-driving"]
+    },
+    {
+      "id": "b95-body",
+      "question": "What Italian term meaning little boat describes the two-seat open body of Pininfarina's electric B95?",
+      "answer": "Barchetta"
+    },
+    {
+      "id": "sussex-hill",
+      "question": "At which English estate did Max Chilton take an electric McMurtry up the Festival of Speed hill in 39 seconds in 2022?",
+      "answer": "Goodwood",
+      "aliases": ["Goodwood House", "Goodwood Estate"]
+    },
+    {
+      "id": "mission-x-battery",
+      "question": "Where did Porsche place the Mission X concept's traction battery to let the driver sit close to the floor?",
+      "answer": "Behind the seats",
+      "aliases": ["Behind the driver", "Behind the cockpit", "Behind the passenger compartment"]
+    },
+    {
+      "id": "fittipaldi-tribute",
+      "question": "Which Brazilian driver won the 1972 Formula One title in a Lotus and later lent his name to an Evija edition?",
+      "answer": "Emerson Fittipaldi",
+      "aliases": ["Fittipaldi"]
+    },
+    {
+      "id": "independent-wheel-torque",
+      "question": "What handling technique lets a Rimac Nevera tighten its line through a bend by varying each motor's twisting force independently?",
+      "answer": "Torque vectoring",
+      "aliases": ["All-wheel torque vectoring"]
+    },
+    {
+      "id": "ds-racing-roots",
+      "question": "Which electric racing series supplied the motor technology for the DS E-Tense Performance prototype?",
+      "answer": "Formula E",
+      "aliases": ["FIA Formula E"]
+    },
+    {
+      "id": "gotham-voice",
+      "question": "Which fictional butler inspired the voice of the onboard assistant in Pininfarina's Gotham edition of the electric Battista?",
+      "answer": "Alfred Pennyworth",
+      "aliases": ["Alfred", "Pennyworth"]
+    },
+    {
+      "id": "croatian-design",
+      "question": "Which piece of neckwear inspired the shape of the Rimac Nevera's side air intakes?",
+      "answer": "A necktie",
+      "aliases": ["Tie", "Cravat"]
+    },
+    {
+      "id": "battista-battery",
+      "question": "Which Croatian electric hypercar maker supplied the battery pack for the Pininfarina Battista?",
+      "answer": "Rimac",
+      "aliases": ["Rimac Automobili"]
+    },
+    {
+      "id": "standstill-downforce",
+      "question": "What devices under the McMurtry Spéirling create downforce even when the car is standing still?",
+      "answer": "Fans",
+      "aliases": ["Suction fans", "Electric fans", "Downforce fans"]
+    }
+  ]
+}

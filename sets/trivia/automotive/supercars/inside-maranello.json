@@ -1,0 +1,125 @@
+{
+  "mode": "trivia",
+  "title": "Inside Maranello",
+  "category": "Supercars",
+  "questions": [
+    {
+      "id": "testarossa-translation",
+      "question": "What color were the engine covers that gave the Ferrari Testarossa its name?",
+      "answer": "Red",
+      "aliases": ["Rosso"]
+    },
+    {
+      "id": "gto-rulebook",
+      "question": "For which FIA competition category did Ferrari originally develop the 288 GTO?",
+      "answer": "Group B",
+      "aliases": ["FIA Group B"]
+    },
+    {
+      "id": "monza-passenger",
+      "question": "Which Ferrari Monza speedster has a passenger seat and a second fairing behind it?",
+      "answer": "Monza SP2",
+      "aliases": ["SP2", "SP two", "Monza SP two", "Ferrari Monza SP2"]
+    },
+    {
+      "id": "gearshift-fingers",
+      "question": "In the F355 F1, what did Ferrari put behind the steering wheel to let drivers change gear?",
+      "answer": "Shift paddles",
+      "aliases": ["Paddles", "Paddle shifters", "Gearshift paddles"]
+    },
+    {
+      "id": "name-of-dino",
+      "question": "How was Dino, the namesake of Ferrari's V6 sports cars, related to Enzo Ferrari?",
+      "answer": "His son",
+      "aliases": ["Son", "Enzo's son", "Enzo Ferrari's son"]
+    },
+    {
+      "id": "hidden-radiators",
+      "question": "What heat exchangers sat behind the Testarossa's signature side strakes to cool its engine?",
+      "answer": "Radiators",
+      "aliases": ["The radiators", "Coolant radiators"]
+    },
+    {
+      "id": "florida-finish",
+      "question": "At which Florida endurance race did Ferrari sweep the podium in 1967, inspiring the name of its SP3 road car?",
+      "answer": "24 Hours of Daytona",
+      "aliases": ["Daytona 24 Hours", "Daytona 24", "Daytona", "Daytona 24 Hour Continental"]
+    },
+    {
+      "id": "manettino-switch",
+      "question": "What is the Italian name for the steering-wheel dial that lets an F430 driver select a driving mode?",
+      "answer": "Manettino",
+      "aliases": ["The manettino switch"]
+    },
+    {
+      "id": "fifty-roof",
+      "question": "What roof style let F50 owners remove a rigid panel while leaving the structure behind the seats in place?",
+      "answer": "A targa top",
+      "aliases": ["Targa", "Targa roof", "Removable hardtop", "Lift-off hardtop"]
+    },
+    {
+      "id": "french-road-race",
+      "question": "Which French endurance race for cars gave the Ferrari F12tdf its three-letter suffix?",
+      "answer": "Tour de France Automobile",
+      "aliases": ["Tour de France"]
+    },
+    {
+      "id": "cylinder-math",
+      "question": "In Ferrari's 458 Italia name, what does the final eight count?",
+      "answer": "Cylinders",
+      "aliases": ["Engine cylinders", "The number of cylinders"]
+    },
+    {
+      "id": "endurance-heart",
+      "question": "Which Le Mans-winning Ferrari prototype shares its V6 engine architecture with the F80 road car?",
+      "answer": "Ferrari 499P",
+      "aliases": ["499P", "Four ninety-nine P"]
+    },
+    {
+      "id": "factory-circuit",
+      "question": "Which test circuit did Ferrari open beside Maranello in 1972 and later name its 599 GTB after?",
+      "answer": "Fiorano",
+      "aliases": ["Fiorano Circuit", "Pista di Fiorano"]
+    },
+    {
+      "id": "homologated-letter",
+      "question": "In Ferrari's GTO badge, what Italian word does the O stand for?",
+      "answer": "Omologata"
+    },
+    {
+      "id": "racing-birthday",
+      "question": "Whose ninetieth anniversary did the SF90 Stradale celebrate in 2019?",
+      "answer": "Scuderia Ferrari",
+      "aliases": ["Ferrari's racing team", "The Ferrari racing team"]
+    },
+    {
+      "id": "berlinetta-valves",
+      "question": "If the first two digits of Ferrari's F355 badge describe engine size, what does the final five count?",
+      "answer": "Valves per cylinder",
+      "aliases": ["The valves in each cylinder"]
+    },
+    {
+      "id": "hybrid-braking",
+      "question": "In Ferrari's HY-KERS system, what kind of energy does the letter K stand for?",
+      "answer": "Kinetic energy",
+      "aliases": ["Kinetic", "Energy of motion"]
+    },
+    {
+      "id": "front-engine-return",
+      "question": "On the 550 Maranello, where did Ferrari put the V12 that had sat behind the seats in the preceding F512 M?",
+      "answer": "In front of the driver",
+      "aliases": ["In the front", "Under the front hood", "Front"]
+    },
+    {
+      "id": "track-programme",
+      "question": "Which track-only Ferrari based on the Enzo launched the company's XX customer programme?",
+      "answer": "Ferrari FXX",
+      "aliases": ["FXX", "F X X"]
+    },
+    {
+      "id": "hybrid-aperta",
+      "question": "What Italian word did Ferrari add to LaFerrari's name for the open-top version?",
+      "answer": "Aperta"
+    }
+  ]
+}
