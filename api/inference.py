@@ -18,7 +18,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, ValidationError
 
 LOCAL_TURBO = Path(__file__).resolve().parents[1] / ".models" / "large-v3-turbo"
 WHISPER_MODEL = os.getenv("VQB_WHISPER_MODEL", str(LOCAL_TURBO) if LOCAL_TURBO.is_dir() else "large-v3-turbo")
-DEFAULT_OLLAMA_MODEL = "phi4-mini:3.8b"
+DEFAULT_OLLAMA_MODEL = "qwen3:4b-instruct"
 OLLAMA_MODEL = os.getenv("VQB_OLLAMA_MODEL", DEFAULT_OLLAMA_MODEL)
 JUDGE_MAX_TOKENS = 768
 SAMPLE_RATE = 16000
@@ -148,7 +148,7 @@ _spoken_correction = re.compile(
 def judge_messages(key: Key, transcript: str) -> list[dict[str, str]]:
     # Phi can score the last guess alone if it sees the correction as one string.
     # Keep each guess visible, including when Whisper hears "no weight correction".
-    parts = _spoken_correction.split(transcript) if OLLAMA_MODEL == DEFAULT_OLLAMA_MODEL else [transcript]
+    parts = _spoken_correction.split(transcript) if OLLAMA_MODEL == "phi4-mini:3.8b" else [transcript]
     if len(parts) > 2:
         prompt = (
             "Grade a spoken trivia reply split at explicit corrections. Each item in reply_parts "

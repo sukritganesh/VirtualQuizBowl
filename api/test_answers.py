@@ -37,7 +37,7 @@ class AnswerTests(unittest.TestCase):
         for transcript in ("Camry No Weight Correction Honda Civic", "Camry, no, wait. Correction, Honda Civic"):
             with (
                 self.subTest(transcript=transcript),
-                patch.object(inference, "OLLAMA_MODEL", inference.DEFAULT_OLLAMA_MODEL),
+                patch.object(inference, "OLLAMA_MODEL", "phi4-mini:3.8b"),
                 patch.object(inference, "ollama", return_value={"message": {"content": '{"correct":false}'}}) as chat,
             ):
                 verdict = inference.judge(key, transcript)
@@ -46,14 +46,17 @@ class AnswerTests(unittest.TestCase):
                 payload = json.loads(chat.call_args.args[1]["messages"][1]["content"])
                 self.assertEqual(payload, {**key.model_dump(), "first_part": "Camry", "second_part": "Honda Civic"})
 
-        transcript = "Camry, no wait, Honda Civic"
-        with patch.object(inference, "OLLAMA_MODEL", "deepseek-r1:7b"):
-            payload = json.loads(inference.judge_messages(key, transcript)[1]["content"])
-            self.assertEqual(payload, {**key.model_dump(), "player_reply": transcript})
+    def test_default_qwen_and_deepseek_receive_the_whole_correction(self):
+        self.assertEqual(inference.DEFAULT_OLLAMA_MODEL, "qwen3:4b-instruct")
+        transcript = "Shasta, no wait, Mount Whitney"
+        for model in (inference.DEFAULT_OLLAMA_MODEL, "deepseek-r1:7b"):
+            with self.subTest(model=model), patch.object(inference, "OLLAMA_MODEL", model):
+                payload = json.loads(inference.judge_messages(self.key, transcript)[1]["content"])
+                self.assertEqual(payload, {**self.key.model_dump(), "player_reply": transcript})
 
     def test_phi_receives_every_guess_when_player_corrects_twice(self):
         transcript = "Whitney, no wait, Shasta, no wait, Mount Whitney."
-        with patch.object(inference, "OLLAMA_MODEL", inference.DEFAULT_OLLAMA_MODEL):
+        with patch.object(inference, "OLLAMA_MODEL", "phi4-mini:3.8b"):
             payload = json.loads(inference.judge_messages(self.key, transcript)[1]["content"])
             self.assertEqual(payload["reply_parts"], ["Whitney", "Shasta", "Mount Whitney."])
 

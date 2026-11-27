@@ -11,7 +11,7 @@ Start Ollama and run the default benchmark from the repository root. The runner 
 To replay the same transcripts with another installed judge, set the model for the runner's PowerShell session.
 
 ```powershell
-$env:VQB_OLLAMA_MODEL = 'qwen3:4b-instruct'
+$env:VQB_OLLAMA_MODEL = 'phi4-mini:3.8b'
 .\.venv\Scripts\python.exe benchmarks/spoken-answers/run_text.py --warm-up
 ```
 
@@ -39,6 +39,8 @@ Qwen3 rejected three wrong answers that Phi credited. They were the singular fil
 DeepSeek denied credit for Nintendo and for “Charlie Brown's dog? Snoopy, for sure.” It reached the token limit on six other replies (cases 5, 11, 14, 21, 22 and 26). Two of the six deserved credit. The other three models returned verdicts on all 30 replies.
 
 In a separate Chrome game with synthesized microphone input, Whisper transcribed “My guess is Field of Dream.” and “n-i-n-t-e-n-d-d-o”. Phi awarded five points for each. Both the missing S and the extra D survived transcription.
+
+With Qwen3 4B Instruct set as the default, a fresh run reproduced all 30 Qwen verdicts at a 432 ms median. In Chrome, the new default scored “My guess is Field of Dream.” zero and “I think it was hidden figures.” five points.
 
 In a separate pass, the last prompt sentence explicitly allowed one accidental doubled letter in an otherwise exact spelled name. Both Qwen models gave the same 30 verdicts as before. Phi still accepted Nintendo but also credited *Manet* for *Monet* and *ROM* for *RAM*, dropping from 26/30 to 24/30. DeepSeek scored 22/30 with one unscored reply. It began crediting the singular film title and still rejected Nintendo.
 
@@ -157,7 +159,7 @@ The default game also replayed four recordings through Whisper and the updated j
 
 ## Baseline results
 
-These verdicts and timings use the judge prompt from game commit `f936fcb`, before the explicit rule for changes of answer. The benchmark's `current` profile is pinned to DeepSeek R1 7B to reproduce the original GPU results. The game now defaults to Phi-4 Mini.
+These verdicts and timings use the judge prompt from game commit `f936fcb`, before the explicit rule for changes of answer. The benchmark's `current` profile is pinned to DeepSeek R1 7B to reproduce the original GPU results. The game defaults to Qwen3 4B Instruct.
 
 | Measured on this laptop | Current GPU setup | Smaller CPU setup |
 |---|---:|---:|
