@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Added a 30-question comparator benchmark and asked the judge to require exact proper names, titles or listed aliases. Phi-4 Mini scored 25/30 with both prompts.
+- Added a 30-question comparator benchmark and asked the judge to require exact proper names, titles or listed aliases. The benchmark credits an unambiguous doubled letter in a spelled name and compares four local judges on the same replies.
 
 - Added reusable question sets from the microphone, Whisper context and spelling-boundary experiments to the [spoken-answer benchmarks](benchmarks/spoken-answers/README.md).
 
