@@ -3,12 +3,20 @@ import { createPortal } from 'react-dom'
 import { defaultAudio, playSound, speakQuestion, voiceSample, readAudioPreferences, serializeAudioPreferences, type AudioPreferences, type Narrator, type SoundCue } from './audio'
 import { NarratorPicker, narrationKey } from './NarratorPicker'
 import { SoundEffectPicker } from './SoundEffectPicker'
+import { MenuMusic, type MusicMenu } from './MenuMusic'
 
 const storageKey = 'virtual-quiz-bowl.audio'
-type AudioState = { preferences: AudioPreferences; update: Dispatch<SetStateAction<AudioPreferences>> }
+type AudioState = {
+  preferences: AudioPreferences
+  update: Dispatch<SetStateAction<AudioPreferences>>
+  setMusicMenu: (menu: MusicMenu | null) => void
+  setPreviewing: (active: boolean) => void
+}
 const AudioContext = createContext<AudioState | null>(null)
 
 export function AudioProvider({ children }: { children: ReactNode }) {
+  const [musicMenu, setMusicMenu] = useState<MusicMenu | null>(null)
+  const [previewing, setPreviewing] = useState(false)
   const [preferences, update] = useState(() => {
     try { return readAudioPreferences(localStorage.getItem(storageKey)) }
     catch { return defaultAudio }
@@ -18,7 +26,12 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     catch { /* The controls still work for this session when storage is unavailable. */ }
   }, [preferences])
   useEffect(() => { window.speechSynthesis?.getVoices() }, [])
-  return <AudioContext.Provider value={{ preferences, update }}>{children}</AudioContext.Provider>
+  // Keep both players mounted so each menu retains its track and playback position.
+  return <AudioContext.Provider value={{ preferences, update, setMusicMenu, setPreviewing }}>
+    <MenuMusic menu="home" active={musicMenu === 'home'} volume={preferences.musicVolume} muted={preferences.muted}/>
+    <MenuMusic menu="settings" active={musicMenu === 'settings'} volume={preferences.musicVolume} muted={preferences.muted || previewing}/>
+    {children}
+  </AudioContext.Provider>
 }
 
 export function useAudio() {
@@ -38,6 +51,12 @@ export function MuteButton() {
 
 export function SettingsButton({ inMenu = false }: { inMenu?: boolean }) {
   const [open, setOpen] = useState(false)
+  const { setMusicMenu } = useAudio()
+  const menu = inMenu || open ? 'settings' : 'home'
+  useLayoutEffect(() => {
+    setMusicMenu(menu)
+    return () => setMusicMenu(null)
+  }, [menu, setMusicMenu])
   return <>
     <button aria-haspopup="dialog" className={inMenu ? 'quit menu-settings' : 'quiet settings-link'} onClick={() => setOpen(true)}>
       Settings {inMenu && <span aria-hidden="true">→</span>}
@@ -47,7 +66,7 @@ export function SettingsButton({ inMenu = false }: { inMenu?: boolean }) {
 }
 
 function SettingsPage({ back, showSoundEffects }: { back: () => void; showSoundEffects: boolean }) {
-  const { preferences, update } = useAudio()
+  const { preferences, update, setPreviewing } = useAudio()
   const { muted, volume } = preferences
   const dialog = useRef<HTMLDialogElement>(null)
   const cancel = useRef<(() => void) | undefined>(undefined)
@@ -55,6 +74,11 @@ function SettingsPage({ back, showSoundEffects }: { back: () => void; showSoundE
   const [playing, setPlaying] = useState<string | null>(null)
   const [preparingVoice, setPreparingVoice] = useState(false)
   const [error, setError] = useState<{ kind: 'effect' | 'voice'; message: string } | null>(null)
+  const previewActive = playing !== null
+  useLayoutEffect(() => {
+    setPreviewing(previewActive)
+    return () => setPreviewing(false)
+  }, [previewActive, setPreviewing])
 
   const stopPreview = useCallback(() => {
     generation.current++
